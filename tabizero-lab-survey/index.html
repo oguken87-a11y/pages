@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>飛行機タダ乗りラボ 参加特典アンケート結果</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f4f3ef; --surface:#fcfcfb; --border:#e3e1da; --grid:#ecebe6;
+  --text:#0b0b0b; --text2:#52514e; --muted:#7a7873;
+  --s1:#2a78d6; --s2:#eb6834; --neutral:#c9c7bf;
+  --accent-bg:#fff3ec; --accent-border:#f2b493; --tag-bg:#e8f0fb;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#121211; --surface:#1a1a19; --border:#33322f; --grid:#2a2a28;
+    --text:#ffffff; --text2:#c3c2b7; --muted:#9b9a92;
+    --s1:#3987e5; --s2:#d95926; --neutral:#55544f;
+    --accent-bg:#2b1d16; --accent-border:#7a4026; --tag-bg:#1d2a3b;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#121211; --surface:#1a1a19; --border:#33322f; --grid:#2a2a28;
+  --text:#ffffff; --text2:#c3c2b7; --muted:#9b9a92;
+  --s1:#3987e5; --s2:#d95926; --neutral:#55544f;
+  --accent-bg:#2b1d16; --accent-border:#7a4026; --tag-bg:#1d2a3b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
+  line-height:1.7;font-size:15px}
+.wrap{max-width:960px;margin:0 auto;padding:28px 16px 64px}
+header h1{font-size:24px;line-height:1.4;margin:0 0 6px}
+header p{margin:0;color:var(--text2);font-size:14px}
+section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 20px;margin-top:18px}
+h2{font-size:18px;margin:0 0 4px}
+.sub{color:var(--text2);font-size:13px;margin:0 0 16px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px}
+.kpi .label{font-size:13px;color:var(--text2)}
+.kpi .num{font-size:34px;font-weight:700;line-height:1.2;margin-top:4px}
+.kpi .num small{font-size:15px;font-weight:600;margin-left:2px}
+.kpi .note{font-size:12px;color:var(--muted);margin-top:4px}
+.kpi.hl{background:var(--accent-bg);border-color:var(--accent-border)}
+/* bar chart */
+.chart{display:grid;grid-template-columns:minmax(120px,240px) 1fr;row-gap:10px;column-gap:12px;align-items:center}
+.chart .cat{font-size:14px;color:var(--text);text-align:right;line-height:1.35}
+.track{position:relative;min-height:26px;display:flex;flex-wrap:wrap;column-gap:2px;row-gap:4px;align-items:center}
+.track .gridline{position:absolute;top:-4px;bottom:-4px;width:1px;background:var(--grid);z-index:0}
+.seg{position:relative;z-index:1;flex:0 0 auto;height:26px;cursor:default}
+.seg:first-of-type{border-radius:0}
+.track .seg:last-child{border-top-right-radius:4px;border-bottom-right-radius:4px}
+.seg b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700}
+.seg.s1{background:var(--s1)} .seg.s2{background:var(--s2)} .seg.n{background:var(--neutral)}
+.val{font-size:13px;color:var(--text2);margin-left:8px;align-self:center;white-space:nowrap;z-index:1}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--text2);margin:0 0 14px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.axis{display:grid;grid-template-columns:minmax(120px,240px) 1fr;column-gap:12px;margin-top:6px}
+.axis .ticks{position:relative;height:16px;font-size:11px;color:var(--muted)}
+.axis .ticks span{position:absolute;transform:translateX(-50%)}
+.foot{font-size:12px;color:var(--muted);margin:14px 0 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid2 section{margin-top:18px}
+/* proposal */
+.proposal{background:var(--accent-bg);border-color:var(--accent-border)}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
+.card .top{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--text2)}
+.card .no{font-weight:700;color:var(--text);font-size:15px}
+.tag{display:inline-block;background:var(--tag-bg);border-radius:999px;padding:1px 10px;font-size:12px;color:var(--text)}
+.card .q{font-size:12px;color:var(--muted);margin-top:8px}
+.card .a{font-size:14px;margin-top:2px;white-space:pre-line}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13px}
+th,td{border-bottom:1px solid var(--border);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12px;color:var(--text2);font-weight:600;background:var(--surface);white-space:nowrap}
+td.c{text-align:center;white-space:nowrap}
+tr.ad td{background:var(--tag-bg)}
+.buy{font-weight:700;color:var(--s1)}
+.period{font-size:12px;color:var(--text2)}
+.hidden-note{color:var(--muted);font-size:12px}
+/* tooltip */
+#tip{position:fixed;pointer-events:none;background:var(--text);color:var(--surface);font-size:12px;padding:6px 10px;border-radius:8px;opacity:0;transition:opacity .1s;z-index:10;max-width:260px}
+@media (max-width:720px){
+  .kpis{grid-template-columns:1fr}
+  .grid2{grid-template-columns:1fr}
+  .grid2 section{margin-top:18px}
+  .cards{grid-template-columns:1fr}
+  .chart,.axis{grid-template-columns:110px 1fr}
+  .chart .cat{font-size:12.5px}
+  header h1{font-size:21px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>飛行機タダ乗りラボ<br>参加特典アンケート 結果</h1>
+  <p>回答期間：2026年8月16日〜9月29日（全13件）／集計：2026年10月3日時点</p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="label">アンケート回答</div><div class="num">13<small>件</small></div><div class="note">広告開始（9/25）前 11件／後 2件</div></div>
+  <div class="kpi"><div class="label">そのうちラボを購入</div><div class="num">4<small>人</small></div><div class="note">メールアドレスで購入者と照合</div></div>
+  <div class="kpi hl"><div class="label">「興味がある」と回答・未購入</div><div class="num">6<small>人</small></div><div class="note">オフ会ご招待の候補（下に一覧）</div></div>
+</div>
+
+<section>
+  <h2>飛行機タダ乗りラボへの関心度 × 購入状況</h2>
+  <p class="sub">設問「飛行機タダ乗りラボへの関心度」（1つ選ぶ）の回答を、購入済みと未購入に分けています。</p>
+  <div class="legend"><span><i style="background:var(--s1)"></i>購入済み</span><span><i style="background:var(--s2)"></i>未購入</span></div>
+  <div id="c-interest"></div>
+</section>
+
+<div class="grid2">
+<section>
+  <h2>動画講座の満足度</h2>
+  <p class="sub">設問「動画講座の満足度」（1つ選ぶ）／13件</p>
+  <div id="c-sat"></div>
+</section>
+<section>
+  <h2>いま一番近いもの</h2>
+  <p class="sub">設問「飛行機タダ乗りラボについて、いま一番近いものはどれですか？」（1つ選ぶ）／6件<br>※8/18夜に追加した設問のため、それより前の7件は対象外</p>
+  <div id="c-near"></div>
+</section>
+</div>
+
+<section class="proposal">
+  <h2>ご提案：オフ会へのご招待候補（6人）</h2>
+  <p class="sub">関心度で「興味がある」と答え、まだラボを購入していない方です。No.は「回答一覧」の番号と同じで、お名前はスプレッドシートに記載しています。</p>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section>
+  <h2>回答一覧（13件）</h2>
+  <p class="sub">色付きの行は、メタ広告開始（9/25）以降の回答です。お名前・メールアドレスはこのページには載せていません。</p>
+  <div class="tbl-wrap"><table id="tbl"></table></div>
+  <p class="foot">ラボ購入：決済ページの登録者と購入者シナリオのメールアドレスで照合（2026年10月3日時点）。別のメールアドレスで決済した場合は「未購入」と表示されます。<br>「印象に残ったこと」は、「感想の匿名での紹介を希望しない」にチェックした方の分は表示していません。</p>
+</section>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const PRE='（設問追加前）';
+const HIDE=null; // 紹介を希望しない
+const rows=[
+ {no:1,d:'8/16',q1:'満足',q4:'興味がある',q5:PRE,buy:'',txt:'増田さんが、本業をやりながら多岐に亘って成果を出し続けていること。'},
+ {no:2,d:'8/16',q1:'とても満足',q4:'興味がある',q5:PRE,buy:'',txt:'知っているか知らないかで大きく差が出る情報がある。'},
+ {no:3,d:'8/16',q1:'満足',q4:'迷っている',q5:PRE,buy:'',txt:'クレカの還元率だけではなく、使い方などで受け取るマイルが変わること。\n確かに食事1回分で旅行に行けること。'},
+ {no:4,d:'8/16',q1:'満足',q4:'興味がある',q5:PRE,buy:'',txt:'なにごとも、知ってるか知らないかが天と地の差を生む。\n情報があふれているようで、肝心な必要情報が手に入らない。\nありきたいではない情報を得ることが重要。'},
+ {no:5,d:'8/17',q1:'とても満足',q4:'今すぐ参加したい',q5:PRE,buy:'8/17',txt:'特典航空券の片道追加無料'},
+ {no:6,d:'8/18',q1:'満足',q4:'迷っている',q5:PRE,buy:'',txt:'講座の料金がとても良心的なこと'},
+ {no:7,d:'8/18',q1:'とても満足',q4:'興味がある',q5:PRE,buy:'',txt:'ポイントの使い方です。'},
+ {no:8,d:'8/20',q1:'満足',q4:'迷っている',q5:'内容がまだよく分からない',buy:'',txt:'買った物が同額以上で売れる話'},
+ {no:9,d:'8/25',q1:'とても満足',q4:'興味がある',q5:'参加したいが、時間が取れるか不安',buy:'',txt:HIDE},
+ {no:10,d:'8/28',q1:'とても満足',q4:'興味がある',q5:'参加したいが、金額がネック',buy:'',txt:'コミュニティで飛行機の格安情報。マイルなどの情報'},
+ {no:11,d:'8/30',q1:'満足',q4:'興味がある',q5:'すでに申し込みました',buy:'8/24',txt:'マイルの価値、交換する際の考え方'},
+ {no:12,d:'9/29',q1:'ふつう',q4:'興味がある',q5:'すでに申し込みました',buy:'9/28',txt:HIDE,ad:true},
+ {no:13,d:'9/29',q1:'満足',q4:'興味がある',q5:'参加したいが、自分にもできるか不安',buy:'9/30',txt:HIDE,ad:true}
+];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function niceMax(m){return Math.max(2,Math.ceil(m/2)*2)}
+function barChart(el,cats,series,unit){
+  // series: [{key,cls,label}] ; cats: [{name, vals:[..]}]
+  const max=niceMax(Math.max(...cats.map(c=>c.vals.reduce((a,b)=>a+b,0)))*1.25);
+  let h='<div class="chart">';
+  cats.forEach(c=>{
+    const total=c.vals.reduce((a,b)=>a+b,0);
+    h+=`<div class="cat">${esc(c.name)}</div><div class="track">`;
+    for(let t=0;t<=max;t+=max/2){h+=`<span class="gridline" style="left:${t/max*100}%"></span>`}
+    c.vals.forEach((v,i)=>{ if(!v)return;
+      const s=series[i];
+      const tip=`${c.name}｜${s.label?s.label+' ':''}${v}${unit}`;
+      h+=`<span class="seg ${s.cls}" style="width:calc(${v/max*100}% - 2px)" data-tip="${esc(tip)}" tabindex="0" aria-label="${esc(tip)}">${series.length>1?'<b>'+v+'</b>':''}</span>`;
+    });
+    h+=`<span class="val">${total}${unit}</span></div>`;
+  });
+  h+='</div><div class="axis"><div></div><div class="ticks">';
+  for(let t=0;t<=max;t+=max/2){h+=`<span style="left:${t/max*100}%">${t}</span>`}
+  h+='</div></div>';
+  el.innerHTML=h;
+}
+const count=(f,v)=>rows.filter(r=>r[f]===v).length;
+
+// 関心度 × 購入
+const q4=['今すぐ参加したい','興味がある','迷っている','今回は見送る'];
+barChart(document.getElementById('c-interest'),
+  q4.map(n=>({name:n,vals:[rows.filter(r=>r.q4===n&&r.buy).length, rows.filter(r=>r.q4===n&&!r.buy).length]})),
+  [{cls:'s1',label:'購入済み'},{cls:'s2',label:'未購入'}],'人');
+
+const q1=['とても満足','満足','ふつう','やや不満','不満'];
+barChart(document.getElementById('c-sat'),q1.map(n=>({name:n,vals:[count('q1',n)]})),[{cls:'s1',label:''}],'件');
+
+const q5=['すでに申し込みました','参加したいが、自分にもできるか不安','参加したいが、時間が取れるか不安','参加したいが、金額がネック','内容がまだよく分からない','今は旅行の予定がない','特にない'];
+barChart(document.getElementById('c-near'),q5.map(n=>({name:n,vals:[count('q5',n)]})),[{cls:'s1',label:''}],'件');
+
+// 招待候補
+document.getElementById('cards').innerHTML=rows.filter(r=>r.q4==='興味がある'&&!r.buy).map(r=>`
+ <div class="card">
+  <div class="top"><span class="no">No.${r.no}</span><span>${r.d} 回答</span><span class="tag">満足度：${esc(r.q1)}</span></div>
+  <div class="q">いま一番近いもの</div><div class="a">${esc(r.q5)}</div>
+  <div class="q">動画講座で一番印象に残ったこと</div>
+  <div class="a">${r.txt===null?'<span class="hidden-note">（紹介を希望しない方のため非表示）</span>':esc(r.txt)}</div>
+ </div>`).join('');
+
+// 一覧表
+let t='<thead><tr><th>No.</th><th>回答日</th><th>時期</th><th>満足度</th><th>関心度</th><th>いま一番近いもの</th><th>ラボ購入</th><th>動画講座で一番印象に残ったこと</th></tr></thead><tbody>';
+rows.forEach(r=>{
+  t+=`<tr${r.ad?' class="ad"':''}><td class="c">${r.no}</td><td class="c">${r.d}</td><td class="c period">${r.ad?'広告開始後':'広告開始前'}</td><td class="c">${esc(r.q1)}</td><td class="c">${esc(r.q4)}</td><td>${esc(r.q5)}</td><td class="c">${r.buy?'<span class="buy">購入済み（'+r.buy+'）</span>':'未購入'}</td><td style="white-space:pre-line">${r.txt===null?'<span class="hidden-note">（紹介を希望しない方のため非表示）</span>':esc(r.txt)}</td></tr>`;
+});
+document.getElementById('tbl').innerHTML=t+'</tbody>';
+
+// tooltip
+const tip=document.getElementById('tip');
+function show(e,el){tip.textContent=el.dataset.tip;tip.style.opacity=1;move(e,el)}
+function move(e,el){const r=el.getBoundingClientRect();const x=e&&e.clientX!=null?e.clientX:r.left+r.width/2;const y=e&&e.clientY!=null?e.clientY:r.top;
+  tip.style.left=Math.min(window.innerWidth-tip.offsetWidth-8,Math.max(8,x-tip.offsetWidth/2))+'px';tip.style.top=(y-tip.offsetHeight-12)+'px'}
+document.querySelectorAll('[data-tip]').forEach(el=>{
+  el.addEventListener('mouseenter',e=>show(e,el));el.addEventListener('mousemove',e=>move(e,el));
+  el.addEventListener('mouseleave',()=>tip.style.opacity=0);
+  el.addEventListener('focus',()=>show(null,el));el.addEventListener('blur',()=>tip.style.opacity=0);
+});
+</script>
+</body>
+</html>
