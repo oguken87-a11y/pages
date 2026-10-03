@@ -107,7 +107,7 @@ tr.ad td{background:var(--tag-bg)}
 <div class="kpis">
   <div class="kpi"><div class="label">アンケート回答</div><div class="num">13<small>件</small></div><div class="note">広告開始（9/25）前 11件／後 2件</div></div>
   <div class="kpi"><div class="label">そのうちラボを購入</div><div class="num">4<small>人</small></div><div class="note">メールアドレスで購入者と照合</div></div>
-  <div class="kpi hl"><div class="label">「興味がある」と回答・未購入</div><div class="num">6<small>人</small></div><div class="note">オフ会ご招待の候補（下に一覧）</div></div>
+  <div class="kpi hl"><div class="label">「興味がある」と回答・未購入</div><div class="num">6<small>人</small></div><div class="note">オフ会ご招待の候補</div></div>
 </div>
 
 <section>
@@ -129,12 +129,6 @@ tr.ad td{background:var(--tag-bg)}
   <div id="c-near"></div>
 </section>
 </div>
-
-<section class="proposal">
-  <h2>ご提案：オフ会へのご招待候補（6人）</h2>
-  <p class="sub">関心度で「興味がある」と答え、まだラボを購入していない方です。No.は「回答一覧」の番号と同じで、お名前はスプレッドシートに記載しています。</p>
-  <div class="cards" id="cards"></div>
-</section>
 
 <section>
   <h2>回答一覧（13件）</h2>
@@ -199,15 +193,6 @@ barChart(document.getElementById('c-sat'),q1.map(n=>({name:n,vals:[count('q1',n)
 
 const q5=['すでに申し込みました','参加したいが、自分にもできるか不安','参加したいが、時間が取れるか不安','参加したいが、金額がネック','内容がまだよく分からない','今は旅行の予定がない','特にない'];
 barChart(document.getElementById('c-near'),q5.map(n=>({name:n,vals:[count('q5',n)]})),[{cls:'s1',label:''}],'件');
-
-// 招待候補
-document.getElementById('cards').innerHTML=rows.filter(r=>r.q4==='興味がある'&&!r.buy).map(r=>`
- <div class="card">
-  <div class="top"><span class="no">No.${r.no}</span><span>${r.d} 回答</span><span class="tag">満足度：${esc(r.q1)}</span></div>
-  <div class="q">いま一番近いもの</div><div class="a">${esc(r.q5)}</div>
-  <div class="q">動画講座で一番印象に残ったこと</div>
-  <div class="a">${r.txt===null?'<span class="hidden-note">（紹介を希望しない方のため非表示）</span>':esc(r.txt)}</div>
- </div>`).join('');
 
 // 一覧表
 let t='<thead><tr><th>No.</th><th>回答日</th><th>時期</th><th>満足度</th><th>関心度</th><th>いま一番近いもの</th><th>ラボ購入</th><th>動画講座で一番印象に残ったこと</th></tr></thead><tbody>';
