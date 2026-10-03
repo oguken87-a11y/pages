@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>AIワカさん 音声で恋愛診断（試作）</title>
+<style>
+  :root{
+    --bg:#eef2f7; --card:#ffffff; --card2:#dfe7f1; --line:#c8d4e3;
+    --tx:#1c2b3a; --sub:#54657c; --navy:#16437e; --blue:#2e6fca;
+    --line-green:#06c755; --rec:#d64561;
+    --c-deai:#2e86de; --c-kaiwa:#e67e22; --c-kyori:#d64561; --c-goal:#1e9e6a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{overflow-x:hidden}
+  body{background:var(--bg);color:var(--tx);overflow-x:hidden;
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic",Meiryo,sans-serif;
+    font-size:16px;line-height:1.7;min-height:100vh}
+  button{font-family:inherit;color:inherit;cursor:pointer;border:0;background:none}
+  .wrap{max-width:560px;margin:0 auto;padding:14px 16px 48px}
+  .scr{display:none}
+  .scr.on{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ─ 試作ラベル ─ */
+  .proto{display:inline-block;background:#fff4d6;color:#8a5a00;border:1px solid #f0d58a;
+    font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;letter-spacing:.05em}
+
+  /* ─ アバター（共通） ─ */
+  .stage{position:relative;border-radius:22px;overflow:hidden;
+    background:radial-gradient(120% 90% at 50% 15%,#ffffff 0%,#e6edf6 55%,#d3dfee 100%);
+    border:1px solid var(--line);transition:box-shadow .3s}
+  .stage .ava{display:block;margin:0 auto;width:min(62vw,230px);height:auto}
+  .stage.speaking{box-shadow:0 0 0 3px rgba(46,111,202,.45),0 0 28px rgba(46,111,202,.35);animation:glow 1.4s ease-in-out infinite}
+  @keyframes glow{50%{box-shadow:0 0 0 5px rgba(46,111,202,.25),0 0 36px rgba(46,111,202,.45)}}
+  .tag{position:absolute;left:12px;bottom:12px;display:flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;padding:3px 12px 3px 4px;
+    font-size:14px;font-weight:700;color:var(--navy)}
+  .tag i{font-style:normal;background:var(--navy);color:#fff;font-size:11px;border-radius:999px;padding:1px 7px;letter-spacing:.05em}
+  .eq{position:absolute;right:14px;bottom:16px;display:flex;align-items:flex-end;gap:3px;height:22px}
+  .eq span{width:4px;height:4px;border-radius:2px;background:var(--blue);opacity:.45}
+  .stage.speaking .eq span{opacity:1;animation:eq .7s ease-in-out infinite}
+  .stage.speaking .eq span:nth-child(2){animation-delay:.12s}
+  .stage.speaking .eq span:nth-child(3){animation-delay:.24s}
+  .stage.speaking .eq span:nth-child(4){animation-delay:.08s}
+  .stage.speaking .eq span:nth-child(5){animation-delay:.18s}
+  @keyframes eq{0%,100%{height:4px}50%{height:20px}}
+  .note-img{position:absolute;right:12px;top:10px;font-size:11px;color:var(--sub);background:rgba(255,255,255,.8);border-radius:6px;padding:0 6px}
+
+  /* アバターの動き */
+  .ava .head{transform-origin:100px 150px;animation:idle 6s ease-in-out infinite}
+  @keyframes idle{0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1.2deg)}}
+  .ava .eyes{transform-box:fill-box;transform-origin:center;animation:blink 4.8s infinite}
+  @keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+  .ava .m-open{transform-box:fill-box;transform-origin:50% 0;transform:scaleY(0);transition:transform .08s linear}
+
+  /* ─ スタート画面 ─ */
+  .start-head{text-align:center;margin:10px 0 14px}
+  h1{font-size:26px;line-height:1.45;font-weight:800;letter-spacing:.03em;margin:10px 0 6px}
+  h1 small{display:block;font-size:15px;color:var(--sub);font-weight:600;letter-spacing:.05em}
+  .lead{color:var(--sub);text-align:center;font-size:15px;margin:16px 4px 18px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border-radius:14px;
+    padding:15px 16px;font-size:17px;font-weight:800;margin-top:10px;transition:transform .1s}
+  .btn:active{transform:scale(.98)}
+  .btn svg{width:22px;height:22px;flex:none}
+  .btn-main{background:var(--navy);color:#fff;box-shadow:0 4px 0 #0d2c55}
+  .btn-sub{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+  .btn-demo{background:var(--card2);color:var(--navy)}
+  .btn small{display:block;font-size:12px;font-weight:600;opacity:.85}
+  .hint{font-size:13px;color:var(--sub);text-align:center;margin-top:6px}
+  .notes{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:18px;font-size:13px;color:var(--sub)}
+  .notes p{padding:3px 0}
+
+  /* ─ 会話画面 ─ */
+  .bar{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .prog{flex:1;min-width:0}
+  .prog .lbl{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prog .lbl small{font-size:12px;font-weight:600;color:var(--sub);margin-left:6px}
+  #stageTalk .ava{width:min(46vw,190px)}
+  .prog .track{height:6px;background:var(--card2);border-radius:3px;overflow:hidden;margin-top:3px}
+  .prog .fill{height:100%;width:0;background:var(--blue);transition:width .4s}
+  .tbtn{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--navy);
+    background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 10px;white-space:nowrap}
+  .tbtn svg{width:16px;height:16px}
+  .tbtn.off{color:var(--sub);background:var(--card2)}
+  .demo-banner{display:none;align-items:center;justify-content:space-between;gap:8px;background:#fff4d6;border:1px solid #f0d58a;
+    color:#8a5a00;border-radius:12px;padding:7px 12px;font-size:13px;font-weight:700;margin-bottom:10px}
+  .demo-banner.on{display:flex}
+  .demo-banner button{background:#fff;border:1px solid #e3c36a;border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700;color:#8a5a00}
+  .status{display:flex;justify-content:center;margin:10px 0 6px}
+  .status span{font-size:13px;font-weight:700;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 14px}
+  .status span.rec{color:#fff;background:var(--rec);border-color:var(--rec)}
+
+  .caption{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px 12px;margin-top:6px}
+  .caption .cap-lbl{position:absolute;top:-10px;left:14px;font-size:11px;font-weight:700;color:#fff;background:var(--navy);border-radius:6px;padding:0 8px;letter-spacing:.1em}
+  .caption p{font-size:19px;font-weight:700;line-height:1.6;min-height:1.6em}
+  .skip{display:none;margin:8px 0 0 auto;font-size:13px;font-weight:700;color:var(--blue);background:#f1f5fb;border:1px solid var(--line);border-radius:999px;padding:4px 12px;align-items:center;gap:4px}
+  .skip.on{display:flex}
+  .skip svg{width:14px;height:14px}
+
+  .user{display:none;margin:12px 0 0 auto;max-width:88%;text-align:right}
+  .user.on{display:block}
+  .user .who{font-size:11px;color:var(--sub);font-weight:700;margin-right:4px}
+  .user .bub{display:inline-block;text-align:left;background:#dff3e7;border:1px solid #b8e2c8;border-radius:16px 16px 4px 16px;padding:9px 14px;font-size:16px;font-weight:600}
+  .user .bub.interim{color:var(--sub);font-weight:500}
+  .user .res{font-size:13px;margin-top:4px;color:var(--sub)}
+  .user .res b{color:var(--navy)}
+  .user .res.ng b{color:var(--rec)}
+
+  .banner{display:none;white-space:pre-line;background:#fdecef;border:1px solid #f3c0cb;color:#8e2238;border-radius:12px;padding:9px 12px;font-size:13px;font-weight:600;margin-top:12px}
+  .banner.on{display:block}
+
+  .micbox{display:none;flex-direction:column;align-items:center;margin:16px 0 4px}
+  .micbox.on{display:flex}
+  .mic{position:relative;width:76px;height:76px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 #0d2c55}
+  .mic svg{width:34px;height:34px}
+  .mic:disabled{opacity:.45;cursor:default}
+  .mic.rec{background:var(--rec);box-shadow:0 4px 0 #a02f47}
+  .mic.rec::before,.mic.rec::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid var(--rec);animation:ring 1.4s ease-out infinite}
+  .mic.rec::after{animation-delay:.7s}
+  @keyframes ring{from{transform:scale(1);opacity:.7}to{transform:scale(1.7);opacity:0}}
+  .mic-lbl{font-size:13px;font-weight:700;color:var(--navy);margin-top:8px}
+
+  .choices-lbl{font-size:12px;color:var(--sub);font-weight:700;text-align:center;margin:16px 0 8px;display:flex;align-items:center;gap:10px}
+  .choices-lbl::before,.choices-lbl::after{content:"";flex:1;height:1px;background:var(--line)}
+  .choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .choices.wide{grid-template-columns:1fr}
+  .ch{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;font-size:15px;font-weight:600;text-align:center;line-height:1.45;transition:background .2s,border-color .2s,opacity .2s}
+  .choices.wide .ch{text-align:left;padding:11px 14px}
+  .ch:active{transform:scale(.98)}
+  .ch.amb{border-color:var(--blue);background:#eaf2fd;animation:amb 1s ease-in-out infinite}
+  @keyframes amb{50%{background:#d4e5fb}}
+  .ch.sel{border-color:var(--blue);background:#eaf2fd;color:var(--navy)}
+  .ch.chosen{background:var(--navy);border-color:var(--navy);color:#fff}
+  .choices.lock .ch:not(.chosen){opacity:.4}
+  .choices.lock .ch{pointer-events:none}
+  .choices.pulse .ch{animation:pulse .9s ease-in-out 2}
+  @keyframes pulse{50%{border-color:var(--blue);background:#eef5fe}}
+  .decide{display:none;width:100%;margin-top:10px;background:var(--blue);color:#fff;font-weight:800;font-size:16px;border-radius:12px;padding:12px}
+  .decide.on{display:block}
+
+  .result{display:none;margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px 16px;text-align:center}
+  .result.on{display:block;animation:fade .4s ease}
+  .result .cat{display:inline-block;color:#fff;font-size:13px;font-weight:700;border-radius:999px;padding:2px 14px}
+  .result .type{font-size:22px;font-weight:800;line-height:1.5;margin:10px 0 4px}
+  .result .rnd{font-size:12px;color:var(--sub)}
+  .btn-line{background:var(--line-green);color:#fff;box-shadow:0 4px 0 #04943f;margin-top:14px}
+  .again{margin-top:12px;font-size:14px;font-weight:700;color:var(--blue);text-decoration:underline}
+
+  #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:rgba(28,43,58,.92);color:#fff;
+    font-size:14px;border-radius:12px;padding:10px 16px;transition:all .25s;pointer-events:none;max-width:90vw;text-align:center}
+  #toast.on{opacity:1;transform:translate(-50%,0)}
+
+  @media (min-width:700px){
+    .wrap{padding-top:24px}
+    .stage .ava{width:240px}
+    #stageTalk .ava{width:210px}
+    h1{font-size:30px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .ava .head,.ava .eyes,.stage.speaking,.ch.amb{animation:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ══════════ スタート画面 ══════════ -->
+  <section id="scrStart" class="scr on">
+    <div class="start-head">
+      <span class="proto">試作・イメージ確認用</span>
+      <h1>AIワカさんと話す<br>恋愛診断<small>音声対話版</small></h1>
+    </div>
+    <div class="stage" id="stageStart">
+      <span class="note-img">画像は仮</span>
+      <div class="ava-slot"></div>
+      <div class="tag"><i>AI</i>ワカ</div>
+    </div>
+    <p class="lead">AIワカさんが<b>声で質問</b>します。<br>声で答えても、ボタンで選んでもOKです。</p>
+
+    <button class="btn btn-main" id="btnVoice" type="button">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-6a3.5 3.5 0 1 0-7 0v6A3.5 3.5 0 0 0 12 15Zm6-3.5a1 1 0 1 0-2 0 4 4 0 0 1-8 0 1 1 0 1 0-2 0 6 6 0 0 0 5 5.91V20H8.5a1 1 0 1 0 0 2h7a1 1 0 1 0 0-2H13v-2.59a6 6 0 0 0 5-5.91Z"/></svg>
+      <span>声で答えて始める</span>
+    </button>
+    <p class="hint" id="srHint" hidden>※この端末・ブラウザでは声での回答が使えません（ボタンで答える形になります）</p>
+    <button class="btn btn-sub" id="btnTap" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/></svg>
+      <span>ボタンで答えて始める</span>
+    </button>
+    <button class="btn btn-demo" id="btnDemo" type="button">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.4-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5Z"/></svg>
+      <span>自動デモを見る<small>回答も自動で読み上げて最後まで進みます</small></span>
+    </button>
+
+    <div class="notes">
+      <p>🔊 音が出ます。音を出せない場所では、字幕とボタンで進められます。</p>
+      <p>※試作です。声は端末に入っている読み上げ音声、人物はイメージ用のイラストです。</p>
+      <p>※質問は今の診断から6問だけ抜き出しています。結果はでたらめに表示します。</p>
+    </div>
+  </section>
+
+  <!-- ══════════ 会話画面 ══════════ -->
+  <section id="scrTalk" class="scr">
+    <div class="demo-banner" id="demoBanner"><span>▶ 自動デモ再生中</span><button type="button" id="btnDemoStop">止める</button></div>
+    <div class="bar">
+      <div class="prog"><div class="lbl" id="progLbl">はじめに</div><div class="track"><div class="fill" id="progFill"></div></div></div>
+      <button class="tbtn" id="btnTts" type="button" aria-pressed="true"></button>
+      <button class="tbtn" id="btnReset" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>最初から</button>
+    </div>
+
+    <div class="stage" id="stageTalk">
+      <span class="note-img">画像は仮</span>
+      <div class="ava-slot"></div>
+      <div class="tag"><i>AI</i>ワカ</div>
+      <div class="eq"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+
+    <div class="status"><span id="status">AIワカさんが話しています</span></div>
+
+    <div class="caption">
+      <span class="cap-lbl">字幕</span>
+      <p id="caption"></p>
+      <button class="skip" id="btnSkip" type="button">読み上げをスキップ
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 6.2v11.6a1 1 0 0 0 1.6.8L13 13v4.8a1 1 0 0 0 1.6.8l7.2-5.8a1 1 0 0 0 0-1.6l-7.2-5.8A1 1 0 0 0 13 6.2V11L5.6 5.4A1 1 0 0 0 4 6.2Z"/></svg></button>
+    </div>
+
+    <div class="user" id="user"><div class="who">あなた</div><div class="bub" id="userBub"></div><div class="res" id="userRes"></div></div>
+
+    <div class="banner" id="banner"></div>
+
+    <div class="micbox" id="micbox">
+      <button class="mic" id="btnMic" type="button" aria-label="押して話す">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-6a3.5 3.5 0 1 0-7 0v6A3.5 3.5 0 0 0 12 15Zm6-3.5a1 1 0 1 0-2 0 4 4 0 0 1-8 0 1 1 0 1 0-2 0 6 6 0 0 0 5 5.91V20H8.5a1 1 0 1 0 0 2h7a1 1 0 1 0 0-2H13v-2.59a6 6 0 0 0 5-5.91Z"/></svg>
+      </button>
+      <div class="mic-lbl" id="micLbl">押して話す</div>
+    </div>
+
+    <div id="choiceArea">
+      <div class="choices-lbl" id="choicesLbl">ボタンで答える</div>
+      <div class="choices" id="choices"></div>
+      <button class="decide" id="btnDecide" type="button">これで決定</button>
+    </div>
+
+    <div class="result" id="result">
+      <span class="cat" id="resCat"></span>
+      <div class="type" id="resType"></div>
+      <div class="rnd">※試作のため、結果はでたらめに選んでいます</div>
+      <button class="btn btn-line" id="btnLine" type="button">公式LINEで詳しい結果を受け取る</button>
+      <button class="again" id="btnAgain" type="button">もう一度ためす</button>
+    </div>
+  </section>
+</div>
+<div id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ════════════════════════════════════════════════════════════════
+   AIワカさん 音声対話版 恋愛診断（試作）
+   ・読み上げ  = ブラウザの speechSynthesis（端末の読み上げ音声）
+   ・音声認識  = ブラウザの SpeechRecognition（Chrome / Safari）
+   ・質問      = 本番の診断（全21問）から6問を抜粋。選択肢の文言は本番と同じ
+   ・結果      = 11タイプからランダム（試作のため）
+   ════════════════════════════════════════════════════════════════ */
+
+const $=s=>document.querySelector(s);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const synth=('speechSynthesis' in window)?window.speechSynthesis:null;
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+
+/* ── 人物イラスト（オリジナル・仮） ── */
+const AVATAR=`<svg class="ava" viewBox="0 0 200 220" aria-hidden="true">
+  <path d="M14 222 C18 182 52 163 100 161 C148 163 182 182 186 222 Z" fill="#26364d"/>
+  <path d="M80 161 L100 207 L120 161 Z" fill="#f5f7fa"/>
+  <path d="M80 161 L100 207 L90 222 L57 173 Z" fill="#34496a"/>
+  <path d="M120 161 L100 207 L110 222 L143 173 Z" fill="#34496a"/>
+  <g class="head">
+    <path d="M84 124 L84 163 Q100 178 116 163 L116 124 Z" fill="#e2ad8a"/>
+    <path d="M84 134 Q100 150 116 134 L116 128 Q100 143 84 128 Z" fill="#c38867" opacity=".35"/>
+    <ellipse cx="58" cy="98" rx="8" ry="13" fill="#eab896"/>
+    <ellipse cx="142" cy="98" rx="8" ry="13" fill="#eab896"/>
+    <path d="M60 78 C60 46 80 34 100 34 C120 34 140 46 140 78 L140 102 C140 130 122 148 100 148 C78 148 60 130 60 102 Z" fill="#f2c6a4"/>
+    <path d="M63 106 C66 132 82 148 100 148 C118 148 134 132 137 106 C130 122 117 130 100 130 C83 130 70 122 63 106 Z" fill="#7b5a43" opacity=".17"/>
+    <ellipse cx="72" cy="112" rx="7" ry="4" fill="#e7918a" opacity=".18"/>
+    <ellipse cx="128" cy="112" rx="7" ry="4" fill="#e7918a" opacity=".18"/>
+    <path d="M57 92 C50 52 70 24 102 24 C134 24 154 46 145 92 C143 74 138 62 131 55 C116 62 86 60 70 50 C64 60 59 74 57 92 Z" fill="#8a5d3b"/>
+    <path d="M70 50 C86 60 116 62 131 55 C124 43 112 36 98 36 C86 36 76 41 70 50 Z" fill="#a8774f" opacity=".55"/>
+    <path d="M86 30 Q93 41 90 56" stroke="#6e4a2e" stroke-width="2" fill="none" stroke-linecap="round" opacity=".6"/>
+    <path d="M71 78 Q81 72 91 77" stroke="#6a4529" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M109 77 Q119 72 129 78" stroke="#6a4529" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <g class="eyes">
+      <ellipse cx="82" cy="90" rx="6.5" ry="4.3" fill="#fff"/>
+      <circle cx="82" cy="90" r="3.4" fill="#3e6b8f"/><circle cx="82" cy="90" r="1.6" fill="#1b2a38"/><circle cx="83.2" cy="88.8" r=".9" fill="#fff"/>
+      <ellipse cx="118" cy="90" rx="6.5" ry="4.3" fill="#fff"/>
+      <circle cx="118" cy="90" r="3.4" fill="#3e6b8f"/><circle cx="118" cy="90" r="1.6" fill="#1b2a38"/><circle cx="119.2" cy="88.8" r=".9" fill="#fff"/>
+    </g>
+    <path d="M75 87 Q82 83 89 87" stroke="#6a4529" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M111 87 Q118 83 125 87" stroke="#6a4529" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M100 92 Q98 104 94 111 Q99 114 106 111" stroke="#cf9b78" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <g class="mouth">
+      <g class="m-open">
+        <path d="M88 123 Q100 121 112 123 Q109 139 100 139 Q91 139 88 123 Z" fill="#7d2f2c"/>
+        <path d="M90 123.5 Q100 122 110 123.5 L109 127 Q100 126 91 127 Z" fill="#fff"/>
+      </g>
+      <path d="M88 124 Q100 131 112 124" stroke="#a45f4c" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>`;
+document.querySelectorAll('.ava-slot').forEach(el=>{el.innerHTML=AVATAR;});
+
+/* ── 11タイプ（本番の診断と同じ名前） ── */
+const TYPES=[
+  {cat:'出会い',color:'var(--c-deai)',type:'出会いの接点不足タイプ'},
+  {cat:'出会い',color:'var(--c-deai)',type:'出会い方ミスマッチタイプ'},
+  {cat:'出会い',color:'var(--c-deai)',type:'過去の成功パターン継続タイプ'},
+  {cat:'会話',color:'var(--c-kaiwa)',type:'会話の入口で緊張しやすいタイプ'},
+  {cat:'会話',color:'var(--c-kaiwa)',type:'雑談止まりタイプ'},
+  {cat:'会話',color:'var(--c-kaiwa)',type:'相手の反応読み違いタイプ'},
+  {cat:'距離の縮め方',color:'var(--c-kyori)',type:'会話の数で勝負タイプ'},
+  {cat:'距離の縮め方',color:'var(--c-kyori)',type:'自己流スキンシップタイプ'},
+  {cat:'距離の縮め方',color:'var(--c-kyori)',type:'安心感はあるが進展しにくいタイプ'},
+  {cat:'成功目前',color:'var(--c-goal)',type:'誠実さ一本足タイプ'},
+  {cat:'成功目前',color:'var(--c-goal)',type:'条件アピール先行タイプ'}
+];
+
+/* ── 聞き取った言葉を数字にそろえる（漢数字・全角数字→半角数字） ── */
+function kanjiNum(s){
+  const d={'〇':0,'零':0,'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9};
+  let total=0,cur=0;
+  for(const ch of s){
+    if(ch in d) cur=cur*10+d[ch];
+    else if(ch==='十'){total+=(cur||1)*10;cur=0;}
+    else if(ch==='百'){total+=(cur||1)*100;cur=0;}
+  }
+  return total+cur;
+}
+function normNum(t){
+  t=String(t||'').replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0));
+  t=t.replace(/ひとり/g,'1人').replace(/ふたり/g,'2人');
+  t=t.replace(/[〇零一二三四五六七八九十百]+/g,m=>String(kanjiNum(m)));
+  return t;
+}
+function nums(t){return (normNum(t).match(/\d+/g)||[]).map(Number);}
+const MATCH=v=>({kind:'match',values:Array.isArray(v)?v:[v]});
+const AMB=a=>({kind:'ambiguous',values:a.slice(0,2)});
+const NONE={kind:'none',values:[]};
+const uniq=a=>[...new Set(a)];
+function byKeywords(t,table){
+  const hit=table.filter(([,re])=>re.test(t)).map(([v])=>v);
+  if(!hit.length) return NONE;
+  return hit.length===1?MATCH(hit[0]):AMB(hit);
+}
+function decadeLabel(n,max,maxLabel){const d=Math.floor(n/10)*10;if(d<=20)return'20代';if(d>=max)return maxLabel;return d+'代';}
+
+/* ── 質問（本番の診断から6問。選択肢の文言は本番と同じ） ── */
+const Q=[
+ {id:'q1',sec:'基本情報',
+  say:'まず、あなたの年齢を教えてください。',
+  o:['20代','30代','40代','50代','60代','70代以上'],
+  match(t){
+    const n=normNum(t);
+    const m=n.match(/([1-9])0代/); if(m) return MATCH(decadeLabel(+m[1]*10,70,'70代以上'));
+    if(/アラカン/.test(t)) return AMB(['50代','60代']);
+    if(/還暦/.test(t)) return MATCH('60代');
+    if(/アラフィフ/.test(t)) return MATCH('50代');
+    if(/アラフォー/.test(t)) return MATCH('40代');
+    if(/アラサー/.test(t)) return MATCH('30代');
+    const ns=nums(t).filter(x=>x>=18&&x<=110);
+    if(ns.length) return MATCH(decadeLabel(ns[0],70,'70代以上'));
+    return NONE;
+  },
+  ack:v=>`${v}ですね。ありがとうございます。`},
+ {id:'q3',sec:'基本情報',
+  say:'好みの女性は、何歳くらいの方ですか？',
+  o:['20代','30代','40代','50代以上'],
+  match(t){
+    const n=normNum(t);
+    const m=n.match(/([1-9])0代/); if(m) return MATCH(decadeLabel(+m[1]*10,50,'50代以上'));
+    if(/同年代|同い年|同世代|自分と同じ/.test(t)&&S.answers.q1){
+      return MATCH(decadeLabel(parseInt(S.answers.q1,10),50,'50代以上'));
+    }
+    const ns=nums(t).filter(x=>x>=16&&x<=90);
+    if(ns.length){const set=uniq(ns.map(x=>decadeLabel(x,50,'50代以上')));return set.length>1?AMB(set):MATCH(set[0]);}
+    if(/若い|年下|わかい/.test(t)) return AMB(['20代','30代']);
+    return NONE;
+  },
+  ack:v=>`${v}の女性ですね。わかりました。`},
+ {id:'q8',sec:'出会い',
+  say:'今、新しく出会う女性とは、月に何人くらい会えていますか？',
+  o:['0人','1人～5人','6人～10人','11人以上'],
+  match(t){
+    const bucket=x=>x===0?'0人':x<=5?'1人～5人':x<=10?'6人～10人':'11人以上';
+    const ns=nums(t).filter(x=>x<=200);
+    if(ns.length){const set=uniq(ns.map(bucket));return set.length>1?AMB(set):MATCH(set[0]);}
+    if(/数人|何人か|少し|少な|ちょっと|ちょこちょこ|たまに/.test(t)) return MATCH('1人～5人');
+    if(/ゼロ|ぜろ|いない|会えてない|会えていない|会ってない|会っていない|全然|ぜんぜん|まったく|全く|なし|無し/.test(t)) return MATCH('0人');
+    if(/たくさん|いっぱい|多い|結構|けっこう/.test(t)) return AMB(['6人～10人','11人以上']);
+    return NONE;
+  },
+  ack:v=>({'0人':'なるほど。まずは出会いの数からですね。','1人～5人':'月に1人から5人。ちゃんと動けていますね。','6人～10人':'月に6人から10人。かなり動けていますね。','11人以上':'11人以上ですか。行動量は十分ですね。'})[v]},
+ {id:'q15',sec:'会話',
+  say:'女性と話すとき、どんな話し方になることが多いですか？',
+  o:['一方的に話す','相手の話す量と自分の話す量が同じくらいになるように話す','聞き役に徹する','よく話題に詰まってしまう','緊張で頭が真っ白になる'],
+  wide:true,
+  match(t){
+    return byKeywords(t,[
+      ['一方的に話す',/一方的|自分ばかり|自分ばっかり|しゃべりすぎ|喋りすぎ|話しすぎ|自分の話/],
+      ['相手の話す量と自分の話す量が同じくらいになるように話す',/同じくらい|半々|半分|バランス|キャッチボール|交互/],
+      ['聞き役に徹する',/聞き役|聞き手|聞くほう|聞く方|相槌|あいづち|聞いて/],
+      ['よく話題に詰まってしまう',/詰ま|つまっ|つまる|沈黙|続かない|話題がない|ネタが/],
+      ['緊張で頭が真っ白になる',/緊張|真っ白|まっしろ|あがっ|あがる|焦っ|焦る/]
+    ]);
+  },
+  ack:v=>v==='緊張で頭が真っ白になる'?'緊張しますよね。そこには、ちゃんと順番があります。':'なるほど。そこで悩む方、本当に多いんです。'},
+ {id:'q17',sec:'距離',
+  say:'スキンシップは得意な方ですか？',
+  o:['得意','あまり得意ではない','スキンシップをやったことがない'],
+  match(t){
+    if(/(やった|した)こと(が|は)?(ない|無い)|経験(が|は)?(ない|無い)|未経験|一度もない/.test(t)) return MATCH('スキンシップをやったことがない');
+    if(/まあまあ|普通|ふつう/.test(t)) return AMB(['得意','あまり得意ではない']);
+    if(/得意じゃ|得意では|苦手|あまり|あんまり|そんなに|下手|へた|できない/.test(t)) return MATCH('あまり得意ではない');
+    if(/得意|自信(が)?ある|できる|上手|うまい|はい/.test(t)) return MATCH('得意');
+    return NONE;
+  },
+  ack:v=>({'得意':'頼もしいですね。','あまり得意ではない':'大丈夫です。順番さえ分かれば変わります。','スキンシップをやったことがない':'大丈夫です。最初はみなさん、そこからです。'})[v]},
+ {id:'q20',sec:'あなたの悩み',
+  say:'最後です。今、恋愛で悩んでいることを教えてください。いくつでも大丈夫です。',
+  o:['好みの女性となるとうまくいかない','ルックスの良い女性となるとうまくいかない','若い女性になるとうまくいかない','ワンナイトはできるが既存化ができない','今後も一生独身かと不安になる','そもそも女性経験が少ない'],
+  wide:true, multi:true,
+  match(t){
+    const hit=[
+      ['好みの女性となるとうまくいかない',/好み|タイプの|本命|好きな人|好きな子/],
+      ['ルックスの良い女性となるとうまくいかない',/ルックス|美人|きれい|綺麗|かわいい|可愛い/],
+      ['若い女性になるとうまくいかない',/若い|年下|わかい/],
+      ['ワンナイトはできるが既存化ができない',/ワンナイト|一晩|1回きり|一回きり|2回目|二回目|次につながらない|リピート/],
+      ['今後も一生独身かと不安になる',/独身|一生|結婚できない|ひとりのまま|一人のまま/],
+      ['そもそも女性経験が少ない',/経験が少な|経験少な|経験がない|経験ない|慣れていない|慣れてない|経験不足/]
+    ].filter(([,re])=>re.test(t)).map(([v])=>v);
+    return hit.length?MATCH(hit):NONE;
+  },
+  ack:v=>`${v.map(x=>'「'+x+'」').join('と、')}ですね。よく分かります。`}
+];
+
+/* 読み上げ用の言い換え（字幕はそのまま） */
+function forSpeech(s){
+  return s.replace(/1人～5人/g,'ひとりから5人').replace(/～/g,'から').replace(/(^|[^\d])0人/g,'$1ゼロ人').replace(/「|」/g,'');
+}
+
+/* ── 自動デモの台本（聞き取れない・あいまい、の流れも入れている） ── */
+const DEMO={
+  q1:['55歳です'],
+  q3:['若い子がいいですね','20代かな'],
+  q8:['うーん、2、3人ですかね'],
+  q15:['えーっと…','緊張して、頭が真っ白になっちゃいます'],
+  q17:['あんまり得意じゃないです'],
+  q20:['若い子だとうまくいかないのと、このまま一生独身なのかなって不安です']
+};
+
+/* ── 状態 ── */
+const S={mode:'voice',tts:!!synth,idx:-1,answers:{},run:0,micDenied:false,micWorked:false,
+  listening:false,rec:null,amb:null,locked:true,multi:new Set(),demoStep:{},speaking:false};
+
+/* ── 声の選択（男性の声があれば優先） ── */
+const V={waka:null,wakaPitch:.85,user:null,userPitch:1.15};
+function pickVoices(){
+  if(!synth) return;
+  const vs=synth.getVoices().filter(v=>/^ja(-|_|$)/i.test(v.lang));
+  if(!vs.length) return;
+  const male=vs.find(v=>/Otoya|Ichiro|Keita|Daichi|Naoki|Hiroshi|Kenji|Takumi|male|男性/i.test(v.name));
+  V.waka=male||vs[0]; V.wakaPitch=male?1:.8;
+  const other=vs.find(v=>v!==V.waka&&!/Otoya|Ichiro|Keita|Daichi|Naoki|Hiroshi|Kenji|Takumi/i.test(v.name))||vs.find(v=>v!==V.waka);
+  V.user=other||V.waka; V.userPitch=other?1.05:1.25;
+}
+if(synth){pickVoices();synth.onvoiceschanged=pickVoices;}
+
+/* ── 画面部品 ── */
+const el={
+  start:$('#scrStart'),talk:$('#scrTalk'),stage:$('#stageTalk'),status:$('#status'),caption:$('#caption'),
+  skip:$('#btnSkip'),user:$('#user'),userBub:$('#userBub'),userRes:$('#userRes'),banner:$('#banner'),
+  micbox:$('#micbox'),mic:$('#btnMic'),micLbl:$('#micLbl'),choiceArea:$('#choiceArea'),choices:$('#choices'),
+  choicesLbl:$('#choicesLbl'),decide:$('#btnDecide'),result:$('#result'),progLbl:$('#progLbl'),progFill:$('#progFill'),
+  tts:$('#btnTts'),demoBanner:$('#demoBanner')
+};
+const mouth=el.stage.querySelector('.m-open');
+let mouthTimer=null;
+function startMouth(){stopMouth();mouthTimer=setInterval(()=>{mouth.style.transform='scaleY('+(0.15+Math.random()*0.85).toFixed(2)+')';},110);}
+function stopMouth(){clearInterval(mouthTimer);mouthTimer=null;mouth.style.transform='scaleY(0)';}
+
+const STATUS={
+  speak:'AIワカさんが話しています',listen:'聞いています…お話しください',turn:'マイクを押して答えてください',
+  tap:'下のボタンから選んでください',retry:'もう一度話すか、ボタンで選んでください',demo:'お客様役が答えています（デモ）',
+  check:'お答えを確認しています…',done:'診断完了'
+};
+function setStatus(k){el.status.textContent=STATUS[k]||k;el.status.classList.toggle('rec',k==='listen'||k==='demo');}
+function setCaption(t){el.caption.textContent=t;}
+function setSpeaking(on){S.speaking=on;el.stage.classList.toggle('speaking',on);el.skip.classList.toggle('on',on&&S.tts);if(on)setStatus('speak');}
+function toast(t){const x=$('#toast');x.textContent=t;x.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>x.classList.remove('on'),2200);}
+function renderTts(){
+  el.tts.classList.toggle('off',!S.tts);el.tts.setAttribute('aria-pressed',String(S.tts));
+  el.tts.innerHTML=S.tts
+    ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg>読み上げON'
+    :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="m17 9 5 6M22 9l-5 6"/></svg>読み上げOFF';
+}
+function showBanner(t){el.banner.textContent=t;el.banner.classList.toggle('on',!!t);}
+function canListen(){return S.mode==='voice'&&!!SR&&!S.micDenied;}
+function renderMic(){
+  const show=canListen()||S.mode==='demo';
+  el.micbox.classList.toggle('on',show);
+  el.mic.disabled=S.mode==='demo'||S.locked;
+  el.mic.classList.toggle('rec',S.listening);
+  el.micLbl.textContent=S.mode==='demo'?(S.listening?'お客様役が話しています':'自動デモ中'):(S.listening?'聞いています（押すと終了）':'押して話す');
+  el.choicesLbl.textContent=show?'またはボタンで答える':'ボタンで答える';
+}
+
+/* ── AIワカさんが話す（読み上げOFFのときは字幕だけ） ── */
+let speakDone=null;
+function say(text,opt={}){
+  setCaption(text);
+  if(!S.tts||!synth){
+    setSpeaking(false);
+    return sleep(opt.offWait||0);
+  }
+  return new Promise(res=>{
+    let done=false,t1=0,t2=0;
+    const finish=()=>{if(done)return;done=true;clearTimeout(t1);clearTimeout(t2);stopMouth();setSpeaking(false);speakDone=null;res();};
+    speakDone=finish;
+    const spoken=forSpeech(opt.speak||text);
+    const u=new SpeechSynthesisUtterance(spoken);
+    u.lang='ja-JP';if(V.waka)u.voice=V.waka;u.pitch=V.wakaPitch;u.rate=1.05;
+    u.onend=finish;u.onerror=finish;
+    setSpeaking(true);startMouth();
+    synth.speak(u);
+    t1=setTimeout(()=>{if(!synth.speaking&&!synth.pending)finish();},2500);   /* 読み上げが始まらない端末の保険 */
+    t2=setTimeout(finish,3000+spoken.length*260);                            /* 終わりの合図が来ない端末の保険 */
+  });
+}
+function skipSpeech(){if(synth)synth.cancel();if(speakDone)speakDone();}
+
+/* ── お客様役（自動デモ）が話す ── */
+function sayUser(text){
+  const run=S.run;
+  el.user.classList.add('on');el.userBub.classList.add('interim');el.userBub.textContent='';el.userRes.textContent='';
+  S.listening=true;renderMic();setStatus('demo');
+  const typing=new Promise(res=>{
+    let i=0;const chars=[...text];
+    const tm=setInterval(()=>{if(run!==S.run){clearInterval(tm);return res();}
+      el.userBub.textContent=chars.slice(0,++i).join('');if(i>=chars.length){clearInterval(tm);res();}},85);
+  });
+  let voice=Promise.resolve();
+  if(S.tts&&synth){
+    voice=new Promise(res=>{
+      let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(t);res();};
+      const u=new SpeechSynthesisUtterance(text.replace(/…/g,'、'));
+      u.lang='ja-JP';if(V.user)u.voice=V.user;u.pitch=V.userPitch;u.rate=1.0;u.onend=fin;u.onerror=fin;
+      synth.speak(u);const t=setTimeout(fin,2500+text.length*260);
+    });
+  }
+  return Promise.all([typing,voice]).then(()=>{S.listening=false;renderMic();});
+}
+
+/* ── 音声認識 ── */
+function startListening(auto){
+  if(!SR||S.listening||S.locked||!canListen()) return;
+  const run=S.run,qi=S.idx;
+  let rec;
+  try{rec=new SR();}catch(e){return;}
+  S.rec=rec;rec.lang='ja-JP';rec.interimResults=true;rec.maxAlternatives=3;rec.continuous=false;
+  let finals=null,lastErr='';
+  rec.onresult=e=>{
+    let interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const r=e.results[i];
+      if(r.isFinal){finals=[];for(let k=0;k<r.length;k++)finals.push(r[k].transcript);}
+      else interim+=r[0].transcript;
+    }
+    if(!finals&&interim){el.user.classList.add('on');el.userBub.classList.add('interim');el.userBub.textContent=interim;el.userRes.textContent='';}
+  };
+  rec.onerror=e=>{lastErr=e.error;};
+  rec.onend=()=>{
+    if(S.rec===rec)S.rec=null;
+    S.listening=false;renderMic();
+    if(run!==S.run||qi!==S.idx||S.locked) return;
+    if(finals&&finals.length){S.micWorked=true;processVoice(finals);return;}
+    if(lastErr==='not-allowed'||lastErr==='service-not-allowed'||lastErr==='audio-capture'){
+      if(auto&&!S.micWorked){setStatus('turn');return;}   /* 自動で始められない端末＝マイクボタンで始めてもらう */
+      micDenied();return;
+    }
+    if(el.userBub.classList.contains('interim'))el.user.classList.remove('on');
+    setStatus(lastErr==='no-speech'?'retry':'turn');
+  };
+  try{rec.start();S.listening=true;renderMic();setStatus('listen');}
+  catch(e){setStatus('turn');}
+}
+function stopListening(abort){
+  const r=S.rec;S.rec=null;
+  if(r){try{abort?r.abort():r.stop();}catch(e){}}
+  S.listening=false;renderMic();
+}
+function micDenied(){
+  S.micDenied=true;stopListening(true);renderMic();setStatus('tap');
+  showBanner('マイクが使えない設定のため、下のボタンから選んでください。');
+}
+
+/* ── 選択肢 ── */
+function renderChoices(){
+  const q=Q[S.idx];
+  el.choices.className='choices'+((q.wide||q.o.some(x=>x.length>8))?' wide':'');
+  el.choices.innerHTML='';
+  q.o.forEach(label=>{
+    const b=document.createElement('button');b.type='button';b.className='ch';b.textContent=label;b.dataset.v=label;
+    b.addEventListener('click',()=>onTap(label,b));
+    el.choices.appendChild(b);
+  });
+  S.multi.clear();renderDecide();
+}
+function chipEls(){return [...el.choices.querySelectorAll('.ch')];}
+function markAmb(values){chipEls().forEach(b=>b.classList.toggle('amb',values.includes(b.dataset.v)));}
+function markChosen(values){chipEls().forEach(b=>{b.classList.remove('amb','sel');b.classList.toggle('chosen',values.includes(b.dataset.v));});el.choices.classList.add('lock');}
+function pulseChoices(){el.choices.classList.remove('pulse');void el.choices.offsetWidth;el.choices.classList.add('pulse');}
+function renderDecide(){const q=Q[S.idx];const n=S.multi.size;el.decide.classList.toggle('on',!!(q&&q.multi&&n));el.decide.textContent=`これで決定（${n}件）`;}
+function onTap(label,b){
+  if(S.locked||S.mode==='demo') return;
+  const q=Q[S.idx];
+  if(S.listening) stopListening(true);
+  if(S.speaking) skipSpeech();
+  if(q.multi){
+    if(S.multi.has(label))S.multi.delete(label);else S.multi.add(label);
+    b.classList.toggle('sel',S.multi.has(label));renderDecide();return;
+  }
+  commit([label],null);
+}
+el.decide.addEventListener('click',()=>{
+  if(S.locked||!S.multi.size) return;
+  if(S.listening) stopListening(true);
+  if(S.speaking) skipSpeech();
+  const q=Q[S.idx];commit(q.o.filter(x=>S.multi.has(x)),null);
+});
+
+/* ── お客様の答え表示 ── */
+function showUser(text,res,voiced){
+  el.user.classList.add('on');el.userBub.classList.remove('interim');
+  el.userBub.textContent=voiced?`「${text}」`:text;
+  el.userRes.className='res'+(res.kind==='none'?' ng':'');
+  if(!voiced){el.userRes.textContent='（ボタンで選択）';return;}
+  if(res.kind==='match') el.userRes.innerHTML='→ <b></b> として受け取りました';
+  else if(res.kind==='ambiguous') el.userRes.innerHTML='→ <b></b> のどちらか確認します';
+  else el.userRes.innerHTML='→ <b>聞き取れませんでした</b>';
+  const b=el.userRes.querySelector('b');
+  if(b&&res.kind!=='none') b.textContent=res.values.map(v=>'「'+v+'」').join(res.kind==='ambiguous'?'か':'・');
+}
+
+/* ── 声の答えを選択肢に当てはめる ── */
+async function processVoice(alts){
+  const run=S.run,q=Q[S.idx];
+  setStatus('check');
+  let res=NONE,heard=alts[0];
+  for(const a of alts){const r=q.match(a);if(r.kind!=='none'){res=r;heard=a;break;}}
+  if(res.kind==='match'){showUser(heard,res,true);return commit(res.values,heard);}
+  showUser(heard,res,true);
+  if(res.kind==='ambiguous'){
+    markAmb(res.values);
+    if(S.amb){
+      await say('すみません、下のボタンから選んでいただけますか？',{offWait:0});
+      if(run!==S.run) return;
+      if(S.mode==='demo') return demoNext();
+      setStatus('tap');return;
+    }
+    S.amb=res.values;
+    await say(`「${res.values[0]}」と「${res.values[1]}」、どちらに近いですか？`,{offWait:0});
+    if(run!==S.run) return;
+    return userTurn(true);
+  }
+  pulseChoices();
+  await say('すみません、うまく聞き取れませんでした。もう一度お話しいただくか、下の選択肢から選んでください。',{offWait:0});
+  if(run!==S.run) return;
+  if(S.mode==='demo') return demoNext();
+  setStatus(canListen()?'retry':'tap');
+}
+
+/* ── 答えを確定して次へ ── */
+async function commit(values,heard){
+  if(S.locked) return;
+  S.locked=true;stopListening(true);renderMic();renderDecide();el.decide.classList.remove('on');
+  const run=S.run,q=Q[S.idx];
+  S.answers[q.id]=q.multi?values:values[0];
+  markChosen(values);
+  if(!heard) showUser(values.join('、'),MATCH(values),false);
+  await sleep(650); if(run!==S.run) return;
+  await say(q.ack(q.multi?values:values[0]),{offWait:1100}); if(run!==S.run) return;
+  if(S.idx+1<Q.length) askQuestion(S.idx+1); else finish();
+}
+
+/* ── 自動デモ：お客様役の次のセリフ ── */
+async function demoNext(){
+  const run=S.run,q=Q[S.idx];
+  const list=DEMO[q.id];const k=S.demoStep[q.id]||0;S.demoStep[q.id]=k+1;
+  const line=list[Math.min(k,list.length-1)];
+  setStatus('demo');
+  await sleep(450); if(run!==S.run) return;
+  await sayUser(line); if(run!==S.run) return;
+  processVoice([line]);
+}
+
+/* ── お客様の番 ── */
+function userTurn(auto){
+  if(S.locked) return;
+  if(S.mode==='demo') return demoNext();
+  if(canListen()){ if(auto) startListening(true); else setStatus('turn'); }
+  else setStatus('tap');
+}
+
+/* ── 質問する ── */
+async function askQuestion(i){
+  const run=S.run;
+  S.idx=i;S.locked=false;S.amb=null;
+  el.progLbl.innerHTML=`質問 ${i+1} / ${Q.length}<small></small>`;
+  el.progLbl.querySelector('small').textContent=Q[i].sec;
+  el.progFill.style.width=(i/Q.length*100)+'%';
+  el.user.classList.remove('on');el.userRes.textContent='';
+  renderChoices();renderMic();
+  if(i>0) window.scrollTo({top:0,behavior:'smooth'});   /* 次の質問はページ先頭から（本番の診断と同じ動き） */
+  await say(Q[i].say,{offWait:0});
+  if(run!==S.run) return;
+  userTurn(true);
+}
+
+/* ── 結果 ── */
+async function finish(){
+  const run=S.run;
+  el.progLbl.textContent='診断完了';el.progFill.style.width='100%';
+  el.choiceArea.style.display='none';el.micbox.classList.remove('on');el.user.classList.remove('on');
+  await say('診断が終わりました。お疲れさまでした！',{offWait:800}); if(run!==S.run) return;
+  const t=TYPES[Math.floor(Math.random()*TYPES.length)];
+  const c=$('#resCat');c.textContent=t.cat;c.style.background=t.color;
+  $('#resType').textContent=t.type;el.result.classList.add('on');
+  await say(`あなたは、「${t.cat}」でつまずいている、「${t.type}」です。詳しい結果と、ここからの直し方は、公式LINEでお送りしますね。`,{offWait:0});
+  if(run!==S.run) return;
+  setStatus('done');
+  if(S.mode==='demo'){el.demoBanner.querySelector('span').textContent='▶ 自動デモ終了';$('#btnDemoStop').textContent='最初の画面へ';}
+}
+
+/* ── 開始・リセット ── */
+function begin(mode){
+  S.run++;const run=S.run;
+  S.mode=mode;S.idx=-1;S.answers={};S.demoStep={};S.locked=true;S.amb=null;S.micDenied=false;
+  if(synth&&(synth.speaking||synth.pending))synth.cancel();
+  stopListening(true);
+  el.start.classList.remove('on');el.talk.classList.add('on');window.scrollTo(0,0);
+  el.result.classList.remove('on');el.choiceArea.style.display='';el.choices.innerHTML='';el.user.classList.remove('on');
+  el.progLbl.textContent='はじめに';el.progFill.style.width='0';
+  el.demoBanner.classList.toggle('on',mode==='demo');el.demoBanner.querySelector('span').textContent='▶ 自動デモ再生中';$('#btnDemoStop').textContent='止める';
+  showBanner(mode==='voice'&&!SR?'この端末・ブラウザでは声での回答が使えません。下のボタンから選んでください（声で答えるには Chrome か Safari で開いてください）。':'');
+  if(!synth) showBanner((el.banner.textContent?el.banner.textContent+'\n':'')+'この端末では読み上げが使えないため、字幕だけで進みます。');
+  renderTts();renderMic();
+  const intro=mode==='tap'
+    ?'こんにちは、AIワカです。これから6つ質問します。下のボタンから選んで答えてください。'
+    :mode==='demo'
+      ?'こんにちは、AIワカです。これから6つ質問します。今回は自動デモなので、お客様役の答えも自動で流れます。'
+      :'こんにちは、AIワカです。これから6つ質問しますので、声で答えてください。話しにくいときは、下のボタンを押しても大丈夫です。';
+  /* iPhoneは最初の読み上げをボタンを押した瞬間に始める必要があるため、ここでは await より前に say を呼ぶ */
+  say(intro,{offWait:1200}).then(()=>{if(run===S.run)askQuestion(0);});
+}
+function reset(){
+  S.run++;if(synth)synth.cancel();if(speakDone)speakDone();stopListening(true);stopMouth();
+  el.talk.classList.remove('on');el.start.classList.add('on');window.scrollTo(0,0);
+}
+
+$('#btnVoice').addEventListener('click',()=>begin('voice'));
+$('#btnTap').addEventListener('click',()=>begin('tap'));
+$('#btnDemo').addEventListener('click',()=>begin('demo'));
+$('#btnReset').addEventListener('click',reset);
+$('#btnAgain').addEventListener('click',reset);
+$('#btnDemoStop').addEventListener('click',reset);
+el.skip.addEventListener('click',skipSpeech);
+el.tts.addEventListener('click',()=>{
+  if(!synth){toast('この端末では読み上げが使えません');return;}
+  S.tts=!S.tts;renderTts();
+  if(!S.tts){synth.cancel();if(speakDone)speakDone();}
+});
+el.mic.addEventListener('click',()=>{
+  if(S.mode==='demo'||S.locked) return;
+  if(S.listening){stopListening(false);return;}
+  if(S.speaking) skipSpeech();
+  startListening(false);
+});
+$('#btnLine').addEventListener('click',()=>toast('試作のため、このボタンは動きません'));
+if(!SR) $('#srHint').hidden=false;
+
+/* 動作確認用（画面には影響しない） */
+window.__voiceProto={Q,forSpeech,S};
+})();
+</script>
+</body>
+</html>
