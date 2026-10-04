@@ -1,0 +1,389 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Waka塾 Threads 運用モック（恋愛診断案）</title><style>
+:root{--bg:#eef0f3;--ink:#101010;--sub:#777;--line:#e2e2e2;--card:#fff;--blue:#1d6fd6;--warn:#7a5c00;--warnbg:#fff4cc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;line-height:1.6}
+.wrap{max-width:1280px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:22px;margin:0 0 6px}
+.lead{color:#444;font-size:14px;margin:0 0 4px}
+.badge{display:inline-block;background:var(--warnbg);color:var(--warn);font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;margin:8px 0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:28px;align-items:start}
+.col h2{font-size:16px;margin:0 0 4px}
+.col p.cap{font-size:13px;color:#555;margin:0 0 12px}
+.phone{background:#111;border-radius:42px;padding:12px;max-width:390px;margin:0 auto;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.screen{background:var(--card);border-radius:32px;height:760px;overflow-y:auto;overflow-x:hidden}
+.statusbar{display:flex;justify-content:space-between;padding:10px 22px 4px;font-size:12px;font-weight:700;position:sticky;top:0;background:var(--card);z-index:2}
+.feedhead{padding:8px 16px 10px;font-weight:700;font-size:15px;border-bottom:1px solid var(--line)}
+.prof{padding:10px 16px 0}
+.prof-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pname{font-size:20px;font-weight:800;line-height:1.3}
+.pid{font-size:14px;margin-top:2px}
+.pav{width:72px;height:72px;border-radius:50%;flex:none}
+.bio{white-space:pre-wrap;font-size:14px;margin:12px 0 6px}
+.plink{color:var(--blue);font-size:14px}
+.pfol{color:var(--sub);font-size:14px;margin:6px 0 12px}
+.pbtns{display:flex;gap:8px}
+.pbtns span{flex:1;text-align:center;border-radius:10px;padding:7px 0;font-weight:700;font-size:14px}
+.b1{background:#000;color:#fff}.b2{border:1px solid #ccc}
+.tabs{display:flex;justify-content:space-around;margin-top:14px;border-bottom:1px solid var(--line);font-size:14px;color:var(--sub)}
+.tabs span{padding:10px 0}.tabs .on{color:var(--ink);font-weight:700;border-bottom:2px solid var(--ink)}
+.post{padding:12px 16px 4px;border-bottom:1px solid var(--line)}
+.post.chain{border-bottom:none}
+.row{display:flex;gap:10px}
+.av-col{display:flex;flex-direction:column;align-items:center;flex:none}
+.av{width:36px;height:36px;border-radius:50%}
+.thread-line{flex:1;width:2px;background:transparent;margin-top:6px}
+.post.chain .thread-line{background:#d7d7d7}
+.main{flex:1;min-width:0}
+.who{display:flex;align-items:center;gap:8px;font-size:14px}
+.when{color:var(--sub)}
+.dots{margin-left:auto;color:var(--sub)}
+.txt{white-space:pre-wrap;font-size:14.5px;margin-top:2px;overflow-wrap:anywhere}
+.lnk{color:var(--blue)}
+.act{display:flex;gap:18px;padding:8px 0 6px}
+.act svg{width:19px;height:19px;fill:none;stroke:#333;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.more{font-size:13px;color:var(--sub);margin-top:6px}
+.pinned{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--sub);margin:0 0 6px 46px}
+.pinned svg{width:13px;height:13px;fill:var(--sub)}
+.slot{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:10px 12px 0;padding:6px 8px;border:1px dashed #b8b8b8;border-radius:8px;background:#fafafa;font-size:12px}
+.slot .t{font-weight:800}
+.role{color:#fff;border-radius:999px;padding:1px 8px;font-weight:700}
+.r-a{background:#2f6fde}.r-b{background:#6b4fd6}.r-c{background:#0f8a6b}.r-d{background:#d2462e}
+.slot .note{color:#555}
+.replyhint{margin:12px 16px 20px;padding:10px 14px;border-radius:999px;background:#f2f2f2;color:var(--sub);font-size:14px}
+.flowwrap{margin-top:36px}
+.flowwrap h2{font-size:16px;margin:0 0 12px}
+.flow{max-width:760px;margin:0 auto;display:flex;flex-direction:column;align-items:stretch}
+.step{background:#fff;border:1px solid #d9d9d9;border-radius:12px;padding:12px 16px;text-align:center}
+.step b{display:block;font-size:15px}.step span{display:block;font-size:13px;color:#555}
+.s3{border:2px solid #d2462e}.s6{border:2px solid #2f6fde}.s7{background:#101010;color:#fff;border-color:#101010}.s7 span{color:#ddd}
+.arr{text-align:center;font-size:20px;color:#888;line-height:1.4}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.foot{margin-top:28px;font-size:12px;color:#666}
+@media (max-width:480px){.phone{border-radius:0;padding:0;box-shadow:none;background:transparent}.screen{border-radius:12px;height:auto;max-height:none}.three{grid-template-columns:1fr}}
+.av,.pav{display:block;background:url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/6xaJSlACEQAAAAEAABZ/anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAFllqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOmI1MDZmNDRkLTc1YWEtNDZhYS1hZTQ0LTI3ZDMyMmVlYThmNgAAAAOUanVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAAuWp1bWIAAABEanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5pbmdyZWRpZW50LnYzAAAAABhjMnNoVaJJyF++SSbFmV2zI8o6pwAAAG1jYm9yo2lkYzpmb3JtYXRqaW1hZ2UvanBlZ2ppbnN0YW5jZUlEeCx4bXA6aWlkOjhhZGQ5YmMzLTUxZGItNDg0Ny05ZDQwLTI2YTg0YmUxY2Q2ZWxyZWxhdGlvbnNoaXBocGFyZW50T2YAAAHianVtYgAAAEFqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmFjdGlvbnMudjIAAAAAGGMyc2gqXWPQCSyqa60Otji1BJ3oAAABmWNib3KiZ2FjdGlvbnOComZhY3Rpb25rYzJwYS5vcGVuZWRqcGFyYW1ldGVyc6FraW5ncmVkaWVudHOBomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCD+KJp308H0MHiQtNcJTorhBfrnmoiXhXb9bo7xusnefaRmYWN0aW9ueB1jb20uYW50aHJvcGljLmNsYXVkZS5wcm92aWRlZGpwYXJhbWV0ZXJzoXgfY29tLmFudGhyb3BpYy5vcmlnaW4tY29uZmlkZW5jZWd1bmtub3dua2Rlc2NyaXB0aW9ueGZDbGF1ZGUgcHJvdmlkZWQgdGhpcyBmaWxlIGF0IHRoZSByZXF1ZXN0IG9mIGEgdXNlciBhbmQgbWF5IGhhdmUgY3JlYXRlZCBvciBtb2RpZmllZCB0aGUgZmlsZSBjb250ZW50cy5tc29mdHdhcmVBZ2VudKFkbmFtZWZDbGF1ZGVyYWxsQWN0aW9uc0luY2x1ZGVk9QAAAMhqdW1iAAAAQGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaGFzaC5kYXRhAAAAABhjMnNo5eXT6WEYLKfcJho8vgzRmgAAAIBjYm9ypWNhbGdmc2hhMjU2Y3BhZE4AAAAAAAAAAAAAAAAAAGRoYXNoWCBTNgF0BBo6rcK+Bov45XEWaRAyoJ1T7TtsU8LlTUvOG2RuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBRmbGVuZ3RoGRaLAAACPmp1bWIAAAAnanVtZGMyY2wAEQAQgAAAqgA4m3EDYzJwYS5jbGFpbS52MgAAAAIPY2JvcqVjYWxnZnNoYTI1NmlzaWduYXR1cmV4TXNlbGYjanVtYmY9L2MycGEvdXJuOmMycGE6YjUwNmY0NGQtNzVhYS00NmFhLWFlNDQtMjdkMzIyZWVhOGY2L2MycGEuc2lnbmF0dXJlamluc3RhbmNlSUR4LHhtcDppaWQ6NzEyOTQwZjMtNzUwNi00ZmRmLTliZDMtODVhMDhmNjNkN2VhcmNyZWF0ZWRfYXNzZXJ0aW9uc4OiY3VybHgtc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5pbmdyZWRpZW50LnYzZGhhc2hYIP4omnfTwfQweJC01wlOiuEF+ueaiJeFdv1ujvG6yd59omN1cmx4KnNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuYWN0aW9ucy52MmRoYXNoWCAtfvxBcMxsbcishzj8X5vNEBBbadvnWktRYCvh+6NU0aJjdXJseClzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmhhc2guZGF0YWRoYXNoWCB33vwlENDZWvA6/a0zXQHx9CiuWQ5qu+FhzQBazgQYeXRjbGFpbV9nZW5lcmF0b3JfaW5mb6NkbmFtZW9BbnRocm9waWMgRmlsZXNndmVyc2lvbmUxLjAuMGtzcGVjVmVyc2lvbmUyLjQuMAAAEDhqdW1iAAAAKGp1bWRjMmNzABEAEIAAAKoAOJtxA2MycGEuc2lnbmF0dXJlAAAAEAhjYm9y0oRZAhKiASYYIVkCCjCCAgYwggGNoAMCAQICFEDloAruwjnQvriD+gZCBT1nVRMAMAoGCCqGSM49BAMDMEkxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMS4wLAYDVQQDEyVBbnRocm9waWMgQ29udGVudCBDcmVkZW50aWFscyBSb290IENBMB4XDTI2MDgwNzE4NDM1NloXDTI4MDgwNjE5NDM1NlowRDEXMBUGA1UEChMOQW50aHJvcGljLCBQQkMxKTAnBgNVBAMTIEFudGhyb3BpYyBDbGF1ZGUgQ29udGVudCBTaWduaW5nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmHoKa8tQGAUU1TS9QqU5W0Tp2N3XsvlK7BfQt6YWKwEzd2R3/dzKPEUDdCjlLjp9fT+KFjRVnuZ9v0oXvTe3k6NYMFYwDgYDVR0PAQH/BAQDAgeAMBUGA1UdJQQOMAwGCisGAQQBg+heAgEwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBTOUeIEgU5kWyP448TPmj6cwddcwjAKBggqhkjOPQQDAwNnADBkAjAxcx0UngF60stVjs5G4T2eiptsBk5mf9oCtfJPAUBl8qs/PEXa8+gk1/X5QJ2DVcYCMHBfXN31YapiSqYvlIWrDVDJKOvXMl+kkz37Wt0PBI8sw486Mq6JeOhT+lRR4b1HCaFjcGFkWQ2eAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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) center/cover}</style></head><body><div class="wrap">
+<h1>Waka塾 Threads 運用モック（恋愛診断案）</h1>
+<p class="lead">確認用シート「Waka塾 Threads運用 ワカさん確認用」の内容で運用したときの見え方です。文面はシートのまま（投稿の口調は「です・ます」版で表示）。</p>
+<span class="badge">モック（実際の画面ではありません）</span>
+<div class="grid">
+<section class="col"><h2>① プロフィール画面</h2><p class="cap">最初に見られる場所。一番上に固定投稿（恋愛診断の案内）が来ます。</p><div class="phone"><div class="screen">
+<div class="statusbar"><span>9:41</span><span>●●● ▮</span></div>
+<div class="prof">
+ <div class="prof-top"><div><div class="pname">ワカ | 60代おっさんの恋愛塾長</div><div class="pid">waka77.renai2</div></div><span class="pav"></span></div>
+ <div class="bio">アプリも相談所もダメだった40〜60代へ
+普通のおじさんでも、20代美女は彼女にできる。
+・若い美女は&quot;おじさん&quot;を選ぶ
+・媚びる男は選ばれない
+・勝負は最初の一言で決まる
+東大院(脳科学)｜著書2冊｜YouTube3万人
+▼どこで止まっているか3分で分かる無料診断はリンクから</div>
+ <div class="plink">lp.waka-juku.com/p/shindan-t</div>
+ <div class="pfol">フォロワー216人</div>
+ <div class="pbtns"><span class="b1">フォロー</span><span class="b2">メンション</span></div>
+ <div class="tabs"><span class="on">スレッド</span><span>返信</span><span>メディア</span><span>リポスト</span></div>
+</div>
+<article class="post chain"><div class="pinned"><svg viewBox="0 0 24 24"><path d="M15 3l6 6-3 1-4 4 1 5-2 1-4-4-5 5-1-1 5-5-4-4 1-2 5 1 4-4z"/></svg>固定済み</div>
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">固定</span><span class="dots">···</span></div>
+<div class="txt">【40〜60代の男性へ】若い女性とうまくいかない理由、3分で分かります
+
+アプリも、結婚相談所も、恋愛コンサルも試した。
+それでも、20代の女性とはうまくいかない。
+
+原因は、年齢ではありません。
+「出会い」「会話」「距離の縮め方」のどこかで止まっているだけです。
+止まっている場所が違えば、直す順番も違います。
+
+そこで、Waka塾の「年の差恋愛 3つのつまずき診断」を無料で用意しました。
+
+・全21問、選ぶだけで約3分
+・あなたが止まっている場所と、そのタイプ
+・最初に直すべきポイント
+
+結果は公式LINEで届きます。
+タイプ別の直す順番と直し方は、無料のZoom勉強会でも解説しています。
+
+東大大学院で脳科学を学び、20代女性200人以上と関係を築いてきた私の方法の、入口です。
+
+自分がどこで止まっているか知りたい方は、返信欄のリンクからどうぞ↓</div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article>
+<article class="post">
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">固定の返信</span><span class="dots">···</span></div>
+<div class="txt">無料診断はこちら👇
+<span class="lnk">https://lp.waka-juku.com/p/shindan-t?utm_source=threads</span></div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article>
+<article class="post">
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">3時間前</span><span class="dots">···</span></div>
+<div class="txt">20代の美女に選ばれる50代が、やらないこと4選
+
+①お金を使わない
+高い店に連れて行くほど、相手より下の立場になります。
+
+②時間を使わない
+楽しくても長居しない。長く一緒にいるほど、媚びていると見られます。
+
+③褒めない
+美女は毎日のように褒められています。褒めた時点で、その他大勢と同じです。
+
+④口説かない
+口説くのも、相手に価値を置く行動です。
+
+どれも、多くの男性が良かれと思ってやっていることです。
+4つをやめるだけで、他の男性と違う人として見られます。
+
+同じ悩みの40〜60代の方は、フォローしておいてください。毎日書いています。</div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article>
+</div></div></section>
+<section class="col"><h2>② 1日の投稿（7本）</h2><p class="cap">点線の枠は説明用の注記です（実際の画面には出ません）。時刻と役割は投稿配分のたたき台どおり。</p><div class="phone"><div class="screen">
+<div class="statusbar"><span>9:41</span><span>●●● ▮</span></div>
+<div class="feedhead">waka77.renai2 のスレッド（1日分・新しい順）</div>
+<div class="slot"><span class="t">22:00</span><span class="role r-c">タップ</span><span class="note">ストックNo.15／型12 塾生からの相談（返信欄に続き）</span></div><article class="post">
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">22:00</span><span class="dots">···</span></div>
+<div class="txt">塾生から相談が来ました。
+
+「気になる20代の女性から、LINEの返事が遅くなってきました。どうすれば挽回できますか」
+
+50代の塾生からのLINEです。
+話を聞くと、原因ははっきりしていました。
+
+伝えたことは返信欄に書きました↓</div><div class="more">返信欄に続き（タップで開く）</div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article><div class="slot"><span class="t">20:00</span><span class="role r-a">集客</span><span class="note">ストックNo.8／型8 年齢タイムライン</span></div><article class="post">
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">20:00</span><span class="dots">···</span></div>
+<div class="txt">厳しい現実を言います。
+アプリで20代の彼女を探し続けた50代は、こうなります。
+
+・50歳
+有料プランに入る。20代に毎日いいねを送る
+
+・51歳
+100人に送って、返事は0件
+写真を撮り直し、年収欄を見直す
+
+・52歳
+やっとマッチした若い女性から、投資の話をされる
+
+・53歳
+会えるのは同年代ばかり
+「現実を見よう」と自分に言い聞かせる
+
+・55歳
+ふと気づく
+使ったのはお金ではなく、5年という時間だった
+
+最初にやるべきだったのは、プロフィールを直すことではありません。
+年齢で足切りされない出会い方に変えることでした。
+
+同じ悩みの40〜60代の方は、フォローしておいてください。毎日書いています。</div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article><div class="slot"><span class="t">18:30</span><span class="role r-d">診断へ誘導</span><span class="note">ストックNo.7／締めで固定投稿の無料診断へ（1日1回）</span></div><article class="post">
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">18:30</span><span class="dots">···</span></div>
+<div class="txt">アプリで40代以上が不利な理由、4選
+
+①人気が一部に集中する
+会員は数百万人。女性の人気は、若くて見た目のいい男性に集まります。
+
+②会う前にスペックで振り分けられる
+年齢、写真、年収、職業。中身を見てもらう前に落とされます。
+
+③写真が加工されている
+女性の9割以上が加工した写真を使っています。会ってから驚くのはこちらです。
+
+④検索で表示されない
+20代の女性の多くは、相手の年齢を30代以下にしぼって探します。
+40歳を過ぎた時点で、プロフィールを作り込んでも画面に出ません。
+
+プロフィールを直す前に、出会い方を見直してください。
+
+自分がどこで止まっているか知りたい方は、固定投稿の無料診断をどうぞ。3分で終わります。</div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article><div class="slot"><span class="t">15:00</span><span class="role r-c">シリーズ</span><span class="note">ストックNo.6／型6 選ばれるおじさんシリーズ（毎日1本・返信欄に続き）</span></div><article class="post">
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">15:00</span><span class="dots">···</span></div>
+<div class="txt">選ばれるおじさんは「最初の会話」が別格
+
+■損するおじさん
+・自分から自己紹介を始める
+・仕事や住まいを聞く
+・うんちくを語る
+・若い子の流行りに話を合わせる
+・「きれいだね」と容姿を褒める
+・高い店に連れて行く
+
+本人は誠実にやっているつもり。
+女性には「狙われている」としか見えていません。
+
+■選ばれるおじさん↓↓</div><div class="more">返信欄に続き（タップで開く）</div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article><div class="slot"><span class="t">12:00</span><span class="role r-a">集客</span><span class="note">ストックNo.4／型4 男女で違う○○</span></div><article class="post">
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">12:00</span><span class="dots">···</span></div>
+<div class="txt">男女で180度違う「優しさ」
+
+男が思っている優しさ
+・丁寧に接する
+・レディーファースト
+・女性の要望を全部かなえる
+・いい店を予約する
+
+女性が求めている優しさ
+・その気がないのに結婚をにおわせない
+・結婚しているなら最初に言う
+・期待させてから裏切らない
+・傷つけない
+
+若い美女ほど、表面の優しさにはなびきません。
+本当の優しさは、女性を傷つけないこと。
+これを持っている男性に、良い女性は集まります。
+
+あなたはどちらでしたか。返信で教えてください。</div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article><div class="slot"><span class="t">9:00</span><span class="role r-b">教育</span><span class="note">ストックNo.2／型2 ○○は間違い。正解は○○</span></div><article class="post">
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">9:00</span><span class="dots">···</span></div>
+<div class="txt">ほとんどの男性が勘違いしていますが、
+若い女性にお金をかければ振り向いてもらえる、は間違いです。
+正解は、1人500円までです。
+
+私も昔は、1人1万円以上の店に連れて行っていました。
+1人の女性に使った最高額は40万円。
+それでも、関係は1ミリも進みませんでした。
+
+高い店を予約し、会計を全部持ち、機嫌をとり、最後は「いい人」で終わる。
+お金を出すほど、相手より下の立場になるからです。
+
+使うのはチェーンのカフェで500円。
+他の男性が何万円も使う中で、それだけで「格上の男」に見えます。
+
+年齢のせいにする前に、やり方を変えてください。</div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article><div class="slot"><span class="t">7:00</span><span class="role r-a">集客</span><span class="note">ストックNo.5／型5 思い込みと実際</span></div><article class="post">
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">7:00</span><span class="dots">···</span></div>
+<div class="txt">←損をしている50代が思う「若い美女と付き合える男」
+・イケメン
+・高身長
+・年収1000万
+・話し上手
+・若く見える
+
+→20代の美女と付き合っている普通の50代
+・媚びない
+・容姿を褒めない
+・自分の話をしすぎない
+・女性の話を最後まで聞く
+・高い店に連れて行かない
+
+条件を高くしすぎです。
+美女は、自分がすでに持っているルックスを相手に求めません。
+人は自分にないものを相手に求めるからです。
+美女が相手に求めるのは、外見ではなく接し方。
+
+「顔が普通だから」と悩む必要はありません。
+今日1つだけ、やってみてください。</div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article>
+</div></div></section>
+<section class="col"><h2>③ 返信欄に続きがある投稿を開いたところ</h2><p class="cap">続きを自分の返信に書く型。開いてもらうことで、投稿が伸びやすくなります（教材026）。</p><div class="phone"><div class="screen">
+<div class="statusbar"><span>9:41</span><span>●●● ▮</span></div>
+<div class="feedhead">← スレッド</div>
+<div class="slot"><span class="t">15:00</span><span class="role r-c">シリーズ</span><span class="note">ストックNo.6 を開いた状態。続きは自分の返信で見せる</span></div>
+<article class="post chain">
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">15:00</span><span class="dots">···</span></div>
+<div class="txt">選ばれるおじさんは「最初の会話」が別格
+
+■損するおじさん
+・自分から自己紹介を始める
+・仕事や住まいを聞く
+・うんちくを語る
+・若い子の流行りに話を合わせる
+・「きれいだね」と容姿を褒める
+・高い店に連れて行く
+
+本人は誠実にやっているつもり。
+女性には「狙われている」としか見えていません。
+
+■選ばれるおじさん↓↓</div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article>
+<article class="post">
+<div class="row"><div class="av-col"><span class="av"></span><div class="thread-line"></div></div>
+<div class="main"><div class="who"><b>waka77.renai2</b><span class="when">15:00</span><span class="dots">···</span></div>
+<div class="txt">・自己紹介はしない
+・相手のことも聞かない
+・知っていても語らない
+・自分のペースに巻き込む
+・褒めるなら持ち物だけ
+・深い仲になるまでは安い店
+
+相手のことは、深い関係になれば女性の方から話してくれます。
+差がつくのは、話の中身ではなく「やらないこと」です。
+
+できていなかった項目があれば、今日から1つ直してください。</div><div class="act" aria-hidden="true">
+<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3.1-6.3L20 5l-.6 3.4A8 8 0 0 1 20 12z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M7 7h10l-3-3M17 17H7l3 3M17 7v5M7 17v-5"/></svg>
+<svg viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></svg>
+</div></div></div></article>
+<div class="replyhint">返信を追加…</div>
+</div></div></section>
+</div>
+<section class="flowwrap"><h2>④ リンクを押したあとの流れ</h2><div class="flow">
+ <div class="step s1"><b>スレッズ</b><span>1日7本の投稿で、ワカさんの考え方を毎日伝える</span></div>
+ <div class="arr">↓</div>
+ <div class="step s2"><b>固定投稿・プロフィールのリンク</b><span>18:30の投稿などで「固定投稿の無料診断」へ誘導</span></div>
+ <div class="arr">↓</div>
+ <div class="step s3"><b>恋愛診断「年の差恋愛 3つのつまずき診断」</b><span>全21問・約3分・選択式</span></div>
+ <div class="arr">↓</div>
+ <div class="step s4"><b>公式LINEで診断結果が届く</b></div>
+ <div class="arr">↓</div>
+ <div class="three"><div class="step s5"><b>オープンチャット</b><span>ワカさんが案内・質問に回答</span></div><div class="step s5"><b>Zoom勉強会</b><span>毎週火曜</span></div><div class="step s5"><b>YouTube更新</b><span>公式LINEで案内</span></div></div>
+ <div class="arr">↓</div>
+ <div class="step s6"><b>個別相談会</b><span>診断で状況が分かっているので話を進めやすい</span></div>
+ <div class="arr">↓</div>
+ <div class="step s7"><b>入塾</b></div>
+</div></section>
+<p class="foot">作成 2026-10-03／元にした資料：確認用シート（Threads運用の内容・投稿のルール・投稿ストック50本）、投稿配分のたたき台（1日7本）、恋愛診断LP。いいね数・表示回数などの数字は入れていません。</p>
+</div></body></html>
