@@ -322,8 +322,9 @@ body{margin:0;background:var(--page);color:var(--ink);font-family:var(--serif)}
 (function(){
   var lp=document.getElementById('lp'),w=document.getElementById('w');
   document.getElementById('fv2').src=document.getElementById('fv1').src;
-  function fit(){lp.style.zoom=(w.clientWidth/900)}
-  fit(); addEventListener('resize',fit);
+  function fit(){var cw=w.clientWidth||Math.min(390,document.documentElement.clientWidth);if(cw>0)lp.style.zoom=(cw/900)}
+  fit(); addEventListener('resize',fit); addEventListener('load',fit);
+  if(window.ResizeObserver)new ResizeObserver(fit).observe(w);
 })();
 </script>
 </body></html>
