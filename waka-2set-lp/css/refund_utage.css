@@ -1,0 +1,26 @@
+@charset "UTF-8";
+/* 全額返金保証：UTAGE https://utage-system.com/page/6iTuoLNTCRst の「980円 全額返金保証」を移植（2026-10-15）
+   UTAGEの 1rem＝min(1px, 100vw/750) を --u に置き換え */
+.uRefund { --u: min(1px, calc(100vw / 750)); text-align: left; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: calc(64 * var(--u)) calc(50 * var(--u)); position: relative; width: calc(750 * var(--u)); max-width: 100%; min-height: calc(408 * var(--u)); }
+.uRefund, .uRefund * { box-sizing: border-box; }
+.uRefund p, .uRefund h2 { margin: 0; }
+.uRefundBg { position: absolute; inset: 0; max-width: none; object-fit: cover; pointer-events: none; width: 100%; height: 100%; }
+.uRefundBox { background-color: rgba(255, 255, 255, 0.95); border-color: rgb(140, 114, 54); border-style: solid; border-width: calc(4 * var(--u)) 0; display: flex; flex-direction: column; gap: calc(16 * var(--u)); align-items: center; padding: calc(24 * var(--u)) 0; position: relative; width: calc(671 * var(--u)); max-width: 100%; }
+.uRefundHead { display: flex; gap: calc(24 * var(--u)); align-items: center; position: relative; }
+.uRefundShield { height: calc(128 * var(--u)); position: relative; flex-shrink: 0; width: calc(110 * var(--u)); }
+.uRefundShield img { position: absolute; inset: 0; max-width: none; object-fit: cover; pointer-events: none; width: 100%; height: 100%; }
+.uRefundTitle { display: flex; flex-direction: column; font-family: "Noto Serif JP", serif; font-weight: 900; gap: calc(2 * var(--u)); align-items: center; line-height: 1.2; position: relative; font-size: calc(48 * var(--u)); color: transparent; text-align: center; width: calc(288 * var(--u)); }
+.uRefundTitle h2, .uRefundTitle p { font-size: inherit; font-weight: inherit; width: 100%; -webkit-background-clip: text; background-clip: text; }
+.uRefundTitle h2 { background-image: linear-gradient(90deg, rgb(23, 23, 23), rgb(81, 7, 8)); }
+.uRefundTitle p { background-image: linear-gradient(to right, rgb(183, 16, 17), rgb(81, 7, 8)); }
+.uRefundLine { height: 2px; width: calc(606 * var(--u)); max-width: 100%; background: linear-gradient(to right, #fff, #8C7236 10.0962%, #C49D00 50%, #8C7236 90%, #fff); }
+.uRefundText { font-family: "Noto Serif JP", serif; font-weight: 900; color: rgb(22, 22, 22); text-align: center; position: relative; width: 100%; }
+.uRefundText .t1 { line-height: 1.4; font-size: calc(20 * var(--u)); }
+.uRefundText .t2 { line-height: 1.4; font-size: calc(24 * var(--u)); }
+.uRefundText .red { color: rgb(183, 16, 17); }
+@media (max-width: 600px) {
+  .uRefundText { padding: 0 12px; }
+  .uRefundText .t1 { font-size: 16px; line-height: 1.65; }
+  .uRefundText .t2 { font-size: max(16px, calc(24 * var(--u))); line-height: 1.65; }
+  .uRefundText .t2 span { display: block; }
+}

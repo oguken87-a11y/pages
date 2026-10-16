@@ -1,0 +1,55 @@
+@charset "UTF-8";
+/* セット①恋愛診断ツール・セット②マニュアル：UTAGE https://utage-system.com/page/6iTuoLNTCRst の
+   「最初に、恋愛診断で あなたの恋愛の『現在地』を確認します。」「Zoom勉強会でお伝えすること」を参考に作り直し（2026-10-15）
+   UTAGEの 1rem＝min(1px, 100vw/750) を --u に置き換え。このLPは横750固定なので、3項目はUTAGEのスマホ用の縦並びを採用し、文字は本文22以上にした */
+.uDiag, .uManual { --u: min(1px, calc(100vw / 750)); text-align: left; margin: 0 auto; position: relative; width: calc(750 * var(--u)); max-width: 100%; display: flex; flex-direction: column; align-items: center; overflow: clip; font-family: "Noto Sans JP", sans-serif; }
+.uDiag, .uManual, .uDiag *, .uManual * { box-sizing: border-box; }
+.uDiag p, .uDiag h2, .uDiag h3, .uDiag ul, .uManual p, .uManual h2 { margin: 0; padding: 0; }
+.uBg { position: absolute; inset: 0; max-width: none; object-fit: cover; pointer-events: none; width: 100%; height: 100%; }
+.uY { color: rgb(255, 238, 21); }
+.uR { color: rgb(183, 16, 17); }
+.uSetLabel { display: inline-block; background: #fff; color: rgb(183, 16, 17); font-weight: 900; font-size: calc(30 * var(--u)); line-height: 1.5; letter-spacing: calc(0.6 * var(--u)); padding: 0 calc(24 * var(--u)); border-radius: calc(4 * var(--u)); text-shadow: none; }
+
+/* セット① */
+.uDiag { gap: calc(40 * var(--u)); padding: calc(48 * var(--u)) calc(50 * var(--u)) calc(56 * var(--u)); }
+.uDiagHead { display: flex; flex-direction: column; gap: calc(16 * var(--u)); align-items: center; position: relative; width: 100%; }
+.uDiagIcon { position: relative; width: calc(120 * var(--u)); height: calc(120 * var(--u)); }
+.uDiagIcon img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.uDiagTitle { font-weight: 900; text-align: center; color: #fff; text-shadow: rgba(0, 0, 0, 0.25) 0 calc(4 * var(--u)) calc(4 * var(--u)); letter-spacing: calc(0.96 * var(--u)); width: 100%; display: flex; flex-direction: column; align-items: center; gap: calc(8 * var(--u)); }
+.uDiagTitle h2 { font-size: calc(52 * var(--u)); line-height: 1.4; font-weight: 900; }
+.uDiagTitle .sub { font-size: calc(42 * var(--u)); line-height: 1.4; }
+.uDiagLead { position: relative; width: 100%; color: #fff; font-weight: 500; font-size: calc(26 * var(--u)); line-height: 1.6; letter-spacing: calc(0.52 * var(--u)); }
+.uDiagCard { background: #fff; display: flex; flex-direction: column; align-items: stretch; gap: calc(16 * var(--u)); padding: calc(32 * var(--u)) calc(32 * var(--u)); position: relative; border-radius: calc(6 * var(--u)); width: 100%; }
+.uDiagItem { display: flex; align-items: center; gap: calc(28 * var(--u)); }
+.uDiagItemImg { position: relative; flex-shrink: 0; width: calc(150 * var(--u)); height: calc(125 * var(--u)); overflow: hidden; }
+.uDiagItemImg img { position: absolute; height: 109.27%; left: -4.41%; max-width: none; top: -4.52%; width: 107.24%; }
+.uDiagItemText { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: calc(6 * var(--u)); }
+.uDiagItemText .lbl { font-weight: 700; line-height: 1.4; color: rgb(183, 16, 17); font-size: calc(32 * var(--u)); }
+.uDiagItemText .txt { font-weight: 500; line-height: 1.6; color: rgb(33, 33, 33); font-size: calc(24 * var(--u)); letter-spacing: calc(0.28 * var(--u)); }
+.uDiagArrow { display: block; width: calc(82 * var(--u)); height: calc(19 * var(--u)); margin: 0 auto; }
+.uDiagCall { position: relative; width: 100%; color: #fff; font-weight: 500; font-size: calc(30 * var(--u)); line-height: 1.6; letter-spacing: calc(0.6 * var(--u)); }
+.uDiagCall .uY { font-weight: 900; }
+.uDiagBox { background: #fff; display: flex; flex-direction: column; gap: calc(28 * var(--u)); align-items: center; padding: calc(32 * var(--u)) calc(32 * var(--u)) calc(40 * var(--u)); position: relative; border-radius: calc(6 * var(--u)); width: 100%; }
+.uDiagPhoto { position: relative; width: 100%; height: calc(260 * var(--u)); }
+.uDiagPhoto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.uDiagBand { background: rgb(168, 8, 8); color: #fff; font-weight: 700; font-size: calc(36 * var(--u)); line-height: 1.5; letter-spacing: calc(0.72 * var(--u)); padding: 0 calc(16 * var(--u)); text-align: center; }
+.uDiagList { list-style: none; width: 100%; display: flex; flex-direction: column; gap: calc(14 * var(--u)); }
+.uDiagList li { display: flex; align-items: flex-start; gap: calc(14 * var(--u)); font-weight: 700; color: rgb(33, 33, 33); font-size: calc(28 * var(--u)); line-height: 1.5; padding-bottom: calc(14 * var(--u)); border-bottom: 1px dashed #ccc; }
+.uDiagList li:last-child { border-bottom: 0; padding-bottom: 0; }
+.uDiagList li img { width: calc(36 * var(--u)); height: auto; flex-shrink: 0; margin-top: calc(4 * var(--u)); }
+.uDiagBoxText { width: 100%; display: flex; flex-direction: column; gap: calc(20 * var(--u)); font-weight: 700; color: rgb(33, 33, 33); font-size: calc(26 * var(--u)); line-height: 1.6; letter-spacing: calc(0.52 * var(--u)); }
+.uDiagBoxText .uR { font-weight: 900; }
+
+/* セット② */
+.uManual { gap: calc(48 * var(--u)); padding: calc(64 * var(--u)) calc(50 * var(--u)); }
+.uManualBase { position: absolute; inset: 0; background: rgb(245, 245, 245); }
+.uManualHead { display: flex; flex-direction: column; gap: calc(16 * var(--u)); align-items: center; position: relative; text-align: center; color: #fff; width: 100%; }
+.uManualHead h2 { font-weight: 900; font-size: calc(48 * var(--u)); line-height: 1.35; text-shadow: rgba(0, 0, 0, 0.25) 0 calc(4 * var(--u)) calc(4 * var(--u)); letter-spacing: calc(0.96 * var(--u)); }
+.uManualSub { font-weight: 700; font-size: calc(26 * var(--u)); line-height: 1.5; letter-spacing: calc(0.52 * var(--u)); }
+.uManualList { display: flex; flex-direction: column; gap: calc(24 * var(--u)); position: relative; width: 100%; }
+.uManualCard { display: flex; align-items: stretch; overflow: clip; position: relative; border-radius: calc(6 * var(--u)); width: 100%; filter: drop-shadow(rgba(0, 0, 0, 0.25) calc(4 * var(--u)) calc(4 * var(--u)) calc(4 * var(--u))); }
+.uManualImg { flex: 1 0 0; min-width: 1px; position: relative; }
+.uManualImg img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.uManualBody { background: #fff; display: flex; flex-direction: column; gap: calc(20 * var(--u)); padding: calc(24 * var(--u)) calc(20 * var(--u)); width: calc(417 * var(--u)); flex-shrink: 0; }
+.uManualBody .num { font-family: "Crimson Text", serif; font-style: italic; font-weight: 700; line-height: 1; color: rgb(183, 16, 17); font-size: calc(40 * var(--u)); letter-spacing: calc(0.8 * var(--u)); }
+.uManualBody .ttl { font-weight: 700; color: rgb(22, 22, 22); font-size: calc(28 * var(--u)); line-height: 1.45; }

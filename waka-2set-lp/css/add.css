@@ -1,0 +1,128 @@
+@charset "UTF-8";
+/* 元LP（meta/z/opt/1）の style.css はそのまま。980円版で足した部分だけここに書く */
+.blk {
+  display: block;
+}
+/*入力フォーム：2つセットの中身・リード・返金保証・注記*/
+.formTopText .blk + .blk {
+  margin-top: 2px;
+}
+.formTopText .plus {
+  color: #B71011;
+  font-size: clamp(22px, 4vw, 30px);
+  line-height: 1.4;
+}
+.formInfo .formInfoLine,
+.formInfo p {
+  line-height: 1.6;
+}
+.formGuarantee {
+  text-align: left;
+  font-size: clamp(14px, 2.6vw, 18px);
+  font-weight: 600;
+  color: #B71011;
+  margin: -2% auto 5%;
+  line-height: 1.6;
+}
+.formNoteOut {
+  color: #FFF;
+  font-size: clamp(13px, 2.6vw, 19px);
+  font-weight: 500;
+  text-align: left;
+  line-height: 1.7;
+  margin: 4% 0 0;
+}
+.formNoteOut + .formNoteOut {
+  margin-top: 1%;
+}
+/*セット①・980円：zoom の型を使う*/
+.zoom .textContent {
+  margin-top: 5%;
+}
+.zoom .textContent p {
+  margin: 0 0 4%;
+}
+.zoomTitleBottom {
+  margin-top: 3%;
+}
+.zoomHead {
+  font-size: clamp(22px, 4.4vw, 34px);
+  font-weight: 900;
+  margin: 2% auto 4%;
+}
+.offerTitle {
+  font-size: clamp(24px, 4.6vw, 36px);
+}
+.guaranteeTitle {
+  background: #B71011;
+  color: #FFF;
+  font-size: clamp(22px, 4.2vw, 34px);
+  font-weight: 900;
+  width: fit-content;
+  margin: 8% auto 3%;
+  padding: 1% 6%;
+}
+/*受け取るまでの流れ：nayami の型を使う*/
+.flowTitle {
+  margin-bottom: 6%;
+}
+.flow .nayamiBox {
+  gap: 12px;
+}
+.flow .zoomArrow img {
+  margin: 0 auto;
+}
+.stepHead {
+  font-size: clamp(18px, 3.8vw, 28px) !important;
+}
+.stepText {
+  display: block;
+  text-align: left;
+  font-weight: 500 !important;
+  line-height: 1.7;
+  margin-top: 2%;
+}
+.flow .textContent {
+  margin-top: 6%;
+  font-weight: 700;
+}
+/*プロフィール*/
+.profileName {
+  font-size: clamp(22px, 4.2vw, 34px);
+  font-weight: 900;
+  margin: 2% 0 4%;
+}
+/*出版実績の書名（『』を足したので1行に収める）*/
+.bookTitle {
+  white-space: nowrap;
+  font-size: clamp(15px, 2.8vw, 21px);
+}
+.textLeft {
+  text-align: left;
+}
+/*申込ボタン：UTAGE（https://utage-system.com/page/6iTuoLNTCRst）のボタン画像に合わせた（2026-10-15）*/
+.formBtn {
+  display: block;
+  width: 100%;
+  max-width: 540px;
+  height: auto;
+  aspect-ratio: 1348 / 348;
+  margin: 0 auto;
+}
+#topBtn {
+  height: auto;
+  padding: 12px 0;
+  line-height: normal;
+}
+#topBtn a {
+  display: block;
+  width: min(85%, 540px);
+  margin: 0 auto;
+}
+#topBtn .pic2 {
+  position: static;
+  transform: none;
+  display: block;
+  width: 100%;
+  height: auto;
+}

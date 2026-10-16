@@ -1,0 +1,27 @@
+@charset "UTF-8";
+/* 受け取るまでの流れ：UTAGE https://utage-system.com/page/6iTuoLNTCRst の「お申込みから参加までの流れ」を参考に作り直し（2026-10-15）
+   UTAGEの 1rem＝min(1px, 100vw/750) を --u に置き換え。4枚のカードは同じ指定なので共通クラスにまとめた */
+.uFlow { --u: min(1px, calc(100vw / 750)); text-align: left; margin: 0 auto; display: flex; flex-direction: column; gap: calc(48 * var(--u)); align-items: center; overflow: clip; padding: calc(48 * var(--u)) calc(32 * var(--u)); position: relative; width: calc(750 * var(--u)); max-width: 100%; }
+.uFlow, .uFlow * { box-sizing: border-box; }
+.uFlow p, .uFlow h2 { margin: 0; }
+.uFlowBg { position: absolute; inset: 0; max-width: none; object-fit: cover; pointer-events: none; width: 100%; height: 100%; transform: rotate(180deg); }
+.uFlowTitle { font-family: "Noto Sans JP", sans-serif; font-weight: 900; position: relative; color: rgb(183, 16, 17); font-size: calc(48 * var(--u)); text-align: center; letter-spacing: calc(0.96 * var(--u)); width: 100%; word-break: break-word; }
+.uFlowTitle h2, .uFlowTitle p { font-size: inherit; font-weight: inherit; line-height: calc(58 * var(--u)); }
+.uFlowTitle h2 { color: rgb(22, 22, 22); }
+.uFlowCard { background-color: #fff; display: flex; flex-direction: column; gap: calc(12 * var(--u)); align-items: center; overflow: clip; padding: calc(16 * var(--u)) calc(28 * var(--u)) calc(24 * var(--u)); position: relative; border-radius: calc(12 * var(--u)); box-shadow: rgba(0, 0, 0, 0.15) 0 calc(4 * var(--u)) calc(8 * var(--u)) 0; width: 100%; }
+.uFlowImg { height: calc(180 * var(--u)); position: relative; width: calc(300 * var(--u)); }
+.uFlowImg img { position: absolute; inset: 0; max-width: none; object-fit: cover; pointer-events: none; width: 100%; height: 100%; }
+.uFlowHead { display: flex; flex-direction: column; gap: calc(8 * var(--u)); align-items: center; position: relative; width: 100%; }
+.uFlowRibbon { display: flex; align-items: flex-start; overflow: clip; padding: calc(3 * var(--u)) calc(48 * var(--u)); position: relative; background-image: linear-gradient(to right, rgb(168, 8, 8), rgb(197, 13, 15) 46.635%, rgb(168, 8, 8)); }
+.uFlowStep { font-family: "Noto Serif JP", serif; font-weight: 700; line-height: normal; font-size: calc(16 * var(--u)); color: #fff; white-space: nowrap; }
+.uFlowName { font-family: "Noto Sans JP", sans-serif; font-weight: 900; line-height: calc(34 * var(--u)); color: rgb(22, 22, 22); font-size: calc(28 * var(--u)); text-align: center; width: 100%; word-break: break-word; }
+.uFlowText { font-family: "Noto Sans JP", sans-serif; font-weight: 500; line-height: 1.5; color: rgb(22, 22, 22); font-size: calc(22 * var(--u)); text-align: center; width: 100%; word-break: break-word; }
+.uFlowClosing { font-family: "Noto Sans JP", sans-serif; font-weight: 700; line-height: 1.6; color: rgb(22, 22, 22); font-size: calc(26 * var(--u)); text-align: center; position: relative; width: 100%; }
+@media (max-width: 600px) {
+  .uFlowStep { font-size: max(14px, calc(16 * var(--u))); line-height: 1.65; }
+  .uFlowName { font-size: max(16px, calc(28 * var(--u))); line-height: 1.65; }
+  .uFlowText { font-size: max(16px, calc(18 * var(--u))); line-height: 1.65; }
+  .uFlowClosing { font-size: max(16px, calc(26 * var(--u))); }
+  .uFlowCard { gap: 12px; padding-top: 16px; padding-bottom: 20px; }
+  .uFlowHead { gap: 10px; }
+}

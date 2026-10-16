@@ -1,0 +1,53 @@
+@charset "UTF-8";
+/* プロフィール：UTAGE https://utage-system.com/page/6iTuoLNTCRst のプロフィール部分をそのまま移植（2026-10-15）
+   UTAGEの 1rem＝min(1px, 100vw/750) を --u に置き換え。クラス名は既存の .profile と衝突しないよう u を付けた */
+.uProfile { --u: min(1px, calc(100vw / 750)); text-align: left; margin: 0 auto; }
+.uProfile, .uProfile * { box-sizing: border-box; }
+.uProfile p, .uProfile h2 { margin: 0; }
+.uProfile img { vertical-align: top; }
+.uProfile { align-content: stretch; display: flex; flex-direction: column; align-items: center; padding: calc(80 * var(--u)); position: relative; flex-shrink: 0; width: calc(750 * var(--u)); }
+.uProfileItem01 { position: absolute; inset: 0px; pointer-events: none; }
+.uProfileItem02 { position: absolute; background-color: rgb(38, 34, 35); inset: 0px; }
+.uProfileItem03 { position: absolute; inset: 0px; overflow: hidden; }
+.uProfileItem04 { position: absolute; height: 100%; left: -59.06%; max-width: none; top: -35.79%; width: 249.73%; }
+.uProfileItem05 { background-color: rgb(255, 255, 255); align-content: stretch; display: flex; flex-direction: column; gap: calc(32 * var(--u)); align-items: center; padding: calc(246 * var(--u)) calc(24 * var(--u)) calc(40 * var(--u)); position: relative; flex-shrink: 0; width: 100%; }
+.uProfileItem06 { word-break: break-word; font-family: "Noto Sans JP", sans-serif; font-weight: 500; line-height: 0; min-width: 100%; position: relative; flex-shrink: 0; color: rgb(22, 22, 22); font-size: calc(24 * var(--u)); letter-spacing: calc(0.48 * var(--u)); width: min-content; white-space: pre-wrap; }
+.uProfileItem07 { line-height: 1.5; margin-bottom: 0px; }
+.uProfileItem08 { line-height: 1.5; margin-bottom: 0px; }
+.uProfileItem09 { line-height: 1.5; margin-bottom: 0px; }
+.uProfileItem10 { line-height: 1.5; margin-bottom: 0px; }
+.uProfileItem11 { line-height: 1.5; margin-bottom: 0px; }
+.uProfileItem12 { line-height: 1.5; margin-bottom: 0px; }
+.uProfileItem13 { line-height: 1.5; margin-bottom: 0px; }
+.uProfileItem14 { line-height: 1.5; margin-bottom: 0px; }
+.uProfileItem15 { line-height: 1.5; }
+.uProfileItem16 { grid-template-columns: max-content; grid-template-rows: max-content; display: inline-grid; line-height: 0; place-items: start; position: relative; flex-shrink: 0; }
+.uProfileItem17 { grid-area: 1 / 1; align-content: stretch; display: flex; flex-direction: column; gap: calc(12 * var(--u)); align-items: flex-end; margin-left: calc(3.5 * var(--u)); margin-top: calc(32.23 * var(--u)); position: relative; width: calc(542 * var(--u)); }
+.uProfileItem18 { place-content: stretch flex-end; display: flex; align-items: center; padding-left: calc(24 * var(--u)); padding-right: calc(24 * var(--u)); position: relative; flex-shrink: 0; width: 100%; background-image: linear-gradient(to right, rgb(81, 7, 8), rgb(183, 16, 17)); }
+.uProfileItem19 { word-break: break-word; font-family: "Noto Sans JP", sans-serif; font-weight: 900; line-height: 1.5; position: relative; flex-shrink: 0; font-size: calc(32 * var(--u)); color: rgb(255, 255, 255); letter-spacing: calc(0.64 * var(--u)); white-space: nowrap; }
+.uProfileItem20 { place-content: stretch center; display: flex; align-items: center; padding-right: calc(24 * var(--u)); position: relative; flex-shrink: 0; }
+.uProfileItem21 { word-break: break-word; font-family: "Noto Sans JP", sans-serif; font-weight: 700; line-height: 1.5; position: relative; flex-shrink: 0; color: rgb(22, 22, 22); font-size: calc(24 * var(--u)); text-align: right; letter-spacing: calc(0.48 * var(--u)); width: calc(308 * var(--u)); }
+.uProfileItem22 { grid-area: 1 / 1; height: calc(329 * var(--u)); margin-left: 0px; margin-top: 0px; position: relative; box-shadow: rgba(0, 0, 0, 0.25) calc(0 * var(--u)) calc(4 * var(--u)) calc(4 * var(--u)) calc(0 * var(--u)); width: calc(224 * var(--u)); }
+.uProfileItem23 { position: absolute; inset: 0px; max-width: none; object-fit: cover; pointer-events: none; width: 100%; height: 100%; }
+.uProfileItem24 { position: absolute; display: contents; left: calc(24 * var(--u)); top: calc(-45.11 * var(--u)); }
+.uProfileItem25 { position: absolute; align-content: stretch; display: flex; flex-direction: column; gap: calc(12 * var(--u)); height: calc(102 * var(--u)); align-items: flex-start; left: calc(24 * var(--u)); top: calc(86.89 * var(--u)); width: calc(503 * var(--u)); }
+.uProfileItem26 { word-break: break-word; font-family: "Noto Sans JP", sans-serif; font-weight: 900; line-height: normal; position: relative; flex-shrink: 0; color: rgb(22, 22, 22); font-size: calc(32 * var(--u)); letter-spacing: calc(0.64 * var(--u)); width: 100%; white-space: pre-wrap; }
+.uProfileItem27 { background-color: rgb(22, 22, 22); align-content: stretch; display: flex; align-items: flex-end; padding-left: calc(24 * var(--u)); padding-right: calc(24 * var(--u)); position: relative; flex-shrink: 0; width: 100%; }
+.uProfileItem28 { word-break: break-word; font-family: "Noto Sans JP", sans-serif; font-weight: 900; line-height: 0; position: relative; flex-shrink: 0; font-size: calc(0 * var(--u)); text-align: center; color: rgb(255, 255, 255); letter-spacing: calc(1.08 * var(--u)); white-space: nowrap; }
+.uProfileItem29 { line-height: normal; font-size: calc(54 * var(--u)); }
+.uProfileItem30 { line-height: normal; font-size: calc(20 * var(--u)); }
+.uProfileItem31 { position: absolute; height: calc(257 * var(--u)); left: calc(332 * var(--u)); top: calc(-45.11 * var(--u)); width: calc(234 * var(--u)); }
+.uProfileItem32 { position: absolute; inset: 0px; max-width: none; object-fit: cover; pointer-events: none; width: 100%; height: 100%; }
+.uProfileItem26 { padding-left: calc(16 * var(--u)); line-height: calc(38 * var(--u)); }
+.uProfileItem29 { line-height: calc(65 * var(--u)); }
+@media (max-width: 600px) {
+.uProfileItem06 { font-size: max(16px, calc(24 * var(--u))); white-space: normal; max-width: 100%; }
+.uProfileItem19 { font-size: max(16px, calc(32 * var(--u))); white-space: normal; max-width: 100%; line-height: 1.65; }
+.uProfileItem21 { font-size: max(16px, calc(24 * var(--u))); white-space: normal; max-width: 100%; line-height: 1.65; }
+.uProfileItem26 { font-size: max(16px, calc(32 * var(--u))); white-space: normal; max-width: 100%; line-height: 1.65; }
+.uProfileItem30 { font-size: max(14px, calc(20 * var(--u))); white-space: normal; max-width: 100%; line-height: 1.65; }
+.uProfile p { text-wrap: pretty; }
+.uProfile { padding-left: calc(40 * var(--u)); padding-right: calc(40 * var(--u)); }
+.uProfileItem05 { padding-left: calc(24 * var(--u)); padding-right: calc(24 * var(--u)); }
+.uProfileItem07, .uProfileItem09, .uProfileItem11, .uProfileItem13, .uProfileItem15 { line-height: 1.75; }
+}
