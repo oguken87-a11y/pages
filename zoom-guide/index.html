@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Zoomの参加のしかた</title>
+<style>
+  :root {
+    --ink: #1f2328;
+    --sub: #57606a;
+    --blue: #0b5cff;
+    --blue-soft: #e8f0ff;
+    --red: #d1242f;
+    --red-soft: #ffebe9;
+    --green: #1a7f37;
+    --green-soft: #dafbe1;
+    --yellow-soft: #fff8c5;
+    --line: #d0d7de;
+    --dark: #24292f;
+  }
+  @page { size: A4; margin: 14mm 14mm; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: #fff; color: var(--ink);
+    font-family: "Yu Gothic UI", "Yu Gothic", "Meiryo", "Hiragino Sans", sans-serif;
+    font-size: 17px; line-height: 1.7;
+  }
+  .page { max-width: 760px; margin: 0 auto; padding: 8px 4px 20px; }
+  .break { break-before: page; }
+  h1 { font-size: 34px; margin: 0 0 4px; color: var(--blue); }
+  h2 { break-after: avoid;
+    font-size: 25px; margin: 0 0 12px; padding: 6px 14px;
+    background: var(--blue); color: #fff; border-radius: 10px;
+  }
+  h3 { font-size: 20px; margin: 18px 0 6px; }
+  p { margin: 6px 0; }
+  .lead { font-size: 19px; }
+  .muted { color: var(--sub); font-size: 15px; }
+  b.k { background: var(--yellow-soft); padding: 0 3px; }
+
+  .flow { display: flex; gap: 10px; margin: 18px 0; align-items: stretch; }
+  .flow .box {
+    flex: 1; border: 3px solid var(--blue); border-radius: 14px; padding: 12px;
+    text-align: center; background: var(--blue-soft);
+  }
+  .flow .num {
+    display: inline-block; width: 40px; height: 40px; line-height: 40px; border-radius: 50%;
+    background: var(--blue); color: #fff; font-weight: bold; font-size: 22px;
+  }
+  .flow .t { font-weight: bold; font-size: 19px; margin-top: 6px; }
+  .flow .arrow { align-self: center; font-size: 28px; color: var(--blue); }
+
+  .step { display: flex; gap: 14px; margin: 0 0 32px; break-inside: avoid; }
+  .step .n {
+    flex: 0 0 44px; height: 44px; line-height: 44px; border-radius: 50%;
+    background: var(--blue); color: #fff; text-align: center; font-weight: bold; font-size: 22px;
+  }
+  .step .body { flex: 1; }
+  .step .title { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
+
+  .note {
+    border-radius: 12px; padding: 10px 14px; margin: 12px 0; break-inside: avoid;
+  }
+  .note.warn { background: var(--red-soft); border: 2px solid var(--red); }
+  .note.ok { background: var(--green-soft); border: 2px solid var(--green); }
+  .note.tip { background: var(--yellow-soft); border: 2px solid #d4a72c; }
+  .note .h { font-weight: bold; font-size: 18px; }
+
+  /* 画面のイメージ図 */
+  .mock {
+    border: 2px solid var(--line); border-radius: 10px; margin: 10px 0; overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,.12); background: #fff; font-size: 15px; break-inside: avoid;
+  }
+  .mock .bar {
+    background: #f0f2f5; border-bottom: 1px solid var(--line); padding: 6px 10px; color: var(--sub);
+    display: flex; gap: 8px; align-items: center;
+  }
+  .mock .dots span { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #c9ced6; margin-right: 4px; }
+  .mock .addr {
+    flex: 1; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 2px 12px; color: var(--ink);
+  }
+  .mock .in { padding: 14px; }
+  .btn {
+    display: inline-block; padding: 6px 16px; border-radius: 8px; border: 1px solid var(--line);
+    background: #fff; font-weight: bold; margin: 2px;
+  }
+  .btn.blue { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .btn.red { background: var(--red); border-color: var(--red); color: #fff; }
+  .click { outline: 4px solid #ff8c00; outline-offset: 3px; position: relative; }
+  .click::after {
+    content: "◀ ここを押す"; position: absolute; top: 50%; left: 100%; transform: translate(12px, -50%); white-space: nowrap;
+    background: #ff8c00; color: #fff; font-size: 13px; padding: 1px 8px; border-radius: 6px;
+  }
+  .dialog {
+    width: 360px; margin: 6px auto; border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 16px; box-shadow: 0 4px 14px rgba(0,0,0,.18); background: #fff;
+  }
+  .dialog .right { text-align: right; margin-top: 12px; }
+
+  /* 会議中のボタン列 */
+  .toolbar {
+    background: var(--dark); color: #fff; display: flex; justify-content: space-between;
+    align-items: flex-end; padding: 10px 10px 6px; border-radius: 0 0 8px 8px; gap: 4px;
+  }
+  .toolbar .g { display: flex; gap: 6px; }
+  .tb { width: 66px; text-align: center; font-size: 12px; line-height: 1.3; position: relative; }
+  .tb svg { width: 30px; height: 30px; display: block; margin: 0 auto 3px; }
+  .tb.share svg rect { fill: var(--green); }
+  .leave { background: var(--red); color: #fff; font-weight: bold; padding: 6px 12px; border-radius: 8px; font-size: 14px; }
+  .stage {
+    background: #3a3f45; height: 150px; display: flex; align-items: center; justify-content: center;
+    gap: 12px; border-radius: 8px 8px 0 0;
+  }
+  .face {
+    width: 170px; height: 110px; background: #5c636b; border-radius: 6px; color: #fff;
+    display: flex; align-items: flex-end; padding: 4px 8px; font-size: 13px;
+  }
+  .tag {
+    position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap;
+    font-size: 12px; font-weight: bold; padding: 1px 6px; border-radius: 6px; top: -26px;
+  }
+  .tag.o { background: #ff8c00; color: #fff; }
+  .tag.x { background: var(--red); color: #fff; }
+
+  table.btns { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 16px; }
+  table.btns th, table.btns td { border: 1px solid var(--line); padding: 7px 10px; vertical-align: top; }
+  table.btns th { background: #f6f8fa; width: 30%; text-align: left; }
+  tr.ng th, tr.ng td { background: var(--red-soft); }
+
+  .qa { margin: 10px 0; break-inside: avoid; }
+  .qa .q { font-weight: bold; font-size: 18px; }
+  .qa .q::before { content: "Q. "; color: var(--red); }
+  .qa .a::before { content: "A. "; color: var(--green); font-weight: bold; }
+
+  .contact {
+    border: 3px dashed var(--blue); border-radius: 14px; padding: 12px 16px; text-align: center;
+    font-size: 19px; margin-top: 16px;
+  }
+  /* クリックできる大きいボタン */
+  .keep { break-inside: avoid; }
+  .contact { break-inside: avoid; }
+  .break > h2:first-child { margin-top: 0; }
+  .bigbtn-wrap { text-align: center; margin: 14px 0 !important; }
+  .bigbtn {
+    display: inline-block; background: var(--blue); color: #fff; font-size: 21px; font-weight: bold;
+    padding: 12px 28px; border-radius: 12px; text-decoration: none; box-shadow: 0 3px 0 #0841b8;
+  }
+
+  /* ①②③の小さい手順 */
+  ol.sub { list-style: none; padding: 0; margin: 8px 0 12px; }
+  ol.sub li { margin: 0 0 8px; padding-left: 1.8em; text-indent: -1.8em; }
+  ol.sub .c { display: inline-block; width: 1.8em; text-indent: 0; color: var(--blue); font-weight: bold; font-size: 1.1em; }
+
+  /* LINE（パソコン版）の画面イメージ */
+  .line {
+    border: 2px solid var(--line); border-radius: 10px; overflow: hidden; margin: 10px 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,.12); break-inside: avoid; font-size: 14px;
+  }
+  .line-head { background: #fff; border-bottom: 1px solid #e3e5e8; padding: 8px 14px; font-weight: bold; font-size: 16px; }
+  .line-head .back { color: var(--sub); margin-right: 6px; }
+  .line-body { background: #8cabd9; padding: 10px 14px 18px; }
+  .line-date {
+    text-align: center; margin: 0 auto 10px; width: 60px; background: rgba(0,0,0,.18); color: #fff;
+    border-radius: 10px; font-size: 12px;
+  }
+  .line-row { display: flex; gap: 8px; align-items: flex-start; }
+  .avatar {
+    flex: 0 0 38px; height: 38px; border-radius: 50%; background: #f2c14e; color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: bold;
+  }
+  .line-name { color: #fff; font-size: 12px; margin-bottom: 2px; }
+  .line-msg { display: flex; align-items: flex-end; gap: 6px; }
+  .bubble {
+    background: #fff; border-radius: 16px; padding: 8px 12px; max-width: 330px; position: relative;
+    line-height: 1.5; word-break: break-all;
+  }
+  .line-link { color: #2f6fd6; text-decoration: underline; }
+  .line-time { color: #fff; font-size: 11px; white-space: nowrap; }
+  .line-input { background: #fff; border-top: 1px solid #e3e5e8; padding: 8px 14px; color: #a0a6ad; font-size: 13px; }
+  .cursor { position: absolute; width: 16px; height: 24px; left: 150px; bottom: -6px; }
+  .ctx {
+    background: #fff; border: 1px solid #c9ced6; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,.25);
+    padding: 4px 0; min-width: 150px; font-size: 14px; position: relative; margin-top: 30px;
+  }
+  .ctx > div { padding: 3px 16px; }
+  .ctx .dim { color: #a0a6ad; }
+  .ctx .hit { background: var(--blue-soft); outline: 3px solid #ff8c00; outline-offset: -3px; font-weight: bold; position: relative; }
+  .mark {
+    position: absolute; background: #ff8c00; color: #fff; font-weight: bold; border-radius: 50%;
+    width: 24px; height: 24px; line-height: 24px; text-align: center; font-size: 15px;
+  }
+  .mark.m1 { left: 172px; bottom: -16px; }
+  .mark.m2 { left: -12px; top: -12px; }
+  .mark.m3 { right: -30px; top: 1px; }
+
+  /* スマホで見たとき */
+  @media screen and (max-width: 600px) {
+    body { font-size: 16px; }
+    .page { padding: 8px 16px 20px; }
+    h1 { font-size: 26px; }
+    h2 { font-size: 20px; margin-top: 36px; }
+    .flow { flex-direction: column; }
+    .flow .arrow { transform: rotate(90deg); }
+    .step { gap: 10px; }
+    .step .n { flex: 0 0 34px; height: 34px; line-height: 34px; font-size: 18px; }
+    .step .title { font-size: 18px; }
+    .dialog { width: auto; max-width: 100%; }
+    .click::after { top: 100%; left: 50%; transform: translate(-50%, 8px); z-index: 1; }
+    .bigbtn { font-size: 17px; padding: 10px 16px; }
+    .line-row { flex-wrap: wrap; }
+    .ctx { margin: 10px 0 0 46px; }
+    .cursor { left: 110px; }
+    .mark.m1 { left: 132px; }
+    .stage { height: 110px; }
+    .face { width: 120px; height: 76px; }
+    .toolbar { padding: 8px 4px 6px; }
+    .toolbar .g { gap: 0; }
+    .tb { width: 42px; font-size: 9px; }
+    .tb svg { width: 22px; height: 22px; }
+    .tag { font-size: 10px; padding: 0 4px; }
+    .leave { padding: 4px 6px; font-size: 12px; }
+    table.btns { font-size: 15px; }
+    table.btns th { width: 34%; }
+  }
+
+  @media print {
+    body { font-size: 14.5px; line-height: 1.55; }
+    .page { padding: 0; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 21px; margin: 45px 0 22px; }
+    h3 { margin: 26px 0 12px; }
+    .page:first-child h2 { margin-top: 39px; }
+    .lead { font-size: 17px; }
+    .flow { margin: 10px 0; }
+    .flow .box { padding: 8px; }
+    .flow .t { font-size: 17px; }
+    .step { margin: 0 0 45px; }
+    .step .title { font-size: 17px; margin-bottom: 8px; }
+    .step .body > p { margin: 6px 0; }
+    .note { padding: 6px 12px; margin: 8px 0; }
+    .note p { margin: 2px 0; }
+    .mock { margin: 6px 0; }
+    .mock .in { padding: 10px; }
+    .dialog { padding: 10px 14px; }
+    .dialog .right { margin-top: 6px; }
+    table.btns th, table.btns td { padding: 5px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== 1ページ目 ===================== -->
+<div class="page">
+  <h1>Zoom（ズーム）の参加のしかた</h1>
+  <p class="muted">パソコン用 ／ 上から順番に進めれば大丈夫です</p>
+
+  <p class="lead">Zoomは「インターネットでするテレビ電話」です。<br>
+  覚えることは <b class="k">3つだけ</b> です。</p>
+
+  <div class="flow">
+    <div class="box"><span class="num">1</span><div class="t">Zoomアプリが<br>入っているか確認</div><div class="muted">なければ入れる（1回だけ）</div></div>
+    <div class="arrow">▶</div>
+    <div class="box"><span class="num">2</span><div class="t">LINEのリンクを<br>コピペして入る</div><div class="muted">毎回</div></div>
+    <div class="arrow">▶</div>
+    <div class="box"><span class="num">3</span><div class="t">マイクとカメラを<br>オンにする</div><div class="muted">毎回</div></div>
+  </div>
+
+  <div class="note ok">
+    <div class="h">大事なこと（先にこれだけ覚えてください）</div>
+    <p>・画面に何か出たら、<b>「開く」「参加」「許可する」</b> の青いボタンを押せば、だいたい進みます。</p>
+    <p>・<b>「録画」ボタンは押さないでください。</b>押すと相手に「録画させてください」というお願いが届いてしまいます。</p>
+    <p>・間違えて抜けてしまっても大丈夫。<b>もう一度リンクをコピペして入り直せばOK</b>です。</p>
+  </div>
+
+  <h2>1　Zoomアプリは入れましたか？</h2>
+  <p>まず、パソコンに <b>Zoomアプリ</b> が入っているか確かめましょう。</p>
+  <div class="note tip">
+    <div class="h">確かめ方</div>
+    <p>画面左下の <b>スタート（Windowsのマーク）</b> を押して、キーボードで <b class="k">zoom</b> と入力します。<br>
+    <b>「Zoom Workplace」</b>（青い四角にビデオカメラの絵）が出てくれば、入っています。</p>
+  </div>
+  <div class="note ok">
+    <p>・<b>出てきた人</b> → アプリは入っています。次のページの <b>「2」</b> に進んでください。</p>
+    <p>・<b>出てこなかった人</b> → アプリが入っていません。<br>
+    　アプリなしでも参加はできますが、<b>入れておいた方がずっとスムーズ</b>です。下の手順で入れてください（1回だけでOK）。</p>
+  </div>
+
+  <div class="keep">
+  <h3>Zoomアプリの入れ方</h3>
+  <div class="step"><div class="n">1</div><div class="body">
+    <div class="title">下の青いボタンをクリックして、Zoomアプリをダウンロードしてください</div>
+    <p class="bigbtn-wrap">
+      <a class="bigbtn" href="https://zoom.us/client/latest/ZoomInstallerFull.exe">▶ ここをクリックしてZoomアプリをダウンロード</a>
+    </p>
+    <p>クリックすると、すぐにダウンロードが始まります。</p>
+    <p class="muted">うまくいかないとき（Macのときも）は、Chromeの上のアドレス欄に <b>zoom.us/download</b> と入力して Enter → いちばん上の青い <b>「ダウンロード」</b> を押してください。</p>
+  </div></div>
+  </div>
+
+  <div class="step"><div class="n">2</div><div class="body">
+    <div class="title">ダウンロードしたファイルを開く</div>
+    <p>Chromeの右上に出る <b>↓（ダウンロード）マーク</b> を押し、<b>「ZoomInstallerFull」</b> という名前のファイルをクリックします。<br>
+    <span class="muted">（↓マークが見当たらないときは、パソコンの「ダウンロード」フォルダの中にあります）</span></p>
+    <p>「このアプリがデバイスに変更を加えることを許可しますか？」と出たら <b>「はい」</b>。あとは自動で入ります。</p>
+  </div></div>
+
+  <div class="step"><div class="n">3</div><div class="body">
+    <div class="title">「サインイン」の画面が出ても、何もしなくてOK</div>
+    <p>参加するだけなら <b>アカウント作成もサインインも不要</b> です。右上の × で閉じてかまいません。</p>
+  </div></div>
+</div>
+
+<!-- ===================== 2ページ目 ===================== -->
+<div class="page">
+  <div class="keep">
+  <h2>2　LINEのリンクをコピーして、Chromeに貼り付ける（毎回）</h2>
+  <p>LINEのリンクをそのままクリックすると、うまく開かないことがあります。<br>
+  <b>コピーして、Chromeに貼り付ける</b> のが確実です。</p>
+
+  <div class="step"><div class="n">1</div><div class="body">
+    <div class="title">LINEで届いたリンクをコピーする</div>
+    <ol class="sub">
+      <li><span class="c">①</span>LINEを開き、Zoomのリンク（<b style="color:#0b5cff">青い文字</b>）の上に <b>マウスの矢印</b> を合わせる</li>
+      <li><span class="c">②</span>マウスの <b class="k">右側のボタン</b> を1回押す → メニューが出てきます</li>
+      <li><span class="c">③</span>メニューの中の <b class="k">「コピー」</b> を、いつもどおり左側のボタンで押す</li>
+    </ol>
+
+    <div class="line">
+      <div class="line-head"><span class="back">‹</span> 小倉</div>
+      <div class="line-body">
+        <div class="line-date">今日</div>
+        <div class="line-row">
+          <div class="avatar">小</div>
+          <div>
+            <div class="line-name">小倉</div>
+            <div class="line-msg">
+              <div class="bubble">明日のZoomはこちらから入ってください<br>
+                <span class="line-link">https://us06web.zoom.us/j/81234567890?pwd=…</span>
+                <span class="mark m1">①</span>
+                <svg class="cursor" viewBox="0 0 16 24"><path d="M1 1v19l5-5 3.5 7 3-1.5L9 13.5h6.5z" fill="#fff" stroke="#000" stroke-width="1.3" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="line-time">10:00</span>
+            </div>
+          </div>
+          <div class="ctx">
+            <span class="mark m2">②</span>
+            <div>返信</div>
+            <div class="hit">コピー<span class="mark m3">③</span></div>
+            <div>転送</div>
+            <div>Keepに保存</div>
+            <div>アナウンス</div>
+            <div>削除</div>
+          </div>
+        </div>
+      </div>
+      <div class="line-input">メッセージを入力</div>
+    </div>
+    <p class="muted">メニューに「リンクをコピー」と出たときは、それを押してください。</p>
+  </div></div>
+  </div>
+
+  <div class="step"><div class="n">2</div><div class="body">
+    <div class="title">Chromeに貼り付けて開く</div>
+    <ol class="sub">
+      <li><span class="c">①</span><b>Chrome</b>（赤・黄・緑の丸いマーク）を開く</li>
+      <li><span class="c">②</span>いちばん上の <b>白い横長の枠（アドレス欄）</b> の上で、マウスの <b class="k">右側のボタン</b> を押す</li>
+      <li><span class="c">③</span>メニューの <b class="k">「貼り付けて移動」</b> を押す</li>
+    </ol>
+    <div class="mock">
+      <div class="bar"><span class="dots"><span></span><span></span><span></span></span><span class="addr">&nbsp;</span></div>
+      <div class="in" style="height:200px; position:relative">
+        <div class="ctx" style="position:absolute; left:120px; top:-4px">
+          <div class="dim">元に戻す</div>
+          <div class="dim">切り取り</div>
+          <div class="dim">コピー</div>
+          <div>貼り付け</div>
+          <div class="hit">貼り付けて移動</div>
+          <div>すべて選択</div>
+        </div>
+      </div>
+    </div>
+    <p class="muted">「貼り付けて移動」が無いときは、「貼り付け」を押してからキーボードの <b>Enter</b> を押してください。<br>
+    （右クリックの代わりに、キーボードの <b>Ctrl</b> を押しながら <b>V</b> → <b>Enter</b> でもOKです）</p>
+  </div></div>
+
+  <div class="step"><div class="n">3</div><div class="body">
+    <div class="title">「Zoom Workplace を開きますか？」と出たら <b class="k">「開く」</b></div>
+    <div class="mock">
+      <div class="bar"><span class="dots"><span></span><span></span><span></span></span><span class="addr">https://us06web.zoom.us/j/…</span></div>
+      <div class="in">
+        <div class="dialog">
+          Zoom Workplace を開きますか？<br>
+          <span class="muted">☐ 常に許可する</span>
+          <div class="right"><span class="btn">キャンセル</span> <span class="btn blue click">開く</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="muted">「常に許可する」にチェックを入れておくと、次からこの画面が出なくなります。<br>
+    何も出ないときは、画面の <b>「ミーティングを起動」</b> ボタンを押してください。</p>
+  </div></div>
+
+  <div class="step"><div class="n">4</div><div class="body">
+    <div class="title">名前を聞かれたら、自分の名前を入れて「参加」</div>
+  </div></div>
+
+  <div class="step"><div class="n">5</div><div class="body">
+    <div class="title">「ホストが参加を許可するまでお待ちください」→ そのまま待つ</div>
+    <p>こちら（主催者）が「許可」を押すまで待合室にいる状態です。<b>何も押さずに</b>待っていてください。</p>
+  </div></div>
+
+  <div class="step"><div class="n">6</div><div class="body">
+    <div class="title">「コンピューターオーディオで参加」を押す ← <span style="color:var(--red)">ここが一番大事！</span></div>
+    <div class="mock">
+      <div class="in">
+        <div class="dialog" style="text-align:center">
+          <b>オーディオに参加</b><br><br>
+          <span class="btn blue click">コンピューターオーディオで参加</span><br>
+          <span class="muted" style="font-size:13px">スピーカーとマイクをテスト</span>
+        </div>
+      </div>
+    </div>
+    <p>これを押さないと、<b>相手の声が聞こえず、自分の声も届きません。</b><br>
+    <span class="muted">（入る前に「ビデオ付きで参加」と出たら、それも押してください）</span></p>
+  </div></div>
+</div>
+
+<!-- ===================== 3ページ目 ===================== -->
+<div class="page">
+  <div class="keep">
+  <h2>3　会議中の画面（下のボタンの意味）</h2>
+  <p>入ると、画面の <b>いちばん下</b> にボタンが並んでいます。<br>
+  <span class="muted">（マウスを動かすと出てきます。Zoomのバージョンで見た目が少し違うことがあります）</span></p>
+
+  <div class="mock" style="margin-top:34px">
+    <div class="stage"><div class="face">相手の顔</div><div class="face">あなたの顔</div></div>
+    <div class="toolbar">
+      <div class="g">
+        <div class="tb"><span class="tag o">声</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/><path d="M3 3l18 18" stroke="#ff6b6b"/></svg>
+          ミュート解除</div>
+        <div class="tb"><span class="tag o">顔</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3"/><path d="M3 3l18 18" stroke="#ff6b6b"/></svg>
+          ビデオの開始</div>
+      </div>
+      <div class="g">
+        <div class="tb"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-4 3-6 7-6s7 2 7 6"/><circle cx="17" cy="9" r="2.5"/></svg>参加者</div>
+        <div class="tb"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 5h16v11H9l-5 4z"/></svg>チャット</div>
+        <div class="tb share"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M12 16V8M8 11l4-4 4 4" stroke="#fff" stroke-width="2" fill="none"/></svg>共有</div>
+        <div class="tb"><span class="tag x">押さない</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4" fill="#ff6b6b" stroke="none"/></svg>
+          録画</div>
+      </div>
+      <div class="g"><span class="leave">退出</span></div>
+    </div>
+  </div>
+  </div>
+
+  <table class="btns">
+    <tr><th>🎤 マイク<br><span class="muted">（左はし）</span></th>
+      <td><b>赤い斜線が付いている＝あなたの声は届いていません。</b><br>押すと斜線が消えて、声が届くようになります。</td></tr>
+    <tr><th>📷 ビデオ</th>
+      <td><b>赤い斜線が付いている＝顔が映っていません。</b><br>押すとカメラが付きます。</td></tr>
+    <tr><th>参加者・チャット</th>
+      <td>参加している人の一覧と、文字のやりとり。今回は使わなくてOKです。</td></tr>
+    <tr><th>共有（緑）</th>
+      <td>自分のパソコン画面を相手に見せる機能。頼まれたときだけ使います。</td></tr>
+    <tr class="ng"><th>⏺ 録画</th>
+      <td><b>押さないでください。</b>押すと相手に「録画の許可をください」というお願いが届きます。<br>
+      間違えて押して何か出たら <b>「キャンセル」</b> を押せば大丈夫です。</td></tr>
+    <tr><th>退出（赤）</th>
+      <td>終わるときに押します。「ミーティングを退出」をもう一度押して終了です。</td></tr>
+  </table>
+
+  <div class="note warn">
+    <div class="h">いろいろな「許可しますか？」が出たときの見分け方</div>
+    <p>・<b>「マイク（カメラ）の使用を許可しますか？」</b> → <b>「許可する」</b>（これは押してOK）</p>
+    <p>・<b>「録画」「レコーディング」</b>という言葉が入っているもの → <b>「キャンセル」</b>（押さなくてOK）</p>
+  </div>
+</div>
+
+<!-- ===================== 4ページ目 ===================== -->
+<div class="page">
+  <h2>こまったときは</h2>
+
+  <div class="qa"><div class="q">相手の声が聞こえない</div>
+    <div class="a">画面左下に <b>「オーディオに接続」</b>（ヘッドホンのマーク）が出ていたら押して、「コンピューターオーディオで参加」を押します。<br>
+    それでもダメなら、パソコンの音量（画面右下のスピーカーマーク）が小さくなっていないか確認してください。</div></div>
+
+  <div class="qa"><div class="q">こちらの声が相手に届かない</div>
+    <div class="a">左下のマイクに <b>赤い斜線</b> が付いていたら押してください。<br>
+    マイクの横の <b>「∧」</b> を押すと、使うマイクを選び直せます。</div></div>
+
+  <div class="qa"><div class="q">顔が映らない</div>
+    <div class="a">左下の <b>ビデオ</b> を押してください。それでも真っ暗なら、カメラのフタ（シャッター）が閉まっていないか見てください。</div></div>
+
+  <div class="qa"><div class="q">間違えて画面を閉じた・抜けてしまった</div>
+    <div class="a">もう一度、LINEのリンクをコピーしてChromeに貼り付ければ入り直せます。何回やり直しても大丈夫です。</div></div>
+
+  <div class="qa"><div class="q">リンクからどうしても入れない</div>
+    <div class="a">Zoomアプリを開いて <b>「参加」</b> を押し、<b>ミーティングID</b>（数字）と <b>パスコード</b> を入れても入れます。<br>
+    IDとパスコードはこちらからLINEで送ります。</div></div>
+
+  <div class="qa"><div class="q">アプリが入れられない（会社のパソコンなど）</div>
+    <div class="a">リンクを開いたページの下の方にある <b>「ブラウザから参加してください」</b> を押すと、アプリなしで参加できます。<br>
+    そのときChromeが <b>「マイク・カメラの使用を許可しますか？」</b> と聞いてくるので <b>「許可する」</b> を押してください。</div></div>
+
+</div>
+
+<!-- ===================== 練習 ===================== -->
+<div class="page break">
+  <h2>最後に、一度練習してみましょう！</h2>
+  <p class="lead">Zoomには <b>ひとりで練習できる部屋</b> があります。<br>
+  本番の前に、<b>自分の声と顔がちゃんと出るか</b> ここで確かめておくと安心です。</p>
+
+  <div class="step"><div class="n">1</div><div class="body">
+    <div class="title">下の青いボタン（リンク）をクリックしてください</div>
+    <p style="text-align:center; margin:14px 0">
+      <a class="bigbtn" href="https://zoom.us/test">▶ ここをクリックして練習ページを開く</a><br>
+      <span class="muted">https://zoom.us/test</span>
+    </p>
+    <p class="muted">クリックしても開かないときは、Chromeの上のアドレス欄に <b>zoom.us/test</b> と入力して Enter を押してください。</p>
+  </div></div>
+
+  <div class="step"><div class="n">2</div><div class="body">
+    <div class="title">青い <b class="k">「参加」</b> ボタンを押す</div>
+    <p>このあとは本番と同じです。「Zoom Workplace を開きますか？」と出たら <b>「開く」</b>。</p>
+  </div></div>
+
+  <div class="step"><div class="n">3</div><div class="body">
+    <div class="title">「着信音が聞こえますか？」→ 聞こえたら <b class="k">「はい」</b></div>
+    <p>ピロピロと音が鳴ります。聞こえないときは「いいえ」を押すと、別のスピーカーで試してくれます。</p>
+  </div></div>
+
+  <div class="step"><div class="n">4</div><div class="body">
+    <div class="title">「話してから話を止めます。返答が聞こえますか？」→ 何かしゃべってみる</div>
+    <p>「あー、あー」などと話すと、少しあとに <b>自分の声が聞こえてきます</b>。聞こえたら <b>「はい」</b>。</p>
+  </div></div>
+
+  <div class="step"><div class="n">5</div><div class="body">
+    <div class="title"><b class="k">「コンピューターオーディオで参加」</b> を押す</div>
+    <p>練習の部屋に入れます。下のボタンで <b>マイク</b> と <b>ビデオ</b> を押して、<b>赤い斜線が消える</b> ことと、<b>自分の顔が映る</b> ことを確かめてください。<br>
+    終わったら、右下の赤い <b>「退出」</b> を押して終わりです。</p>
+    <p style="color:var(--green); font-weight:bold">ここまでできたら、本番もバッチリです！</p>
+  </div></div>
+
+
+  <div class="contact">
+    わからなくなったら、<b>画面をスマホで写真に撮って LINE で送ってください。</b><br>
+    電話でもいっしょに見ながら進められます。
+  </div>
+</div>
+
+</body>
+</html>
