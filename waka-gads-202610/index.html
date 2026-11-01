@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Waka塾 Google広告 10月レポート</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f6f5f2;
+  --surface: #fcfcfb;
+  --surface-2: #f0efec;
+  --border: #e2e0da;
+  --text: #0b0b0b;
+  --text-2: #52514e;
+  --text-3: #7a7974;
+  --accent: #1c5cab;
+  --s1: #2a78d6;   /* 系列1：青（Google検索・狙いどおり） */
+  --s2: #eb6834;   /* 系列2：オレンジ（検索パートナー・狙いと違う） */
+  --neutral: #a9a8a2; /* どちらとも言えない */
+  --grid: #e7e5e0;
+  --good: #0ca30c;
+  --critical: #d03b3b;
+  --warn-bg: #fdf3e7;
+  --note-bg: #eef4fc;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121211;
+    --surface: #1a1a19;
+    --surface-2: #232321;
+    --border: #34332f;
+    --text: #f0efec;
+    --text-2: #c3c2b7;
+    --text-3: #93928b;
+    --accent: #86b6ef;
+    --s1: #3987e5;
+    --s2: #d95926;
+    --neutral: #6f6e68;
+    --grid: #2c2b28;
+    --warn-bg: #2d2418;
+    --note-bg: #17222f;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121211;
+  --surface: #1a1a19;
+  --surface-2: #232321;
+  --border: #34332f;
+  --text: #f0efec;
+  --text-2: #c3c2b7;
+  --text-3: #93928b;
+  --accent: #86b6ef;
+  --s1: #3987e5;
+  --s2: #d95926;
+  --neutral: #6f6e68;
+  --grid: #2c2b28;
+  --warn-bg: #2d2418;
+  --note-bg: #17222f;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+}
+.wrap { max-width: 980px; margin: 0 auto; padding: 32px 16px 64px; }
+header { margin-bottom: 28px; }
+.eyebrow { color: var(--text-3); font-size: 13px; letter-spacing: .04em; }
+h1 { font-size: 28px; line-height: 1.35; margin: 6px 0 8px; }
+.meta { color: var(--text-2); font-size: 14px; }
+h2 { font-size: 21px; margin: 0 0 4px; line-height: 1.4; }
+h3 { font-size: 16px; margin: 20px 0 8px; }
+.lead { color: var(--text-2); margin: 0 0 16px; font-size: 15px; }
+section.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 0 0 20px;
+}
+.num { font-variant-numeric: tabular-nums; }
+.summary ol { margin: 8px 0 0; padding-left: 1.4em; }
+.summary li { margin: 0 0 10px; }
+.summary li b { color: var(--text); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+.tile { background: var(--surface-2); border-radius: 10px; padding: 14px 16px; }
+.tile .k { font-size: 13px; color: var(--text-2); }
+.tile .v { font-size: 26px; font-weight: 700; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.tile .s { font-size: 12.5px; color: var(--text-3); line-height: 1.5; }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+th { color: var(--text-2); font-weight: 600; font-size: 13px; background: var(--surface-2); }
+td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr.hl td { background: var(--note-bg); }
+.down { color: var(--critical); font-weight: 600; }
+.up { color: var(--good); font-weight: 600; }
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 720px) { .chart-grid { grid-template-columns: 1fr; } }
+.chart { position: relative; min-width: 0; }
+.chart-grid > * { min-width: 0; }
+.chart .ttl { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.chart .sub { font-size: 12.5px; color: var(--text-3); margin-bottom: 6px; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart svg text { fill: var(--text-2); font-size: 12px; font-family: inherit; }
+.chart svg .val { fill: var(--text); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--text-2); margin: 6px 0 8px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.tip {
+  position: absolute; pointer-events: none; opacity: 0; transition: opacity .1s;
+  background: var(--text); color: var(--surface); font-size: 12.5px; line-height: 1.5;
+  padding: 6px 9px; border-radius: 6px; white-space: nowrap; z-index: 5;
+}
+.callout { border-radius: 10px; padding: 14px 16px; margin: 16px 0 0; font-size: 15px; }
+.callout.note { background: var(--note-bg); }
+.callout.warn { background: var(--warn-bg); }
+.callout b { color: var(--text); }
+.proposal { border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin: 0 0 12px; }
+.proposal h3 { margin: 0 0 6px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.badge { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--s1); color: #fff; white-space: nowrap; }
+.badge.b2 { background: var(--surface-2); color: var(--text-2); border: 1px solid var(--border); }
+.proposal dl { display: grid; grid-template-columns: 7.5em 1fr; gap: 4px 12px; margin: 8px 0 0; font-size: 14.5px; }
+.proposal dt { color: var(--text-3); }
+.proposal dd { margin: 0; }
+.checklist { list-style: none; padding: 0; margin: 8px 0 0; }
+.checklist li { padding: 10px 0 10px 32px; border-bottom: 1px solid var(--border); position: relative; }
+.checklist li::before { content: ""; position: absolute; left: 4px; top: 14px; width: 16px; height: 16px; border: 2px solid var(--text-3); border-radius: 4px; }
+.small { font-size: 13px; color: var(--text-3); }
+footer { color: var(--text-3); font-size: 13px; margin-top: 28px; }
+@media (max-width: 560px) {
+  h1 { font-size: 23px; }
+  section.card { padding: 18px 14px; }
+  .proposal dl { grid-template-columns: 1fr; }
+  .proposal dt { margin-top: 6px; }
+  table { font-size: 13.5px; }
+  td:first-child, th:first-child { min-width: 8.5em; }
+}
+@media print {
+  body { background: #fff; }
+  section.card { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Waka恋愛アカデミー｜Google広告（検索広告）</div>
+  <h1>10月の結果レポート</h1>
+  <div class="meta">対象期間 2026年10月1日〜31日／作成 2026年11月1日／アカウント 588-392-2162・キャンペーン「Waka恋愛アカデミー」（予算 ¥3,000/日）</div>
+</header>
+
+<!-- 全体の数字 -->
+<section class="card">
+  <h2>10月の全体の数字</h2>
+  <p class="lead">成果（申込や購入）の計測は入っていないため、「どこへ何人送ったか」で見ています。</p>
+  <div class="tiles">
+    <div class="tile"><div class="k">広告費</div><div class="v">¥9.1万</div><div class="s">予算¥9.3万（¥3,000×31日）の98%</div></div>
+    <div class="tile"><div class="k">クリック</div><div class="v">2,432</div><div class="s">1クリック平均 ¥37</div></div>
+    <div class="tile"><div class="k">本のAmazonページへ</div><div class="v">48</div><div class="s">広告の下のリンクから</div></div>
+    <div class="tile"><div class="k">ホームページへ</div><div class="v">2,377</div><div class="s">トップページ2,325＋本の紹介・プロフィールなど</div></div>
+    <div class="tile"><div class="k">広告の表示</div><div class="v">10.4万回</div><div class="s">クリック率 2.33%</div></div>
+    <div class="tile"><div class="k">成果（コンバージョン）</div><div class="v">0</div><div class="s">計測の設定がない</div></div>
+  </div>
+  <h3>9月との比べ</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th></th><th class="r">9月</th><th class="r">10月</th></tr></thead>
+    <tbody>
+      <tr><td>広告費</td><td class="r">¥9.1万</td><td class="r">¥9.1万</td></tr>
+      <tr><td>クリック</td><td class="r">2,157</td><td class="r">2,432</td></tr>
+      <tr><td>表示</td><td class="r">12.8万</td><td class="r">10.4万</td></tr>
+      <tr><td>うちGoogleの検索結果でのクリック</td><td class="r">97</td><td class="r">88</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">9月の数字は10/14の分析（9月1か月分）。9月のAmazonへの誘導は、9/12〜10/2の21日間で42（1日2.0）。</p>
+</section>
+
+<!-- 行き先 -->
+<section class="card">
+  <h2>どこへ送ったか（行き先別のクリック）</h2>
+  <p class="lead">広告本体の行き先はトップページ。広告の下に出るリンク（Amazon・本の紹介ページなど）を押すと、それぞれの行き先へ行きます。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>行き先</th><th class="r">クリック</th><th class="r">表示</th><th class="r">広告費</th></tr></thead>
+    <tbody>
+      <tr><td>トップページ（広告本体）</td><td class="r">2,325</td><td class="r">10.4万</td><td class="r">¥8.8万</td></tr>
+      <tr class="hl"><td>本のAmazonページ</td><td class="r">48</td><td class="r">4,011</td><td class="r">¥1,109</td></tr>
+      <tr><td>プロフィール（無料メルマガ登録・旧行き先）</td><td class="r">20</td><td class="r">2,023</td><td class="r">¥286</td></tr>
+      <tr><td>本の紹介ページ（書店ランキング1位獲得）</td><td class="r">10</td><td class="r">1,611</td><td class="r">¥1,044</td></tr>
+      <tr><td>お問い合わせ（取材依頼）</td><td class="r">10</td><td class="r">3,407</td><td class="r">¥152</td></tr>
+      <tr><td>無料個別相談会</td><td class="r">9</td><td class="r">2,099</td><td class="r">¥128</td></tr>
+      <tr><td>YouTubeチャンネル</td><td class="r">7</td><td class="r">1,380</td><td class="r">¥571</td></tr>
+      <tr><td>プロフィール＃特典（無料メルマガ登録・新行き先）</td><td class="r">3</td><td class="r">1,236</td><td class="r">¥224</td></tr>
+      <tr><td><b>合計</b></td><td class="r"><b>2,432</b></td><td class="r"></td><td class="r"><b>¥9.1万</b></td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">ホームページに来た人が、サイトの中の本のボタンからAmazonへ行った数は、今は数えられません（サイトの計測ツールにこちらのアカウントの権限がないため）。</p>
+</section>
+
+<!-- どこに出ていたか -->
+<section class="card">
+  <h2>広告がどこに出ていたか</h2>
+  <p class="lead">Google広告は、Googleの検索結果だけでなく、Googleと提携している他社サイトの検索欄・検索結果（検索パートナー）にも出ます。今の設定は両方に出す形です。</p>
+  <div class="legend"><span><i style="background:var(--s1)"></i>Googleの検索結果</span><span><i style="background:var(--s2)"></i>検索パートナー（提携サイト）</span></div>
+  <div class="chart" id="c-network"></div>
+  <div class="table-wrap" style="margin-top:12px"><table>
+    <thead><tr><th>10月</th><th class="r">表示</th><th class="r">クリック</th><th class="r">クリック率</th><th class="r">広告費</th><th class="r">単価</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td>Googleの検索結果・上の方</td><td class="r">385</td><td class="r">80</td><td class="r">20.8%</td><td class="r">¥1.5万</td><td class="r">¥192</td></tr>
+      <tr><td>Googleの検索結果・下の方</td><td class="r">480</td><td class="r">8</td><td class="r">1.7%</td><td class="r">¥1,636</td><td class="r">¥205</td></tr>
+      <tr><td>検索パートナー</td><td class="r">10.4万</td><td class="r">2,344</td><td class="r">2.3%</td><td class="r">¥7.4万</td><td class="r">¥32</td></tr>
+      <tr><td><b>合計</b></td><td class="r"><b>10.4万</b></td><td class="r"><b>2,432</b></td><td class="r">2.3%</td><td class="r"><b>¥9.1万</b></td><td class="r">¥37</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout note">
+    <b>クリックの96%・広告費の81%（¥7.4万）が検索パートナー</b>でした。入札が「クリック数をできるだけ多く」なので、Googleは単価の安い検索パートナーへ予算を寄せます。<br>
+    一方、<b>Googleの検索結果の上の方に出たときは、5回に1回押されています</b>（クリック率20.8%）。広告の下のリンク（Amazon・書店ランキング1位など）も、主にここで出ます。
+  </div>
+</section>
+
+<!-- 検索語句 -->
+<section class="card">
+  <h2>上位の検索語句</h2>
+  <p class="lead">実際に検索されて広告が押された言葉です（10月・クリックの多い順・9クリック以上）。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>検索語句</th><th class="r">クリック</th><th class="r">表示</th><th class="r">広告費</th></tr></thead>
+    <tbody>
+      <tr><td>体験 レッスン <span class="small">（今は除外）</span></td><td class="r">597</td><td class="r">977</td><td class="r">¥9,739</td></tr>
+      <tr><td>オンライン レッスン</td><td class="r">259</td><td class="r">302</td><td class="r">¥7,607</td></tr>
+      <tr><td>大人 習い事</td><td class="r">215</td><td class="r">425</td><td class="r">¥5,133</td></tr>
+      <tr><td>恋愛</td><td class="r">112</td><td class="r">3.3万</td><td class="r">¥3,599</td></tr>
+      <tr><td>習い事 <span class="small">（今は除外）</span></td><td class="r">107</td><td class="r">220</td><td class="r">¥2,477</td></tr>
+      <tr><td>スピリチュアル 恋愛 成就</td><td class="r">78</td><td class="r">81</td><td class="r">¥4,163</td></tr>
+      <tr><td>大人 習い事 おすすめ</td><td class="r">62</td><td class="r">82</td><td class="r">¥2,601</td></tr>
+      <tr><td>オンライン 講座</td><td class="r">38</td><td class="r">54</td><td class="r">¥828</td></tr>
+      <tr><td>好きな人と両思いになる方法</td><td class="r">37</td><td class="r">918</td><td class="r">¥1,517</td></tr>
+      <tr><td>初心者 習い事</td><td class="r">34</td><td class="r">63</td><td class="r">¥504</td></tr>
+      <tr><td>ナンパ</td><td class="r">31</td><td class="r">1.3万</td><td class="r">¥1,116</td></tr>
+      <tr><td>無料 体験</td><td class="r">26</td><td class="r">32</td><td class="r">¥1,464</td></tr>
+      <tr><td>モテる方法</td><td class="r">21</td><td class="r">2,894</td><td class="r">¥911</td></tr>
+      <tr><td>婚活</td><td class="r">16</td><td class="r">1,532</td><td class="r">¥1,007</td></tr>
+      <tr><td>習い事 大人</td><td class="r">14</td><td class="r">40</td><td class="r">¥226</td></tr>
+      <tr><td>恋人つくる</td><td class="r">13</td><td class="r">19</td><td class="r">¥603</td></tr>
+      <tr><td>恋愛相談</td><td class="r">11</td><td class="r">3,784</td><td class="r">¥513</td></tr>
+      <tr><td>セフレの作り方</td><td class="r">10</td><td class="r">78</td><td class="r">¥1,910</td></tr>
+      <tr><td>セックスしたい</td><td class="r">9</td><td class="r">55</td><td class="r">¥1,012</td></tr>
+      <tr><td>彼女作り方</td><td class="r">9</td><td class="r">541</td><td class="r">¥280</td></tr>
+      <tr><td>恋愛心理学</td><td class="r">9</td><td class="r">940</td><td class="r">¥508</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">10月の検索語句は合計2,083クリック。ほかに、Googleが中身を見せない検索が349クリックあります。</p>
+</section>
+
+<!-- キーワード -->
+<section class="card">
+  <h2>どのキーワードから出ていたか</h2>
+  <p class="lead">広告に登録しているキーワードごとの、10月の数字です。「インテント マッチ」は、意味が近いとGoogleが判断した検索にも出す設定です。</p>
+  <div class="chart" id="c-kw"></div>
+  <div class="table-wrap" style="margin-top:12px"><table>
+    <thead><tr><th>キーワード</th><th class="r">表示</th><th class="r">クリック</th><th class="r">クリック率</th><th class="r">広告費</th><th class="r">単価</th></tr></thead>
+    <tbody>
+      <tr><td>ナンパ講習 <span class="small">※</span></td><td class="r">2,093</td><td class="r">1,254</td><td class="r">59.9%</td><td class="r">¥2.8万</td><td class="r">¥23</td></tr>
+      <tr><td>恋愛コンサル</td><td class="r">9.3万</td><td class="r">962</td><td class="r">1.03%</td><td class="r">¥5.2万</td><td class="r">¥54</td></tr>
+      <tr><td>零時レイ</td><td class="r">7,917</td><td class="r">94</td><td class="r">1.19%</td><td class="r">¥6,112</td><td class="r">¥65</td></tr>
+      <tr><td>Waka塾</td><td class="r">350</td><td class="r">92</td><td class="r">26.3%</td><td class="r">¥2,692</td><td class="r">¥29</td></tr>
+      <tr><td>Waka ナンパ</td><td class="r">344</td><td class="r">16</td><td class="r">4.65%</td><td class="r">¥1,299</td><td class="r">¥81</td></tr>
+      <tr><td>おっさんナンパ塾</td><td class="r">40</td><td class="r">11</td><td class="r">27.5%</td><td class="r">¥515</td><td class="r">¥47</td></tr>
+      <tr><td>恋トレ大学</td><td class="r">706</td><td class="r">3</td><td class="r">0.42%</td><td class="r">¥469</td><td class="r">¥156</td></tr>
+      <tr><td>つっちー校長</td><td class="r">0</td><td class="r">0</td><td class="r">—</td><td class="r">¥0</td><td class="r">—</td></tr>
+      <tr><td><b>合計</b></td><td class="r"><b>10.4万</b></td><td class="r"><b>2,432</b></td><td class="r">2.33%</td><td class="r"><b>¥9.1万</b></td><td class="r">¥37</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">※「ナンパ講習」は10/12に出す範囲を絞った（フレーズ一致に変更）ため、管理画面では2つに分かれています。ここでは合算しています（変更前 1,253クリック・¥2.8万／変更後 1クリック・¥217）。「つっちー校長」は品質の評価が低く、ほぼ出ていません。</p>
+  <div class="callout note">
+    <b>「ナンパ講習」と「恋愛コンサル」の2語で、クリックの91%・広告費の88%（¥8.0万）。</b>名前のキーワード（Waka塾・Waka ナンパ・おっさんナンパ塾）は押される率が高いものの、検索される回数そのものが少なく、合わせて119クリック・¥4,506でした。
+  </div>
+</section>
+
+<footer>作成：Claude（小倉さんの依頼による）／出どころ：Google広告の管理画面（2026年11月1日に読み取り）／元データ：02_分析/生データ/20261101/</footer>
+</div>
+
+<script>
+(function () {
+  var man = function (n) { return n >= 10000 ? (Math.round(n / 1000) / 10).toFixed(1) + "万" : Math.round(n).toLocaleString("ja-JP"); };
+  var yen = function (n) { return "¥" + man(n); };
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function tipFor(box) {
+    var t = document.createElement("div");
+    t.className = "tip";
+    box.appendChild(t);
+    return {
+      show: function (html, evt) {
+        t.innerHTML = html;
+        t.style.opacity = 1;
+        var r = box.getBoundingClientRect();
+        var x = evt.clientX - r.left + 12, y = evt.clientY - r.top - 36;
+        if (x + t.offsetWidth > r.width) x = evt.clientX - r.left - t.offsetWidth - 12;
+        t.style.left = Math.max(0, x) + "px";
+        t.style.top = Math.max(0, y) + "px";
+      },
+      hide: function () { t.style.opacity = 0; }
+    };
+  }
+  // 横棒グラフ（1系列）
+  function hbars(id, data, opts) {
+    var box = document.getElementById(id);
+    var row = 34, W = Math.max(300, Math.min(900, box.clientWidth || 900)), labelW = W < 500 ? 104 : 130, T = 4;
+    var H = T + data.length * row + 6;
+    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img" }, box);
+    var max = Math.max.apply(null, data.map(function (d) { return d.v; }));
+    var pw = W - labelW - 80;
+    var tip = tipFor(box);
+    data.forEach(function (d, i) {
+      var y = T + i * row, bh = 16, w = Math.max(2, d.v / max * pw);
+      var lt = el("text", { x: labelW - 8, y: y + bh / 2 + 8, "text-anchor": "end" }, svg);
+      lt.textContent = d.label;
+      el("path", {
+        d: "M" + labelW + "," + (y + 4) + "H" + (labelW + w - 4) + "Q" + (labelW + w) + "," + (y + 4) + " " + (labelW + w) + "," + (y + 8) +
+           "V" + (y + bh) + "Q" + (labelW + w) + "," + (y + 4 + bh) + " " + (labelW + w - 4) + "," + (y + 4 + bh) + "H" + labelW + "Z",
+        fill: "var(--s1)"
+      }, svg);
+      var vt = el("text", { x: labelW + w + 6, y: y + bh / 2 + 8, "class": "val" }, svg);
+      vt.textContent = opts.fmt(d.v);
+      var hit = el("rect", { x: 0, y: y, width: W, height: row, fill: "transparent" }, svg);
+      hit.addEventListener("mousemove", function (e) { tip.show(opts.tip(d), e); });
+      hit.addEventListener("mouseleave", tip.hide);
+    });
+  }
+  // 100%積み上げ横棒（2系列）
+  function stack100(id, rows) {
+    var box = document.getElementById(id);
+    var W = Math.max(300, Math.min(900, box.clientWidth || 900)), labelW = W < 500 ? 60 : 90, row = 44, T = 4;
+    var H = T + rows.length * row;
+    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img" }, box);
+    var pw = W - labelW - 8;
+    var tip = tipFor(box);
+    rows.forEach(function (r, i) {
+      var y = T + i * row, bh = 24;
+      var lt = el("text", { x: labelW - 10, y: y + bh / 2 + 5, "text-anchor": "end" }, svg);
+      lt.textContent = r.label;
+      var tot = r.a + r.b, wa = r.a / tot * pw, wb = r.b / tot * pw, x0 = labelW;
+      el("rect", { x: x0, y: y, width: Math.max(3, wa - 1), height: bh, rx: 4, fill: "var(--s1)" }, svg);
+      el("rect", { x: x0 + wa + 1, y: y, width: wb - 1, height: bh, rx: 4, fill: "var(--s2)" }, svg);
+      var pa = Math.round(r.a / tot * 1000) / 10, pb = Math.round(r.b / tot * 1000) / 10;
+      if (wa > 90) { var ta = el("text", { x: x0 + 8, y: y + bh / 2 + 4.5, style: "fill:#fff;font-weight:600" }, svg); ta.textContent = "Google " + pa + "%"; }
+      var tb = el("text", { x: W - 16, y: y + bh / 2 + 4.5, "text-anchor": "end", style: "fill:#fff;font-weight:600" }, svg);
+      tb.textContent = (W < 500 ? "" : "パートナー ") + pb + "%";
+      var hit = el("rect", { x: 0, y: y - 4, width: W, height: row, fill: "transparent" }, svg);
+      hit.addEventListener("mousemove", function (e) { tip.show(r.tip, e); });
+      hit.addEventListener("mouseleave", tip.hide);
+    });
+  }
+
+  stack100("c-network", [
+    { label: "クリック", a: 88, b: 2344, tip: "10月のクリック<br>Google 88（3.6%）／パートナー 2,344（96.4%）" },
+    { label: "広告費", a: 17025, b: 74160, tip: "10月の広告費<br>Google " + yen(17025) + "（18.7%）／パートナー " + yen(74160) + "（81.3%）" }
+  ]);
+
+  hbars("c-kw", [
+    { label: "ナンパ講習", v: 1254, cost: 28291, ctr: "59.9%" },
+    { label: "恋愛コンサル", v: 962, cost: 51807, ctr: "1.03%" },
+    { label: "零時レイ", v: 94, cost: 6112, ctr: "1.19%" },
+    { label: "Waka塾", v: 92, cost: 2692, ctr: "26.3%" },
+    { label: "Waka ナンパ", v: 16, cost: 1299, ctr: "4.65%" },
+    { label: "おっさんナンパ塾", v: 11, cost: 515, ctr: "27.5%" },
+    { label: "恋トレ大学", v: 3, cost: 469, ctr: "0.42%" },
+    { label: "つっちー校長", v: 0, cost: 0, ctr: "—" }
+  ], { fmt: function (v) { return man(v) + "クリック"; },
+       tip: function (d) { return d.label + "<br>" + man(d.v) + "クリック・" + yen(d.cost) + "・クリック率 " + d.ctr; } });
+})();
+</script>
+</body>
+</html>
