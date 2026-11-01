@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Waka塾 Threads 成績報告</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f6f5f2;
+  --surface: #fcfcfb;
+  --surface-2: #f0efeb;
+  --border: #e2e0da;
+  --grid: #e8e6e1;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #7a7973;
+  --series-1: #2a78d6;
+  --accent: #2a78d6;
+  --good: #1f7a3a;
+  --good-bg: #e7f4ea;
+  --warn: #8a5a00;
+  --warn-bg: #fbf1dc;
+  --bad: #b3261e;
+  --bad-bg: #fbe9e7;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121211;
+    --surface: #1a1a19;
+    --surface-2: #232321;
+    --border: #34332f;
+    --grid: #2c2b28;
+    --text-primary: #f0efec;
+    --text-secondary: #c3c2b7;
+    --text-muted: #96958c;
+    --series-1: #3987e5;
+    --accent: #5b9cec;
+    --good: #6fcf8a;
+    --good-bg: #1d3324;
+    --warn: #e5b64f;
+    --warn-bg: #3a2f17;
+    --bad: #f08a80;
+    --bad-bg: #3d1f1c;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121211;
+  --surface: #1a1a19;
+  --surface-2: #232321;
+  --border: #34332f;
+  --grid: #2c2b28;
+  --text-primary: #f0efec;
+  --text-secondary: #c3c2b7;
+  --text-muted: #96958c;
+  --series-1: #3987e5;
+  --accent: #5b9cec;
+  --good: #6fcf8a;
+  --good-bg: #1d3324;
+  --warn: #e5b64f;
+  --warn-bg: #3a2f17;
+  --bad: #f08a80;
+  --bad-bg: #3d1f1c;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", Meiryo, sans-serif;
+  line-height: 1.75;
+  font-size: 15px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; padding: 32px 16px 64px; }
+header.top { margin-bottom: 28px; }
+.eyebrow { font-size: 13px; color: var(--text-secondary); letter-spacing: .04em; }
+h1 { font-size: 28px; line-height: 1.35; margin: 6px 0 10px; }
+.meta { font-size: 13px; color: var(--text-secondary); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px 24px 20px; margin: 0 0 20px; }
+section > h2 { font-size: 19px; margin: 0 0 4px; display: flex; align-items: baseline; gap: 10px; }
+section > h2 .no { font-size: 13px; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+.lead { color: var(--text-secondary); margin: 0 0 16px; font-size: 14px; }
+h3 { font-size: 15px; margin: 18px 0 8px; }
+p { margin: 0 0 10px; }
+ul, ol { margin: 0 0 10px; padding-left: 1.4em; }
+li { margin: 3px 0; }
+a { color: var(--accent); }
+.num { font-variant-numeric: tabular-nums; }
+
+/* 結論 */
+.conclusion { display: grid; gap: 10px; }
+.conclusion .row { display: grid; grid-template-columns: 92px 1fr; gap: 12px; align-items: start; padding: 12px 14px; border-radius: 10px; background: var(--surface-2); }
+.tag { display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+.tag.good { color: var(--good); background: var(--good-bg); }
+.tag.warn { color: var(--warn); background: var(--warn-bg); }
+.tag.bad { color: var(--bad); background: var(--bad-bg); }
+.tag.plain { color: var(--text-secondary); background: var(--surface-2); border: 1px solid var(--border); }
+
+/* KPI */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.kpi { border: 1px solid var(--border); border-radius: 10px; padding: 14px; background: var(--surface); }
+.kpi .label { font-size: 12px; color: var(--text-secondary); }
+.kpi .value { font-size: 26px; font-weight: 700; line-height: 1.3; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.kpi .value small { font-size: 14px; font-weight: 600; margin-left: 2px; }
+.kpi .sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.kpi.main { border-color: var(--accent); }
+
+/* 表 */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+th { background: var(--surface-2); color: var(--text-secondary); font-weight: 600; white-space: nowrap; font-size: 12.5px; }
+tr:last-child td { border-bottom: none; }
+td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.c, th.c { text-align: center; }
+tr.total td { font-weight: 700; background: var(--surface-2); }
+
+/* ファネル */
+.funnel { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 8px; align-items: stretch; }
+.step { border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; background: var(--surface); }
+.step .label { font-size: 12.5px; color: var(--text-secondary); }
+.step .value { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.arrow { display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 12px; color: var(--text-secondary); text-align: center; min-width: 96px; }
+.arrow .rate { font-weight: 700; color: var(--text-primary); font-size: 14px; }
+.arrow svg { width: 28px; height: 14px; }
+@media (max-width: 720px) {
+  .funnel { grid-template-columns: 1fr; }
+  .arrow { flex-direction: row; gap: 8px; min-width: 0; padding: 2px 0; }
+  .arrow svg { transform: rotate(90deg); }
+}
+
+/* グラフ */
+.chart { position: relative; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.chart svg { display: block; width: 100%; min-width: 680px; height: auto; }
+.chart .axis-text { fill: var(--text-muted); font-size: 11px; }
+.chart .grid-line { stroke: var(--grid); stroke-width: 1; }
+.chart .base-line { stroke: var(--text-muted); stroke-width: 1; }
+.chart .bar { fill: var(--series-1); }
+.chart .bar-hit { fill: transparent; cursor: pointer; }
+.chart .bar-hit:hover + .bar, .chart .bar.is-hover { opacity: .78; }
+.chart .line { fill: none; stroke: var(--series-1); stroke-width: 2; }
+.chart .dot { fill: var(--series-1); stroke: var(--surface); stroke-width: 2; }
+.chart .val-label { fill: var(--text-primary); font-size: 11px; font-weight: 600; }
+.chart .reg-label { fill: var(--text-primary); font-size: 11px; font-weight: 700; }
+.chart .reg-zero { fill: var(--text-muted); font-size: 11px; }
+.chart .crosshair { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.tooltip { position: absolute; pointer-events: none; background: var(--surface); color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.6; box-shadow: 0 4px 16px rgba(0,0,0,.12); opacity: 0; transition: opacity .1s; white-space: nowrap; z-index: 5; }
+.tooltip b { font-variant-numeric: tabular-nums; }
+.tooltip .t-title { font-weight: 700; margin-bottom: 2px; }
+.chart-note { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+
+.hbar-list { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: 150px 1fr 56px; gap: 10px; align-items: center; font-size: 13px; }
+.hbar .track { height: 18px; position: relative; }
+.hbar .fill { height: 18px; background: var(--series-1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .v { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.hbar .name { color: var(--text-secondary); }
+@media (max-width: 560px) { .hbar { grid-template-columns: 100px 1fr 48px; } }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
+
+/* タイムライン */
+.timeline { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--border); }
+.timeline li { position: relative; padding: 0 0 12px 18px; margin: 0; }
+.timeline li::before { content: ""; position: absolute; left: -6px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); }
+.timeline .d { font-weight: 700; font-variant-numeric: tabular-nums; margin-right: 8px; }
+
+.callout { border-left: 3px solid var(--accent); background: var(--surface-2); padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 14px; margin: 12px 0 0; }
+.small { font-size: 12.5px; color: var(--text-secondary); }
+.toc ol { columns: 2; column-gap: 32px; }
+@media (max-width: 640px) { .toc ol { columns: 1; } }
+details summary { cursor: pointer; color: var(--text-secondary); font-size: 13px; margin-top: 10px; }
+footer { font-size: 12px; color: var(--text-muted); margin-top: 24px; }
+
+@media print {
+  body { background: #fff; font-size: 12px; }
+  section { break-inside: avoid; border-color: #ccc; }
+  .tooltip { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Waka塾 Threads運用（@waka77.renai2）</div>
+  <h1>Threads 成績報告（運用開始〜2026年10月31日）</h1>
+  <div class="meta">
+    <span>対象期間：2026/10/15（運用開始）〜 10/31（17日間）</span>
+    <span>作成日：2026/11/01</span>
+    <span>元データ：Googleスプレッドシート「Waka塾 Threads 運用台帳」</span>
+  </div>
+</header>
+
+<!-- 2. KPI -->
+<section>
+  <h2><span class="no">01</span>主要な数字のまとめ（10/15〜10/31）</h2>
+  <p class="lead">期間の合計です。メルマガ登録は、小倉さんのテスト登録4件を除いた本当の登録の数です。</p>
+  <div class="kpis">
+    <div class="kpi main"><div class="label">メルマガ登録数</div><div class="value">+12<small>件</small></div><div class="sub">Threads経由・テスト4件を除く</div></div>
+    <div class="kpi"><div class="label">表示（合計）</div><div class="value">90万1622</div><div class="sub">1日平均 約53,000回</div></div>
+    <div class="kpi"><div class="label">フォロワー増加数</div><div class="value">+202<small>人</small></div><div class="sub">約220人 → 422人</div></div>
+    <div class="kpi"><div class="label">登録ページへのクリック</div><div class="value">65<small>回</small></div><div class="sub">10,000表示あたり 0.72回</div></div>
+    <div class="kpi"><div class="label">投稿した本数</div><div class="value">150<small>本</small></div><div class="sub">5本/日 → 7本/日 → 10本/日</div></div>
+    <div class="kpi"><div class="label">いいね（合計）</div><div class="value">517</div><div class="sub">返信14・再投稿7・引用1・シェア1</div></div>
+    <div class="kpi"><div class="label">10,000表示を超えた投稿</div><div class="value">8<small>本</small></div><div class="sub">うち100,000超えが3本</div></div>
+    <div class="kpi"><div class="label">個別相談会の申込（Threads経由）</div><div class="value" style="color:var(--text-muted)">—</div></div>
+  </div>
+</section>
+
+<!-- 3. ファネル -->
+<section>
+  <h2><span class="no">02</span>目的までの流れ（どこで人が減っているか）</h2>
+  <p class="lead">Threadsの目的は「無料メルマガ（Waka塾美女お持ち帰り無料メルマガ）に登録してもらうこと」。投稿を見た人が登録するまでを3段で見ると、いちばん細いのは「見た人がリンクを押す」ところです。</p>
+  <div class="funnel">
+    <div class="step"><div class="label">投稿が表示された</div><div class="value">90万1622</div><div class="small">17日間の合計</div></div>
+    <div class="arrow"><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M0 7h24M18 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="rate">0.007%</span><span>1万表示で0.72回</span></div>
+    <div class="step"><div class="label">登録ページへのリンクが押された</div><div class="value">65</div><div class="small">固定投稿・プロフィール・誘導投稿</div></div>
+    <div class="arrow"><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M0 7h24M18 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="rate">約18%</span><span>押した人の約5人に1人</span></div>
+    <div class="step" style="border-color:var(--accent)"><div class="label">メルマガに登録した</div><div class="value">12</div><div class="small">テスト登録を除く</div></div>
+  </div>
+  <div class="callout">表示1回あたりに直すと、<b>約7万5,000表示で登録1件</b>。押した人の約2割は登録しているので、登録ページそのものより「押してもらうまで」に伸びしろがあります。</div>
+</section>
+
+<!-- 4. 日ごとの推移 -->
+<section>
+  <h2><span class="no">03</span>日ごとの推移</h2>
+  <p class="lead">棒＝その日の表示。棒の下の数字＝その日のメルマガ登録（テスト除く）。棒に触れると、いいね・クリック・フォロワーの増減も見られます。</p>
+  <div class="chart" id="chart-daily"></div>
+  <p class="chart-note">10/17・10/18・10/24・10/31の4日だけで表示全体の約3分の2。登録は10/15（運用初日・4件）と、大きく伸びた投稿の出た10/21〜22にまとまっています。</p>
+
+  <h3>フォロワー数の推移</h3>
+  <div class="chart" id="chart-follow"></div>
+  <p class="chart-note">10/21〜22（1日+30人超）と10/31（+20人）に大きく増えました。どちらも1万表示を超える投稿が出た日です。</p>
+
+  <details>
+    <summary>日ごとの数字を表で見る</summary>
+    <div class="table-wrap" style="margin-top:8px">
+      <table id="table-daily"></table>
+    </div>
+  </details>
+</section>
+
+<!-- 6. トップ10 -->
+<section>
+  <h2><span class="no">04</span>伸びた投稿トップ10</h2>
+  <p class="lead">表示の多い順。数字は11/01朝の時点（★は投稿から24時間後の記録）。「1行目」は投稿の書き出しです。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th class="c">順位</th><th>投稿日時</th><th>役割／型</th><th>1行目</th><th class="r">表示</th><th class="r">いいね</th></tr></thead>
+      <tbody>
+        <tr><td class="c">1</td><td class="num">10/17 07:01</td><td>集客／見分け方リスト</td><td><a href="https://www.threads.com/@waka77.renai2/post/DekjuSpmPlo" target="_blank" rel="noopener">年上の男性を好きになる女性は、実はかなり見分けやすいです。</a></td><td class="r">270,982</td><td class="r">171</td></tr>
+        <tr><td class="c">2</td><td class="num">10/23 15:02</td><td>タップ・シリーズ／モテるおっさんシリーズ</td><td><a href="https://www.threads.com/@waka77.renai2/post/De03bWgkaPH" target="_blank" rel="noopener">モテるおっさんは「彼氏が出てきたとき」が別格</a></td><td class="r">184,885★</td><td class="r">77</td></tr>
+        <tr><td class="c">3</td><td class="num">10/31 15:02</td><td>タップ・シリーズ／モテるおっさんシリーズ</td><td><a href="https://www.threads.com/@waka77.renai2/post/DfJdyt5gHh_" target="_blank" rel="noopener">モテるおっさんは「カフェに入ったあと」が別格</a></td><td class="r">123,541</td><td class="r">66</td></tr>
+        <tr><td class="c">4</td><td class="num">10/21 07:11</td><td>集客／数字の○選</td><td><a href="https://www.threads.com/@waka77.renai2/post/Deu4DS8GhM2" target="_blank" rel="noopener">20代の美女に好かれる50代が、やらないこと4選</a></td><td class="r">62,660</td><td class="r">69</td></tr>
+        <tr><td class="c">5</td><td class="num">10/22 15:02</td><td>タップ・シリーズ／モテるおっさんシリーズ</td><td><a href="https://www.threads.com/@waka77.renai2/post/DeySo6lkQwq" target="_blank" rel="noopener">モテるおっさんは「店員さんへの接し方」が別格</a></td><td class="r">32,172★</td><td class="r">35</td></tr>
+        <tr><td class="c">6</td><td class="num">10/20 18:31</td><td>誘導／見分け方リスト</td><td><a href="https://www.threads.com/@waka77.renai2/post/DethEouFcIz" target="_blank" rel="noopener">楽しそうに笑ってくれるだけでは、脈ありではありません。</a></td><td class="r">26,185</td><td class="r">31</td></tr>
+        <tr><td class="c">7</td><td class="num">10/21 08:01</td><td>集客／見分け方リスト</td><td><a href="https://www.threads.com/@waka77.renai2/post/Deu9x6dCfiC" target="_blank" rel="noopener">ここだけの話ですが、</a></td><td class="r">23,161</td><td class="r">44</td></tr>
+        <tr><td class="c">8</td><td class="num">10/30 08:01</td><td>集客／思い込みと実際</td><td><a href="https://www.threads.com/@waka77.renai2/post/DfGI7HaGie8" target="_blank" rel="noopener">←50代が思う「若い美女に好かれる男」</a></td><td class="r">22,674</td><td class="r">17</td></tr>
+        <tr><td class="c">9</td><td class="num">10/20 15:02</td><td>タップ・シリーズ／モテるおっさんシリーズ</td><td><a href="https://www.threads.com/@waka77.renai2/post/DetJCjslve5" target="_blank" rel="noopener">モテるおっさんは「褒め方」が別格</a></td><td class="r">8,435</td><td class="r">6</td></tr>
+        <tr><td class="c">10</td><td class="num">10/27 18:31</td><td>誘導／見分け方リスト</td><td><a href="https://www.threads.com/@waka77.renai2/post/De_iot-lUes" target="_blank" rel="noopener">結論から言います。</a></td><td class="r">8,012★</td><td class="r">11</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">当たりの型は3つ：<b>①女性の「見分け方」</b>（1位・6位・7位・10位）、<b>②モテるおっさんシリーズ（場面ごとのふるまい）</b>（2位・3位・5位・9位）、<b>③「○○しないこと4選」</b>（4位）。どれも「若い女性に好かれる50代はこうする」を具体的な場面で見せる投稿です。</div>
+</section>
+
+<!-- 7. 時間帯 -->
+<section>
+  <h2><span class="no">05</span>時間帯・役割ごとの傾向</h2>
+  <p class="lead">1日10本のうち、1万表示を超えた8本はすべて4つの枠から出ています。表示は投稿から24時間後の記録（10/31分は11/01朝の時点）。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>枠</th><th>役割</th><th class="r">本数</th><th class="r">表示の真ん中の値</th><th class="r">1万超え</th><th>ひとこと</th></tr></thead>
+      <tbody>
+        <tr><td class="num">15:00</td><td>タップ・シリーズ（モテるおっさんシリーズ）</td><td class="r">17</td><td class="r">1,293</td><td class="r"><b>3本</b></td><td>いちばん当たりやすい枠。10万超え2本</td></tr>
+        <tr><td class="num">07:00</td><td>集客</td><td class="r">17</td><td class="r">537</td><td class="r"><b>2本</b></td><td>最大の27万はここ</td></tr>
+        <tr><td class="num">08:00</td><td>集客（10/21〜）</td><td class="r">11</td><td class="r">1,002</td><td class="r"><b>2本</b></td><td>真ん中の値が高く安定</td></tr>
+        <tr><td class="num">18:30</td><td>誘導（無料メルマガへの案内）</td><td class="r">17</td><td class="r">158</td><td class="r"><b>1本</b></td><td>案内を入れると配られにくい</td></tr>
+        <tr><td>そのほか</td><td>集客（12・20時）・教育（9・21時）・タップ・シリーズ（13・22時）</td><td class="r">88</td><td class="r">—</td><td class="r">0本</td><td>数百の表示が中心。フォロワー向けの役割</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 8. リンク -->
+<section>
+  <h2><span class="no">06</span>どこからリンクが押されたか（10/20〜10/31）</h2>
+  <p class="lead">リンクに目印を付けて数え始めた10/20以降の43回の内訳です。</p>
+  <div class="two-col">
+    <div class="hbar-list" id="hbar-links"></div>
+    <div>
+      <p><b>固定投稿とプロフィールのリンクで88%。</b>毎日の誘導投稿（18:30）のリンクは目印を付けた10/23以降で5回、伸びた投稿の返信欄に付けた案内は0回でした。</p>
+      <p class="small">つまり「投稿を見る → プロフィールに来る → 固定投稿を読む → 押す」が、ほぼ唯一の登録までの道です。プロフィールに来てもらう数を増やすことと、固定投稿の中身が、登録数を左右します。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9. 属性 -->
+<section>
+  <h2><span class="no">07</span>フォロワーの属性（10/26時点）</h2>
+  <p class="lead">Threadsが返すフォロワーの年齢・性別です（性別・年齢を出していない人は含まれない）。</p>
+  <div class="two-col">
+    <div>
+      <h3 style="margin-top:0">年齢</h3>
+      <div class="hbar-list" id="hbar-age"></div>
+    </div>
+    <div>
+      <h3 style="margin-top:0">性別</h3>
+      <div class="hbar-list" id="hbar-gender"></div>
+      <p class="small" style="margin-top:12px"><b>45〜64歳が約76%、性別の分かる人の99%が男性。</b>Waka塾が届けたい「40〜60代の男性」にほぼそのまま届いています。10/20から10/26の6日間でも、この比率は変わっていません。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  元データ：Googleスプレッドシート「Waka塾 Threads 運用台帳」の「日次」「投稿台帳」「記録」「リンク別クリック」「メルマガ登録」「フォロワー属性」（2026/11/01 朝に読み取り）。分析メモ：運用フォルダ <code>Claude作業/改善/分析/</code>。
+</footer>
+
+</div>
+
+<div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var daily = [
+    // [日付, 登録, 投稿数, 表示, いいね, クリック, フォロワー, 純増]
+    ["10/15", 4, 5, 5402, 23, 9, 254, 34],
+    ["10/16", 1, 7, 6707, 1, 9, 264, 10],
+    ["10/17", 0, 7, 131125, 81, 1, 268, 4],
+    ["10/18", 0, 7, 140458, 44, 2, 271, 3],
+    ["10/19", 0, 7, 8860, 5, 1, 274, 3],
+    ["10/20", 0, 7, 12208, 18, 1, 279, 5],
+    ["10/21", 2, 10, 60559, 68, 8, 313, 34],
+    ["10/22", 2, 10, 71948, 54, 9, 344, 31],
+    ["10/23", 0, 10, 53577, 26, 2, 354, 10],
+    ["10/24", 1, 10, 181793, 34, 5, 369, 15],
+    ["10/25", 0, 10, 41897, 10, 2, 374, 5],
+    ["10/26", 1, 10, 8080, 15, 2, 380, 6],
+    ["10/27", 0, 10, 7297, 24, 3, 390, 10],
+    ["10/28", 0, 10, 13837, 14, 5, 395, 5],
+    ["10/29", 0, 10, 4694, 2, 2, 397, 2],
+    ["10/30", 0, 10, 3946, 6, 0, 402, 5],
+    ["10/31", 1, 10, 149234, 92, 4, 422, 20]
+  ];
+  var fmt = function (n) { return n.toLocaleString("ja-JP"); };
+  var NS = "http://www.w3.org/2000/svg";
+  var tip = document.getElementById("tooltip");
+
+  function el(name, attrs, parent) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function showTip(container, html, x, y) {
+    tip.innerHTML = html;
+    tip.style.opacity = "1";
+    var r = container.getBoundingClientRect();
+    var tw = tip.offsetWidth, th = tip.offsetHeight;
+    var left = r.left + window.scrollX + x + 12;
+    if (left + tw > window.scrollX + document.documentElement.clientWidth - 8) left = r.left + window.scrollX + x - tw - 12;
+    var top = r.top + window.scrollY + y - th - 10;
+    if (top < window.scrollY + 4) top = r.top + window.scrollY + y + 14;
+    tip.style.left = left + "px";
+    tip.style.top = top + "px";
+  }
+  function hideTip() { tip.style.opacity = "0"; }
+  function rowTip(d) {
+    return '<div class="t-title">' + d[0] + '（' + d[2] + '本）</div>' +
+      '表示 <b>' + fmt(d[3]) + '</b><br>いいね <b>' + d[4] + '</b>　クリック <b>' + d[5] + '</b><br>' +
+      'メルマガ登録 <b>' + d[1] + '件</b><br>フォロワー <b>' + d[6] + '人</b>（+' + d[7] + '）';
+  }
+
+  // 日ごとの表示（縦棒）
+  (function () {
+    var box = document.getElementById("chart-daily");
+    var W = 960, H = 330, m = { t: 22, r: 8, b: 58, l: 58 };
+    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "日ごとの表示の棒グラフ" }, box);
+    var iw = W - m.l - m.r, ih = H - m.t - m.b;
+    var max = 200000, ticks = [0, 50000, 100000, 150000, 200000];
+    ticks.forEach(function (t) {
+      var y = m.t + ih - ih * t / max;
+      el("line", { x1: m.l, x2: W - m.r, y1: y, y2: y, "class": t === 0 ? "base-line" : "grid-line" }, svg);
+      var tx = el("text", { x: m.l - 8, y: y + 4, "text-anchor": "end", "class": "axis-text" }, svg);
+      tx.textContent = t === 0 ? "0" : (t / 10000) + "万";
+    });
+    var band = iw / daily.length, bw = Math.min(24, band * 0.6);
+    var regTitle = el("text", { x: m.l - 8, y: H - 14, "text-anchor": "end", "class": "axis-text" }, svg);
+    regTitle.textContent = "登録";
+    daily.forEach(function (d, i) {
+      var cx = m.l + band * i + band / 2;
+      var h = Math.max(1, ih * d[3] / max), x = cx - bw / 2, y = m.t + ih - h;
+      var r = Math.min(4, h);
+      var p = "M" + x + "," + (m.t + ih) + " V" + (y + r) + " Q" + x + "," + y + " " + (x + r) + "," + y +
+        " H" + (x + bw - r) + " Q" + (x + bw) + "," + y + " " + (x + bw) + "," + (y + r) + " V" + (m.t + ih) + " Z";
+      var bar = el("path", { d: p, "class": "bar" }, svg);
+      if (d[3] >= 100000) {
+        var vl = el("text", { x: cx, y: y - 6, "text-anchor": "middle", "class": "val-label" }, svg);
+        vl.textContent = (Math.round(d[3] / 1000) / 10) + "万";
+      }
+      var lab = el("text", { x: cx, y: m.t + ih + 16, "text-anchor": "middle", "class": "axis-text" }, svg);
+      lab.textContent = d[0];
+      var rl = el("text", { x: cx, y: H - 14, "text-anchor": "middle", "class": d[1] > 0 ? "reg-label" : "reg-zero" }, svg);
+      rl.textContent = d[1] > 0 ? d[1] : "·";
+      var hit = el("rect", { x: m.l + band * i, y: m.t, width: band, height: ih + 50, "class": "bar-hit" }, svg);
+      function on(ev) {
+        bar.classList.add("is-hover");
+        var pt = svg.getBoundingClientRect(), sc = pt.width / W;
+        showTip(box, rowTip(d), cx * sc, y * sc);
+      }
+      hit.addEventListener("mousemove", on);
+      hit.addEventListener("touchstart", on, { passive: true });
+      hit.addEventListener("mouseleave", function () { bar.classList.remove("is-hover"); hideTip(); });
+    });
+  })();
+
+  // フォロワー推移（折れ線）
+  (function () {
+    var box = document.getElementById("chart-follow");
+    var W = 960, H = 240, m = { t: 20, r: 40, b: 30, l: 58 };
+    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "フォロワー数の折れ線グラフ" }, box);
+    var iw = W - m.l - m.r, ih = H - m.t - m.b;
+    var pts = [["開始", 220]].concat(daily.map(function (d) { return [d[0], d[6], d]; }));
+    var min = 200, max = 450;
+    [200, 250, 300, 350, 400, 450].forEach(function (t) {
+      var y = m.t + ih - ih * (t - min) / (max - min);
+      el("line", { x1: m.l, x2: W - m.r, y1: y, y2: y, "class": t === min ? "base-line" : "grid-line" }, svg);
+      var tx = el("text", { x: m.l - 8, y: y + 4, "text-anchor": "end", "class": "axis-text" }, svg);
+      tx.textContent = t + "人";
+    });
+    var step = iw / (pts.length - 1);
+    var xy = pts.map(function (p, i) { return [m.l + step * i, m.t + ih - ih * (p[1] - min) / (max - min)]; });
+    el("path", { d: "M" + xy.map(function (q) { return q.join(","); }).join(" L"), "class": "line" }, svg);
+    pts.forEach(function (p, i) {
+      if (i % 2 === 0 || i === pts.length - 1) {
+        var lab = el("text", { x: xy[i][0], y: H - 8, "text-anchor": "middle", "class": "axis-text" }, svg);
+        lab.textContent = p[0];
+      }
+    });
+    [0, pts.length - 1].forEach(function (i) {
+      el("circle", { cx: xy[i][0], cy: xy[i][1], r: 4.5, "class": "dot" }, svg);
+      var t = el("text", { x: xy[i][0] + (i === 0 ? 8 : -8), y: xy[i][1] - 10, "text-anchor": i === 0 ? "start" : "end", "class": "val-label" }, svg);
+      t.textContent = (i === 0 ? "約" : "") + pts[i][1] + "人";
+    });
+    var cross = el("line", { x1: 0, x2: 0, y1: m.t, y2: m.t + ih, "class": "crosshair", opacity: 0 }, svg);
+    var hdot = el("circle", { cx: 0, cy: 0, r: 4.5, "class": "dot", opacity: 0 }, svg);
+    var hit = el("rect", { x: m.l - step / 2, y: m.t, width: iw + step, height: ih, fill: "transparent" }, svg);
+    function move(ev) {
+      var r = svg.getBoundingClientRect(), sc = r.width / W;
+      var cxp = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left;
+      var i = Math.max(0, Math.min(pts.length - 1, Math.round((cxp / sc - m.l) / step)));
+      cross.setAttribute("x1", xy[i][0]); cross.setAttribute("x2", xy[i][0]); cross.setAttribute("opacity", 1);
+      hdot.setAttribute("cx", xy[i][0]); hdot.setAttribute("cy", xy[i][1]); hdot.setAttribute("opacity", 1);
+      var html = pts[i][2] ? rowTip(pts[i][2]) : '<div class="t-title">運用開始時</div>フォロワー <b>約220人</b>';
+      showTip(box, html, xy[i][0] * sc, xy[i][1] * sc);
+    }
+    hit.addEventListener("mousemove", move);
+    hit.addEventListener("touchstart", move, { passive: true });
+    hit.addEventListener("mouseleave", function () { cross.setAttribute("opacity", 0); hdot.setAttribute("opacity", 0); hideTip(); });
+  })();
+
+  // 表
+  (function () {
+    var t = document.getElementById("table-daily");
+    var h = "<thead><tr><th>日付</th><th class='r'>投稿</th><th class='r'>表示</th><th class='r'>いいね</th><th class='r'>クリック</th><th class='r'>フォロワー</th><th class='r'>純増</th><th class='r'>登録</th></tr></thead><tbody>";
+    var s = [0, 0, 0, 0, 0, 0];
+    daily.forEach(function (d) {
+      h += "<tr><td class='num'>" + d[0] + "</td><td class='r'>" + d[2] + "</td><td class='r'>" + fmt(d[3]) + "</td><td class='r'>" + d[4] +
+        "</td><td class='r'>" + d[5] + "</td><td class='r'>" + d[6] + "</td><td class='r'>+" + d[7] + "</td><td class='r'>" + d[1] + "</td></tr>";
+      s[0] += d[2]; s[1] += d[3]; s[2] += d[4]; s[3] += d[5]; s[4] += d[7]; s[5] += d[1];
+    });
+    h += "<tr class='total'><td>合計</td><td class='r'>150</td><td class='r'>" + fmt(s[1]) + "</td><td class='r'>" + s[2] + "</td><td class='r'>" + s[3] +
+      "</td><td class='r'>422</td><td class='r'>+" + s[4] + "</td><td class='r'>" + s[5] + "</td></tr></tbody>";
+    t.innerHTML = h;
+  })();
+  // ※投稿の合計は「投稿台帳」の本投稿150本（「日次」の投稿数は固定投稿などを含み合計154）
+
+  // 横棒
+  function hbars(id, rows, unit) {
+    var box = document.getElementById(id), max = 0;
+    rows.forEach(function (r) { if (r[1] > max) max = r[1]; });
+    rows.forEach(function (r) {
+      var div = document.createElement("div");
+      div.className = "hbar";
+      div.innerHTML = '<span class="name">' + r[0] + '</span><span class="track"><span class="fill" style="display:block;width:' +
+        (r[1] / max * 100) + '%"></span></span><span class="v">' + r[1] + unit + '</span>';
+      box.appendChild(div);
+    });
+  }
+  hbars("hbar-links", [["固定投稿のリンク", 19], ["プロフィールのリンク", 19], ["18:30の誘導投稿", 5], ["伸びた投稿の返信欄", 0]], "回");
+  hbars("hbar-age", [["25〜34歳", 9], ["35〜44歳", 42], ["45〜54歳", 155], ["55〜64歳", 126], ["65歳以上", 36]], "人");
+  hbars("hbar-gender", [["男性", 261], ["女性", 2], ["不明", 105]], "人");
+})();
+</script>
+</body>
+</html>
