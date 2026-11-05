@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>会員サイトの安全性について</title>
+<style>
+:root{
+  --bg:#fbf6f4; --card:#ffffff; --ink:#3a2e33; --sub:#7a6a70; --line:#eadfdc;
+  --rose:#b5566f; --rose-d:#8f3d55; --rose-l:#f6e3e8; --gold:#c99a4a; --ok:#e9f3ec; --ok-ink:#2f6b45;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;font-size:17px;line-height:1.9;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header.hero{background:linear-gradient(135deg,#8f3d55,#b5566f 60%,#d48a9b);color:#fff;padding:36px 0 28px}
+header.hero .kicker{font-size:13px;letter-spacing:.15em;opacity:.85;margin:0}
+header.hero h1{font-size:28px;line-height:1.4;margin:0}
+header.hero p{margin:0;opacity:.95;font-size:15px}
+/* 本文 */
+main{padding:10px 0 50px}
+.part{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 22px 8px;margin:18px 0}
+.part h2{font-size:21px;line-height:1.5;margin:0 0 12px;color:var(--rose-d)}
+.part p{margin:0 0 14px}
+strong{background:linear-gradient(transparent 62%,#f7d9a8 62%);font-weight:700}
+.analogy{background:#fff8ec;border-left:5px solid var(--gold);border-radius:8px;padding:12px 14px;margin:0 0 14px;font-weight:700}
+.analogy .tag{display:inline-block;background:var(--gold);color:#fff;font-size:12px;border-radius:12px;padding:1px 10px;margin-right:8px;vertical-align:2px;font-weight:700}
+.kind{border:1px solid var(--line);border-radius:12px;padding:14px 16px 2px;margin:0 0 14px;background:#fffdfc}
+.kind h3{font-size:17px;margin:0 0 8px;color:var(--rose-d);line-height:1.5}
+.pair{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.pill{flex:1 1 220px;background:var(--ok);color:var(--ok-ink);border-radius:12px;padding:12px 14px;font-weight:700;text-align:center}
+.todo{border:1px solid var(--line);border-radius:12px;padding:14px 16px 2px;margin:0 0 14px;background:#fffdfc}
+.todo h3{font-size:18px;margin:0 0 8px;display:flex;align-items:center;gap:10px;line-height:1.5}
+.num{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--rose);color:#fff;display:grid;place-items:center;font-size:15px}
+.todo ul{margin:0 0 12px;padding-left:1.3em}
+.todo li{margin:0 0 6px}
+.conclusion{background:var(--ok);border-radius:12px;padding:16px 16px 2px;margin:0 0 14px}
+.question{background:var(--rose-l);border-radius:12px;padding:14px 16px;margin:0 0 14px;text-align:center;font-weight:700;color:var(--rose-d);font-size:18px;line-height:1.7}
+.question strong{background:none;font-size:20px}
+.roadmap{margin:0 0 14px;padding:0;list-style:none;counter-reset:r}
+.roadmap li{counter-increment:r;background:#fffdfc;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:0 0 8px;font-weight:700}
+.roadmap li::before{content:"リスク" counter(r);display:inline-block;background:var(--rose);color:#fff;font-size:12px;border-radius:12px;padding:1px 9px;margin-right:10px;vertical-align:2px}
+.answer{background:var(--ok);color:var(--ok-ink);border-radius:10px;padding:10px 14px;margin:0 0 12px;font-weight:700}
+.answer .tag{display:inline-block;background:var(--ok-ink);color:#fff;font-size:12px;border-radius:12px;padding:1px 10px;margin-right:8px;vertical-align:2px}
+.think{border:2px dashed var(--rose);border-radius:12px;padding:12px 16px;margin:0 0 14px;color:var(--rose-d);font-weight:700}
+.recap{margin:0 0 14px;padding:0;list-style:none}
+.recap li{border-bottom:1px solid var(--line);padding:8px 0}
+.recap li span{display:inline-block;min-width:9.5em;font-weight:700;color:var(--rose-d)}
+footer{text-align:center;color:var(--sub);font-size:12px;padding:0 0 40px}
+@media (max-width:600px){
+  body{font-size:16px}
+  header.hero h1{font-size:23px}
+  .part{padding:18px 16px 6px}
+  .part h2{font-size:19px}
+    .recap li span{display:block;min-width:0}
+}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <h1>会員サイトの安全性について</h1>
+</div></header>
+
+<main><div class="wrap">
+<section class="part" id="intro"><h2>会員サイト運営のリスクとその対処方法について</h2>
+<p>会員サイトをサーバーで管理することのリスクと対応方法について調べました。</p>
+<p>「会員サイトを乗っ取られたり、情報を盗まれたりしないの？」というご指摘について、回答致します。</p>
+<p>その結果をまとめて、会員サイトのリスクについて大きく3つに分けてお話しします。</p>
+<ol class="roadmap">
+  <li>情報漏洩リスク（情報を盗まれる事）</li>
+  <li>情報改ざんリスク（書き換えられる事）</li>
+  <li>ランサム攻撃リスク（身代金を求められる事）</li>
+</ol>
+</section>
+<section class="part" id="first"><h2>前提条件</h2>
+<p>会員サイトを「家」、サイバー攻撃を「家に泥棒が入ること」に例えて考えていただければ、わかりやすくなると思います。</p>
+<p>ちなみに、最近被害のニュースが増えているのは、AIで不可能なことが可能になったわけではなく、<strong>これまで手間がかかりすぎて誰もやらなかった攻撃が、AIによって手軽にできるようになった</strong>というのが実際のところです。</p>
+<p>つまり、AIだからなんでもできるという訳ではありません。むしろ、<strong>今まで人間では見つけられなかった弱いところや古いところがAIで見つけられて狙われている</strong>というのが実態です。</p>
+<p>言い換えると、AIによってカギを開けられているのではなく、カギがかかっていない扉を見つけられているという事です。</p>
+</section>
+<section class="part" id="steal"><h2>リスク1　情報漏洩</h2>
+<div class="answer"><span class="tag">結論</span>新会員サイトに限って言えば、盗まれても、困るものがほとんどありません</div>
+<div class="analogy"><span class="tag">家でいうと</span>家の中の物を持ち出されること</div>
+<p>この会員サイトに入っているのは、<strong>会員さんのお名前とメールアドレス</strong>くらいです。LINEの情報は会員サイトには入っていないので、盗まれようがありません。年齢や住所も入っていません。</p>
+<p>お名前とメールアドレスが数十件持ち出されても、せいぜい迷惑メールの送り先に使われる程度です。それだけで大きな損害になることは考えにくいです。</p>
+</section>
+<section class="part" id="fake"><h2>リスク2　情報改ざん</h2>
+<div class="answer"><span class="tag">結論</span>改ざんされても、すぐに気づいて直せます</div>
+<div class="analogy"><span class="tag">家でいうと</span>家に勝手に入られて、中を変えられること</div>
+<p>サイトの中身が前とどこか変わっていないかをチェックする仕組みを入れられるので、改ざんされたら直す、という仕組みが作れます。</p>
+<p>「絶対に改ざんされない」とお約束することはできません。ですが、<strong>改ざんされたらすぐに分かるように対処できます</strong>。</p>
+</section>
+<section class="part" id="ransom"><h2>リスク3　ランサム攻撃（身代金を求められる）</h2>
+<div class="answer"><span class="tag">結論</span>現実的には考えにくいです</div>
+<div class="analogy"><span class="tag">家でいうと</span>家の財産を人質にとられて「返してほしければお金を払え」と言われること</div>
+<p>大きな会社で問題になるのは、何百万人分ものお客さまの情報を人質にとられるケースです。</p>
+<p>この会員サイトには、お金に関わる情報や大事なデータは置いていません。数十件のメールアドレスを人質に身代金を求められることは、現実的には考えにくいので、<strong>心配しすぎなくて大丈夫</strong>です。家に現金や高い骨とう品を置いていなければ、盗まれても被害が小さく済むのと同じです。</p>
+</section>
+<section class="part" id="mail"><h2>補足　メールのセキュリティ</h2>
+<p>会員サイトとは別の話ですが、実は会員サイトよりも怖いのは<strong>メールの方</strong>です。</p>
+<p>メールは、DKIM・SPF・DMARCなどの設定で、他人がこちらのアドレスを名乗って送る「なりすまし」を防ぎます。そのうえで、もし乗っ取りが起こったり、不正に使われたりした場合には、<strong>メールの送信を止められる仕組み</strong>が作れます。</p>
+</section>
+<section class="part" id="view"><h2>私の見解</h2>
+<p>「心配しないでいい」とお伝えしましたが、<strong>心配した方がいい点もあります。</strong>それは「使わなくなったまま放置しておくこと」です。</p>
+<p>家で言えば、空き家のまま放置するのと同じです。誰も管理していない家は、泥棒に狙われたり勝手に使われたりするリスクが高まります。</p>
+<p>もしこれからこの会員サイトを使わなくなったときは、放置せずにサイトを削除したり、レンタルサーバーを解約したりすれば問題ありません。</p>
+<p>使っている間は、こちらで次の3つをやっておきます。</p>
+<div class="todo">
+  <h3><span class="num">1</span>いつも最新の状態にしておく</h3>
+  <p>家と同じで、古い家はセキュリティが弱いから入りやすい。<strong>常にセキュリティ対策を最新にアップデートしておけば、わざわざ泥棒がそこを狙うことは少なくなります</strong>。</p>
+</div>
+<div class="todo">
+  <h3><span class="num">2</span>おかしなことにすぐ気づける仕組みを入れる</h3>
+  <ul>
+    <li>サイトのファイルが書き換えられたら（見た目が変わらない書き換えも）、その日のうちに知らせが届く</li>
+    <li>いつもと違うところから管理画面にログインがあったら、その場で知らせが届く</li>
+    <li>人間とは思えない速さで何度もログインを試されたら、そのログインを自動で締め出す</li>
+  </ul>
+</div>
+<div class="todo">
+  <h3><span class="num">3</span>大事なものをサイトに置かない</h3>
+  <p>家と同じように、お金に関わるような情報やデータは会員サイトに置かないようにします（現状の会員サイトでは、そのような情報は置かない仕組みになっています）。</p>
+</div>
+</section>
+<section class="part" id="end"><h2>まとめ</h2>
+<div class="question">この会員サイト、本当に心配しなくちゃいけないのか？</div>
+<ol class="recap">
+  <li><span>情報漏洩</span>盗まれても、困るものがほとんどありません。</li>
+  <li><span>情報改ざん</span>改ざんされても、すぐに気づいて直せます。</li>
+  <li><span>ランサム攻撃</span>狙われる理由がほとんどありません。</li>
+  <li><span>メール（補足）</span>設定でなりすましを防ぎ、もしものときは送信を止められます。</li>
+</ol>
+<div class="conclusion">
+  <p>つまり、<strong>ちゃんと手入れをして、おかしなことに気づける仕組みを入れておけば、必要以上に心配しなくて大丈夫</strong>です。</p>
+  <p>いちばん危ないのは、使わなくなったまま放っておくこと。もし使わなくなったときは、そのまま残さずに閉じておけば安心です。</p>
+</div>
+</section>
+</div></main>
+<footer>この資料は確認用のページです。</footer>
+
+</body>
+</html>
