@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "source": "example-only-not-loaded",
+  "generated_at": "2026-11-07T00:00:00+09:00",
+  "entries": [
+    {
+      "path": "waka-threads/2099-01-01/example_pinned.png",
+      "roles": ["pinned"]
+    },
+    {
+      "path": "waka-threads/2099-01-01/example_unpublished.png",
+      "roles": ["unpublished"]
+    },
+    {
+      "path": "waka-threads/2099-01-01/example_skipped.png",
+      "roles": ["見送り"]
+    },
+    {
+      "path": "waka-threads/2099-01-01/example_rescheduled.png",
+      "roles": ["振替"]
+    },
+    {
+      "path": "waka-threads/2099-01-01/example_reused.png",
+      "roles": ["再利用"]
+    },
+    {
+      "path": "waka-threads/2099-01-01/example_shared.png",
+      "roles": ["共有資産"]
+    },
+    {
+      "path": "https://oguken87-a11y.github.io/pages/waka-threads/2099-01-01/example_published.png",
+      "roles": ["published"]
+    }
+  ]
+}
