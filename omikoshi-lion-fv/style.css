@@ -1,0 +1,46 @@
+* { box-sizing: border-box; }
+html { background: #061222; }
+body { margin: 0; }
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  max-width: 900px;
+  margin-inline: auto;
+}
+.poster { display: block; width: 100%; height: auto; }
+.effect { position: absolute; pointer-events: none; }
+.fire { left: 5.19230769%; top: 17.65517241%; width: 67.69230769%; height: 14.06896552%; }
+.hero[data-design="02"] .fire { left: 0; top: 0; width: 100%; height: 69.65517241%; }
+.hero[data-design="03"] .fire { left: 4.42307692%; top: 16.41379310%; width: 71.34615385%; height: 15.24137931%; }
+.gold-surface {
+  left: 8.26923077%; top: 77.10344828%; width: 83.46153846%; height: 6.82758621%;
+  mask: url("assets/gold-mask.png") center / 100% 100% no-repeat;
+  overflow: hidden;
+}
+.reflection {
+  position: absolute; top: -32%; height: 164%; width: 14%; left: -24%;
+  background: linear-gradient(90deg, transparent, #fff5c532 33%, #fffbddc4 49%, #fff8cd43 61%, transparent);
+  transform: skewX(-24deg);
+  animation: sweep 5.12s infinite linear;
+  mix-blend-mode: screen;
+}
+.flare {
+  width: 10.5%; left: 91.05%; top: 79.1%; opacity: 0;
+  transform: translate(-50%, -50%) scale(.25);
+  animation: glint 5.12s infinite;
+}
+@keyframes sweep {
+  0%, 4% { left: -24%; }
+  23%, 100% { left: 108%; }
+}
+@keyframes glint {
+  0%, 20% { opacity: 0; transform: translate(-50%, -50%) scale(.25) rotate(-12deg); }
+  25% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  34% { opacity: .78; transform: translate(-50%, -50%) scale(.84) rotate(96deg); }
+  43%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(.30) rotate(178deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .effect { display: none; }
+}
