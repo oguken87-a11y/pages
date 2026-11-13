@@ -1,0 +1,7 @@
+{
+  "apply_enabled": false,
+  "published_media_source_url_independence_confirmed": false,
+  "media_root": "waka-threads",
+  "timezone": "Asia/Tokyo",
+  "comment": "Both flags stay false until docs/waka-threads-media-retention.md conditions are met. Default runs are dry-run and delete nothing. Do not enable from this change."
+}
