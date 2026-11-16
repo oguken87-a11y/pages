@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>しるびセールス診断（診断ツール）の項目・配点・結果</title>
+  <style>
+    :root {
+      --ink: #293a32;
+      --muted: #5a685f;
+      --line: #ddd2bd;
+      --paper: #fffaf0;
+      --bg: #f1eee7;
+      --accent: #294735;
+      --accent-2: #986b2a;
+      --thead: #eef3ef;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.75 system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
+    }
+    main {
+      max-width: 880px;
+      margin: 32px auto 64px;
+      padding: 28px 32px 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+    h1, h2, h3 { line-height: 1.4; color: var(--accent); }
+    h1 { font-size: 1.8rem; margin: 0 0 0.6rem; }
+    h2 {
+      font-size: 1.25rem;
+      margin: 2.2rem 0 0.8rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 2px solid var(--accent);
+    }
+    h3 { font-size: 1.05rem; margin: 1.4rem 0 0.5rem; }
+    p, li { color: var(--ink); }
+    .lead { font-size: 1.05rem; }
+    .meta {
+      background: var(--thead);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+    }
+    .meta dt { font-weight: 700; float: left; clear: left; width: 7.5em; }
+    .meta dd { margin: 0 0 0.25rem 7.5em; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      margin: 0.6rem 0 1rem;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 0.45rem 0.65rem;
+      vertical-align: top;
+      text-align: left;
+    }
+    th { background: var(--thead); }
+    td.num, th.num { text-align: right; white-space: nowrap; }
+    .note {
+      background: #fff6e8;
+      border-left: 4px solid var(--accent-2);
+      padding: 0.7rem 1rem;
+      margin: 1rem 0;
+    }
+    .ok {
+      background: #eef6f0;
+      border-left: 4px solid var(--accent);
+      padding: 0.7rem 1rem;
+      margin: 1rem 0;
+    }
+    code, .mono { font-family: ui-monospace, "Cascadia Mono", monospace; font-size: 0.9em; }
+    a { color: var(--accent); }
+    ol.questions > li { margin-bottom: 0.7rem; }
+    .axis { color: var(--muted); font-size: 0.9rem; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    @media (max-width: 700px) {
+      main { margin: 12px; padding: 20px 16px 32px; }
+      .meta dt, .meta dd { float: none; width: auto; margin-left: 0; }
+      .meta dt { margin-top: 0.4rem; }
+    }
+    @media print {
+      body { background: white; }
+      main { border: none; margin: 0; padding: 0; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="axis">しるびさん（ビッグバン株式会社）／補助金活用ファネル</p>
+    <h1>しるびセールス診断（診断ツール）の項目・配点・結果</h1>
+    <p class="lead">UTAGEに入っている現行の診断ツールについて、全設問・各選択肢のポイント・合計点や観点ごとの結果の分かれ方を、実データにもとづいてまとめた資料です。</p>
+
+    <dl class="meta">
+      <dt>対象</dt>
+      <dd>ファネル「補助金活用ファネル」のステップ「診断ツール」（ページ名「しるびセールス診断」）</dd>
+      <dt>公開URL</dt>
+      <dd><a href="https://utage-system.com/p/qQW1U6Vy3oAa">https://utage-system.com/p/qQW1U6Vy3oAa</a></dd>
+      <dt>データ源</dt>
+      <dd>しるびさんのUTAGEを読み取り専用で取得した、当該ページのHTML（JavaScriptに書かれた設問・配点・分岐）。取得日は2026-11-16（Asia/Tokyo）。UTAGE側は変更していない。</dd>
+      <dt>ページ作成</dt>
+      <dd>2026-11-15 19:09:07（更新 19:14:44）。UTAGE上の時刻で、タイムゾーン表記はない。日本向けサービスのためJSTと見てよい。</dd>
+    </dl>
+
+    <h2>1. この診断の仕組み</h2>
+    <p>スタート画面の案内どおり、<strong>約2分・全10問・登録不要</strong>です。見出しは「あなたの商談、どこで取りこぼしていますか？」、リードは「10の質問で商談を4つの観点から採点し、優先して改善するポイントをお伝えします。」です。</p>
+    <p>これはUTAGE標準の「診断ツール」機能ではなく、ファネルページに埋め込んだHTMLとJavaScriptです（content_type は raw_html）。採点と結果表示はすべてブラウザ内で完結します。</p>
+    <ul>
+      <li>ステップの並び（2026-11-16時点）: オプトLP → サンクスページ → 診断ツール</li>
+      <li>ファネルID: <span class="mono">V2Sd0XWnluzc</span> ／ ステップID: <span class="mono">qQW1U6Vy3oAa</span> ／ ページID: <span class="mono">qTDecAsk0BqO</span></li>
+    </ul>
+
+    <h2>2. 選択肢と1問あたりのポイント</h2>
+    <p>全問共通です。画面の上からの並びと、付与される点は次のとおりです。</p>
+    <table>
+      <thead>
+        <tr><th>選択肢</th><th class="num">ポイント</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>いつもできている</td><td class="num">3</td></tr>
+        <tr><td>だいたいできている</td><td class="num">2</td></tr>
+        <tr><td>たまにできている</td><td class="num">1</td></tr>
+        <tr><td>できていない</td><td class="num">0</td></tr>
+      </tbody>
+    </table>
+
+    <h2>3. 全設問と所属する観点</h2>
+    <ol class="questions">
+      <li><span class="axis">オープニング／場の設計</span><br>冒頭で「この時間はあなたのための時間です」と、プロとして言い切っている</li>
+      <li><span class="axis">オープニング／場の設計</span><br>終了時刻を「余裕を持って何時まで大丈夫か」の形で先に確認している</li>
+      <li><span class="axis">ヒアリング</span><br>相手の最初の答えで止めず、「他にはありますか」「なぜですか」で本音まで降りている</li>
+      <li><span class="axis">ヒアリング</span><br>気持ちや状態を10点満点などの数値で答えてもらい、満点に届かない差分を掘り下げている</li>
+      <li><span class="axis">ヒアリング</span><br>自分の商品で必ず確認すべき項目を事前に決めていて、聞き漏らしが起きない</li>
+      <li><span class="axis">価値観教育</span><br>ノウハウを詳しく教えるのではなく、相手が「できそう」と感じる状態を作ることを目的にしている</li>
+      <li><span class="axis">価値観教育</span><br>相手が既に経験している別の領域（スポーツ・料理・仕事など）に喩え、相手自身に答えを言ってもらっている</li>
+      <li><span class="axis">価値観教育</span><br>「あなたには無理」「独学では不可能」とは言わず、うまくいかなかった第三者の具体的な事例で伝えている</li>
+      <li><span class="axis">提案・クロージング</span><br>価格を伝えるとき、言い淀まず、他の大きな支出と比べて意味づけができている</li>
+      <li><span class="axis">提案・クロージング</span><br>その場で決まらなかった場合も、回答の期日を具体的に決めている</li>
+    </ol>
+
+    <h2>4. 4つの観点と重み、観点別スコアの計算</h2>
+    <p>各観点のスコアは 0〜100点です。計算式は、その観点の回答点の合計 ÷（3 × 設問数）× 100 を四捨五入（JavaScript の <span class="mono">Math.round</span>）です。</p>
+    <table>
+      <thead>
+        <tr>
+          <th>観点</th>
+          <th>内部ID</th>
+          <th class="num">重み</th>
+          <th class="num">設問数</th>
+          <th class="num">生点の上限</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>オープニング／場の設計</td><td class="mono">P1_opening</td><td class="num">20</td><td class="num">2</td><td class="num">6</td></tr>
+        <tr><td>ヒアリング</td><td class="mono">P2_hearing</td><td class="num">30</td><td class="num">3</td><td class="num">9</td></tr>
+        <tr><td>価値観教育</td><td class="mono">P3_education</td><td class="num">35</td><td class="num">3</td><td class="num">9</td></tr>
+        <tr><td>提案・クロージング</td><td class="mono">P4_closing</td><td class="num">15</td><td class="num">2</td><td class="num">6</td></tr>
+      </tbody>
+    </table>
+    <p>総合点（上限100点）は次の式です。</p>
+    <p><strong>総合点 = Math.round（オープニング×0.20 ＋ ヒアリング×0.30 ＋ 価値観教育×0.35 ＋ 提案・クロージング×0.15）</strong></p>
+    <p>すべて「いつもできている」なら総合点100点、すべて「できていない」なら0点になります。</p>
+
+    <h2>5. 総合点で分かれる結果文言（3パターン）</h2>
+    <p>結果画面の見出しは「診断結果」で、総合点が大きく表示されます。性格診断のようなタイプ名はなく、総合点の帯で文言が3つに分かれます。</p>
+    <table>
+      <thead>
+        <tr><th>総合点</th><th>結果の文言</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>80点以上</td><td>型が身についている</td></tr>
+        <tr><td>50点以上 80点未満</td><td>型が安定してきた</td></tr>
+        <tr><td>50点未満</td><td>型がまだ無い</td></tr>
+      </tbody>
+    </table>
+
+    <h2>6. 最優先の課題とアドバイス</h2>
+    <p>4つの観点のうち、観点別スコアがいちばん低いものを「最優先の課題」として表示します。同点のときは、オープニング／場の設計 → ヒアリング → 価値観教育 → 提案・クロージングの順で先にある方が選ばれます。</p>
+    <p>選ばれた観点のアドバイスだけが箇条書きで出ます。他の観点のアドバイスは出ません。</p>
+
+    <h3>オープニング／場の設計</h3>
+    <ul>
+      <li>冒頭で相手のための時間だと伝え、安心して相談できる場を作る。</li>
+      <li>自己紹介は短く、判断に役立つ実績や数字を伝える。</li>
+      <li>余裕を持って確保できる終了時刻を聞く。</li>
+      <li>相手の業界になじみのある言葉を使う。</li>
+    </ul>
+
+    <h3>ヒアリング</h3>
+    <ul>
+      <li>質問する理由を伝え、許可を取る。</li>
+      <li>最初の答えから「ほかには」「なぜ」と掘り下げる。</li>
+      <li>10点満点で聞き、満点との差を確認する。</li>
+      <li>商品ごとの必須確認項目を一覧にする。</li>
+      <li>相手の答えを先回りして決めつけない。</li>
+    </ul>
+
+    <h3>価値観教育</h3>
+    <ul>
+      <li>相手が「できそう」と感じる状態を目指す。</li>
+      <li>身近な経験にたとえ、相手自身に答えてもらう。</li>
+      <li>相づちや表情を見ながら進める。</li>
+      <li>相手の可能性を否定する言い方を避ける。</li>
+      <li>第三者の具体的な失敗事例を紹介する。</li>
+      <li>商品説明に進む前に、聞きたいかを確認する。</li>
+    </ul>
+
+    <h3>提案・クロージング</h3>
+    <ul>
+      <li>結果の保証を避け、根拠を持って提案する。</li>
+      <li>価格は言いよどまずに伝える。</li>
+      <li>費用の比較対象を示し、何が変わるか伝える。</li>
+      <li>その場で決まらなければ回答期限を具体的に決める。</li>
+      <li>どちらの結論でも相手の判断を尊重する。</li>
+    </ul>
+
+    <h2>7. 診断後の導線（配信・タグ・シナリオについて）</h2>
+    <div class="note">
+      <p><strong>この診断ページには、合計点やタイプごとに配信・タグ（ラベル）・シナリオへ振り分ける仕組みはありません。</strong> ページ内のJavaScriptを確認した結果、ラベル付与、シナリオ登録、フォーム送信、Webhook、結果タイプごとの別ページ遷移は入っていません。補助金活用ファネルの登録経路（tracking）も、2026-11-16時点で0件でした。</p>
+    </div>
+    <p>診断後に画面上で分かれる導線は、次だけです。</p>
+    <ul>
+      <li>説明文「診断で見つかった課題について、しるびから60分の個別フィードバックを受けられます。」</li>
+      <li>リンク「個別セールス相談を申し込む」→ <a href="https://utage-system.com/p/x6GQnkZxfj0I">https://utage-system.com/p/x6GQnkZxfj0I</a>（ファネル「無料コミュニティ、セールス診断lp」のステップ「セールス個別相談LP」）</li>
+      <li>このリンクには、次のクエリパラメータが付きます。<span class="mono">weak</span>（最弱観点の内部ID）、<span class="mono">score</span>（総合点）、<span class="mono">P1_opening</span> / <span class="mono">P2_hearing</span> / <span class="mono">P3_education</span> / <span class="mono">P4_closing</span>（各観点のスコア）</li>
+      <li>「もう一度診断する」で最初からやり直し</li>
+    </ul>
+    <div class="ok">
+      <p>相談LP（ページ更新 2026-08-25 12:41:24）の要素を読みましたが、<span class="mono">weak</span> や <span class="mono">score</span> などのクエリを参照する記述は見当たらず、ボタン文言「今すぐ個別でセールス診断を受ける」があるだけでした。診断ツール本体の作成は 2026-11-15 です。パラメータはURLに付きますが、相談LP側では使われていないように見えます（要素上の確認であり、画面の別設定までを完全に否定するものではありません）。</p>
+    </div>
+
+    <h2>8. 関連するが別物</h2>
+    <p>次は、今回の「診断ツール」ページとは別の資産です。現行ページのJavaScriptから、これらへ自動で登録や振り分けは行われません。</p>
+    <ul>
+      <li>配信アカウント「るりこ＠売れる仕組み診断（エクスネット管理）」（ID <span class="mono">9QyWeHp9upVi</span>）。シナリオ「診断シナリオ」「個別お話し会リマインダ」など。このアカウントのラベルは0件でした。</li>
+      <li>ファネル「売れる仕組み30秒診断（エクスネット管理）」</li>
+      <li>ファネル「診断レポート」。結果ページが多数あり、ステップ名が回答の組み合わせを並べたものです。今回の10問・4観点・総合点のロジックとは別です。</li>
+    </ul>
+
+    <footer>
+      <p>作成: 2026-11-16（Asia/Tokyo）。しるびさんのUTAGEを読み取り専用で確認した実データにもとづく。UTAGE上の内容は変更していない。</p>
+    </footer>
+  </main>
+</body>
+</html>
