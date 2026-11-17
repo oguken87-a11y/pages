@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>BM追加ガイド</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#1c2230;--sub:#5b6475;--blue:#1877f2;--ok:#1a9e5b;--warn:#d9822b;--line:#dfe3ec;--purple:#7b4fd6}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Yu Gothic UI",sans-serif;line-height:1.75;font-size:17px}
+.wrap{max-width:860px;margin:0 auto;padding:16px}
+h1{font-size:24px;margin:8px 0}h2{font-size:20px;margin:0 0 8px;border-left:6px solid var(--blue);padding-left:10px}
+.card{background:var(--card);border-radius:14px;padding:18px;margin:16px 0;box-shadow:0 1px 4px #0001}
+.say{background:#eef5ff;border-left:5px solid var(--blue);padding:10px 14px;border-radius:8px;margin:10px 0}
+.say::before{content:"🗣 しるびさんに言う：";font-weight:bold;color:var(--blue);display:block;font-size:14px}
+.ai{background:#f4efff;border-left:5px solid var(--purple);padding:10px 14px;border-radius:8px;margin:10px 0}
+.ai::before{content:"🤖 Claude in Chromeに頼む：";font-weight:bold;color:var(--purple);display:block;font-size:14px}
+.chk{background:#eefaf3;border-left:5px solid var(--ok);padding:10px 14px;border-radius:8px;margin:10px 0}
+.warn{background:#fff6ec;border-left:5px solid var(--warn);padding:10px 14px;border-radius:8px;margin:10px 0}
+.who{display:inline-block;font-size:13px;border-radius:12px;padding:1px 10px;margin-left:6px;vertical-align:middle;color:#fff}
+.s{background:#e0457b}.o{background:var(--purple)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow span{border-radius:20px;padding:4px 12px;font-size:14px;color:#fff}
+.flow i{color:var(--sub);font-style:normal}
+.mock{border:2px solid var(--line);border-radius:10px;overflow:hidden;margin:10px 0;font-size:14px}
+.mock .bar{background:#f0f2f5;padding:6px 10px;color:var(--sub);border-bottom:1px solid var(--line)}
+.mock .body{display:flex;min-height:110px}
+.mock .side{width:34%;background:#fafbfc;border-right:1px solid var(--line);padding:8px}
+.mock .side div{padding:4px 6px;border-radius:6px}
+.mock .main{flex:1;padding:10px}
+.hl{background:#fff3b0;outline:2px solid #f5b800;font-weight:bold}
+.btn{display:inline-block;background:var(--blue);color:#fff;border-radius:6px;padding:3px 10px}
+table{border-collapse:collapse;width:100%;font-size:15px}td,th{border:1px solid var(--line);padding:6px;text-align:left}th{background:#f0f2f5}
+.num{display:inline-block;background:var(--ink);color:#fff;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;margin-right:6px}
+small{color:var(--sub)}
+</style></head><body><div class="wrap">
+
+<h1>しるびさんのビジネスマネージャに小倉を入れてもらう — 当日ガイド</h1>
+<small>小倉さん用の進行台本（2026-11-17）。画面の図は一般的な配置のイメージで、今日のMetaの実際の画面とは照らし合わせていません。違ったら画面の言葉に合わせて読み替えてください。</small>
+
+<div class="card">
+<h2>全体の流れ</h2>
+<div class="flow">
+<span class="s">1 BMを開く／作る</span><i>→</i><span class="s">2 小倉を管理者で招待</span><i>→</i><span class="o">3 小倉が承認</span><i>→</i><span class="o">4 小倉が広告アカウント作成</span><i>→</i><span class="o">5 ページ等の割当て確認</span><i>→</i><span class="s">6 カード登録</span>
+</div>
+<p><span class="who s">しるびさん</span> の作業は 1・2・6 だけ。<span class="who o">小倉さん</span> の 3〜5 は Claude in Chrome に画面を見てもらいながら進める。</p>
+<div class="warn">しるびさんのパスワード・カード番号は、しるびさん本人が入力（小倉さんもClaudeも入力しない）。</div>
+<div class="chk"><b>しるびさんの作業（1・2・6）は、しるびさんが手で操作</b>し、小倉さんが横で「🗣」のセリフどおりに指示する。Claude in Chromeは使わない前提。</div>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:bold;color:var(--purple)">▶ 予備：しるびさんのPCにClaude in Chromeが入っていた場合のプロンプト（クリックで開く）</summary>
+<pre id="ps" style="white-space:pre-wrap;background:#f4efff;border:2px solid var(--purple);border-radius:8px;padding:12px;font-size:15px">今から、ビッグバン株式会社のMetaビジネスマネージャで作業します。画面を見ながら、私（しるび）に1ステップずつ「どこを押すか」を案内してください。
+
+やりたいこと（この順で）：
+1. https://business.facebook.com/ を開く。ビジネスマネージャがなければ「ビッグバン株式会社」の名前で新しく作る（名前・メールは私が入力します）
+2. 画面左上がビッグバンのビジネスマネージャになっていることを確認する
+3. 設定 → ユーザー → ユーザー → 追加 で、ogura87@yahoo.co.jp を「フルコントロール（管理者）」で招待する。ページを選ぶ画面が出たら、ビッグバンのFacebookページ（あればInstagram）を選ぶ
+4. 私自身も管理者のまま残っていることを確認する
+
+守ること：
+・パスワード・カード番号・認証コードは入力しない（私が入力します）
+・送信・作成などのボタンは、押す前に私に確認する
+・画面がこの手順と違うときは、今の画面に出ている言葉で案内する</pre>
+<button onclick="navigator.clipboard.writeText(document.getElementById('ps').innerText);this.textContent='コピーしました'" style="font-size:16px;padding:6px 16px;border-radius:8px;border:0;background:var(--purple);color:#fff;cursor:pointer">プロンプトをコピー</button></details>
+</div>
+
+<div class="card">
+<h2><span class="num">0</span>始める前の確認</h2>
+<table>
+<tr><th>確認すること</th><th>なぜ</th></tr>
+<tr><td>しるびさんがFacebookにログインできる（PC推奨）</td><td>BMはFacebookの個人アカウントで入る</td></tr>
+<tr><td>しるびさんの2段階認証（スマホ）がその場で使える</td><td>管理者操作で求められることがある</td></tr>
+<tr><td>小倉さんの招待先メールアドレス</td><td>招待メールが届く先</td></tr>
+<tr><td>ビッグバンのFacebookページ（・Instagram）があるか</td><td>広告を出す名義になる</td></tr>
+<tr><td>小倉さんのPCで Claude in Chrome がつながっている</td><td>手順3〜5で使う</td></tr>
+</table>
+<div class="say">今日は、しるびさんのビジネスマネージャに私を管理者として入れていただきます。広告アカウントは私がその中で作ります。持ち主はビッグバンさんのままで、しるびさんには最後にカードだけ入れていただきます。</div>
+</div>
+
+<div class="card">
+<h2><span class="num">1</span>ビジネスマネージャを開く／なければ作る <span class="who s">しるびさん</span></h2>
+<div class="chk" style="font-size:19px">URL：<a href="https://business.facebook.com/" target="_blank"><b>https://business.facebook.com/</b></a><br>
+<small>BMがない場合も<b>同じURL</b>。開くと作成ボタンが出るので、そこから新規作成。</small></div>
+<div class="say">ブラウザで「business.facebook.com」を開いてください。Facebookにログインした状態で大丈夫です。</div>
+<div class="mock"><div class="bar">🌐 business.facebook.com</div><div class="body"><div class="side"><div>🏠 ホーム</div><div>📣 広告</div><div>…</div><div class="hl">⚙ 設定（左下）</div></div><div class="main">左上に<b>会社名</b>が出ていれば → BMあり、手順2へ<br><br>「ビジネスアカウントを作成」が出たら → 作成する</div></div></div>
+<p><b>作る場合：</b></p>
+<div class="say">「ビジネスアカウントを作成」を押して、会社名に「ビッグバン株式会社」、お名前、会社のメールアドレスを入れて送信してください。届いた確認メールも開いてください。</div>
+<div class="chk">確認：左上のビジネス名が「ビッグバン」か。複数あれば正しい方を選んでもらう。</div>
+</div>
+
+<div class="card">
+<h2><span class="num">2</span>小倉を管理者で招待 <span class="who s">しるびさん</span></h2>
+<div class="say">左下の歯車「設定」→「ユーザー」→「ユーザー」→「＋追加」を押して、私のメールアドレス「<b>ogura87@yahoo.co.jp</b>」を入れてください。</div>
+<div class="mock"><div class="bar">⚙ 設定 ＞ ユーザー</div><div class="body"><div class="side"><div class="hl">└ ユーザー</div><div>└ パートナー</div><div>アカウント</div><div>└ 広告アカウント</div><div>└ ページ</div></div><div class="main">ユーザー　<span class="btn">＋ 追加</span><br><br>メールアドレス：[ 小倉さんのアドレス ]<br>アクセス権：<br>　○ 一部のアクセス（従業員）<br>　◉ <b>フルコントロール（管理者）</b>　← これ</div></div></div>
+<div class="say">「フルコントロール（管理者）」を選んでください。次にページなどを選ぶ画面が出たら、ビッグバンのFacebookページ（あればInstagramも）にチェックを入れて、「招待を送信」を押してください。</div>
+<div class="warn">しるびさん本人も管理者のまま残っているか確認する。小倉さんが抜けるときは、ここから外してもらえば広告アカウントもデータも残る。</div>
+</div>
+
+<div class="card">
+<h2><span class="num">3</span>招待を承認 <span class="who o">小倉さん</span></h2>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:bold;color:var(--purple)">▶ 小倉さん用：Claude in Chromeに貼り付けるプロンプト（クリックで開く）</summary>
+<pre id="p" style="white-space:pre-wrap;background:#f4efff;border:2px solid var(--purple);border-radius:8px;padding:12px;font-size:15px">今から、ビッグバン株式会社（代表：しるびさん）のMetaビジネスマネージャで作業します。画面を見ながら、私（小倉）に1ステップずつ「どこを押すか」を案内してください。
+
+状況：しるびさんがビジネスマネージャに私（ogura87@yahoo.co.jp）を「フルコントロール（管理者）」で招待済みです。
+
+やりたいこと（この順で）：
+1. ogura87@yahoo.co.jp に届いた招待を承認し、ビッグバンのビジネスマネージャに入る
+2. 画面左上がビッグバンのビジネスマネージャになっていることを確認する（私の別のビジネスで作らない）
+3. 設定 → アカウント → 広告アカウント → 追加 → 新しい広告アカウントを作成
+   ・名前：ビッグバン_Meta広告
+   ・タイムゾーン：(GMT+09:00) Asia/Tokyo
+   ・通貨：日本円（JPY）
+   ・このビジネス（ビッグバン）用
+   ※作成ボタンを押す前に、入力内容を私に見せて確認を取ってください（タイムゾーンと通貨は後から変えられないため）
+4. 作った広告アカウントに、私としるびさんが「フルコントロール」で入っているか、ビッグバンのFacebookページ（あればInstagram）がビジネスマネージャに入っているか確認する
+5. 広告アカウントの支払い設定画面を開くところまで案内する
+
+守ること：
+・カード番号・パスワードは入力しない。支払い画面を開いたら止まって「しるびさんに入力を代わってください」と言う
+・送信・作成・承認などのボタンは、押す前に私に確認する
+・画面がこの手順と違うときは、今の画面に出ている言葉で案内する
+・最後に、ビジネスID・広告アカウント名・広告アカウントIDを書き出す</pre>
+<button onclick="navigator.clipboard.writeText(document.getElementById('p').innerText);this.textContent='コピーしました'" style="font-size:16px;padding:6px 16px;border-radius:8px;border:0;background:var(--purple);color:#fff;cursor:pointer">プロンプトをコピー</button></details>
+<div class="flow"><span class="o">メールの招待を開く</span><i>→</i><span class="o">「招待を承認」</span><i>→</i><span class="o">自分のFacebookで入る</span></div>
+<div class="ai">ビッグバンのビジネスマネージャへの招待を承認したい。メールの招待リンクから進めるのをガイドして。</div>
+<small>メールが来ない時：迷惑メール／アドレスの打ち間違い／しるびさん側の「ユーザー」一覧の「保留中」から再送。</small>
+<div class="chk">確認：小倉さんの business.facebook.com で、左上にビッグバンのBMが選べる。</div>
+</div>
+
+<div class="card">
+<h2><span class="num">4</span>広告アカウントを作る <span class="who o">小倉さん</span></h2>
+<div class="ai">ビッグバンのビジネスマネージャの中で、新しい広告アカウントを作りたい。名前は「ビッグバン_Meta広告」、タイムゾーンAsia/Tokyo、通貨は日本円。画面を見ながら手順をガイドして。</div>
+<div class="mock"><div class="bar">⚙ 設定（ビッグバンのBMを選んだ状態）</div><div class="body"><div class="side"><div>ユーザー</div><div>アカウント</div><div class="hl">└ 広告アカウント</div><div>└ ページ</div></div><div class="main">広告アカウント　<span class="btn">＋ 追加</span><br><br>▸ 既存の広告アカウントを追加<br>▸ <b class="hl">新しい広告アカウントを作成</b></div></div></div>
+<table>
+<tr><th>入力欄</th><th>入れる値</th></tr>
+<tr><td>広告アカウント名</td><td>例：ビッグバン_Meta広告</td></tr>
+<tr><td>タイムゾーン</td><td><b>(GMT+09:00) Asia/Tokyo</b></td></tr>
+<tr><td>通貨</td><td><b>日本円（JPY）</b></td></tr>
+<tr><td>誰のためか</td><td>このビジネス（ビッグバン）</td></tr>
+</table>
+<div class="warn">タイムゾーンと通貨は後から変えられない。作成ボタンを押す前に、しるびさんにも画面を見てもらって確認。<br>左上が<b>ビッグバンのBM</b>になっているか必ず確認（自分のBMで作らない）。</div>
+</div>
+
+<div class="card">
+<h2><span class="num">5</span>権限・つながりの確認 <span class="who o">小倉さん</span></h2>
+<div class="ai">ビッグバンのBMで、作った広告アカウントに自分（小倉）が「フルコントロール」で入っているか、Facebookページが広告に使えるようになっているか確認して。</div>
+<table>
+<tr><th>見るところ</th><th>こうなっていればOK</th></tr>
+<tr><td>広告アカウント → 人</td><td>小倉さんが「フルコントロール（管理）」。しるびさんも入れておく</td></tr>
+<tr><td>ページ</td><td>ビッグバンのページがBMに入っている</td></tr>
+<tr><td>Instagram（あれば）</td><td>BMに入っている</td></tr>
+<tr><td>広告マネージャ</td><td>ビッグバンの広告アカウントで「作成」ボタンが押せる</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h2><span class="num">6</span>支払いカードを登録 <span class="who s">しるびさん</span></h2>
+<div class="say">広告費はしるびさんのカードから直接引き落とされる形です。この画面でカードを登録してください。番号は私は見ないようにしますね。</div>
+<div class="ai">ビッグバンの広告アカウントの支払い設定画面を開いて。カードの入力はしるびさん本人がするので、画面を開くところまでガイドして。</div>
+<div class="warn">カード番号は小倉さんもClaudeも入力しない。画面を開いたら、しるびさんにPCを渡す。</div>
+</div>
+
+<div class="card">
+<h2>うまくいかない時</h2>
+<table>
+<tr><th>症状</th><th>対処</th></tr>
+<tr><td>しるびさんの画面に「設定」や「ユーザー追加」が出ない</td><td>しるびさんがBMの管理者でない可能性。管理者の人にやってもらう</td></tr>
+<tr><td>広告アカウントが作れない</td><td>新しいBMには作れる数の制限がある。画面の案内を読む</td></tr>
+<tr><td>2段階認証を求められる</td><td>本人のスマホで設定して続行</td></tr>
+<tr><td>画面がこのガイドと違う</td><td>Claude in Chromeに今の画面を見てもらって次の操作を聞く</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h2>終わったら控えておくこと</h2>
+<ul><li>BMの名前・ビジネスID</li><li>広告アカウント名・広告アカウントID</li><li>管理者：しるびさん・小倉さん</li><li>支払い方法が登録済みか</li></ul>
+</div>
+
+</div></body></html>
