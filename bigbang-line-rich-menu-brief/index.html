@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>しるび公式LINE リッチメニュー制作依頼書</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; color: #222; background: #f3f3f3; font: 16px/1.75 "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif; }
+main { max-width: 960px; margin: 36px auto; padding: 40px; background: white; }
+h1 { font-size: clamp(1.45rem, 4vw, 2rem); line-height: 1.45; margin: 0 0 1rem; }
+h2 { font-size: 1.2rem; margin: 2rem 0 .7rem; }
+p { margin: .6rem 0; }
+ul { padding-left: 1.4em; }
+li + li { margin-top: .4em; }
+.menu { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #777; text-align: center; }
+.tile { display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: .75rem; padding: 1rem .3rem; }
+.tile + .tile { border-left: 1px solid #777; }
+.tile p { margin: 0; }
+.label { font-size: .75rem; }
+.name { font-weight: 700; font-size: clamp(.72rem, 2.6vw, 1.25rem); line-height: 1.5; }
+.action { font-size: clamp(.65rem, 2.3vw, .95rem); }
+.positions { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; font-size: .8rem; margin-bottom: .3rem; }
+a { color: #194e80; }
+@media (max-width: 600px) { main { margin: 0; padding: 24px 14px; } }
+@media print { body { background: white; } main { margin: 0; padding: 0; } .menu { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<main>
+<h1>しるび公式LINE<br>リッチメニュー制作依頼書</h1>
+<p>公式LINEに登録した方が、LPで案内している3大プレゼントを受け取るためのリッチメニューを制作してください。</p>
+<p><strong>横長のハーフサイズ1枚を、左・中央・右の3つのタップエリアに分割</strong>してください。LPと同じ順番で、1枠に1つのプレゼントを配置します。</p>
+<h2>配置と掲載コピー</h2>
+<div class="positions"><span>左</span><span>中央</span><span>右</span></div>
+<div class="menu">
+  <section class="tile"><p class="label">プレゼント01</p><p class="name">売れる仕組み<br>構築マニュアル</p><p class="action">受け取る</p></section>
+  <section class="tile"><p class="label">プレゼント02</p><p class="name">実践者の<br>実例集</p><p class="action">受け取る</p></section>
+  <section class="tile"><p class="label">プレゼント03</p><p class="name">売れない原因<br>セルフチェック</p><p class="action">3分でチェックする</p></section>
+</div>
+<h2>デザインの方向性</h2>
+<ul>
+<li>各枠ではプレゼント名を一番大きく見せてください。タップを促す文言は下部に置き、枠全体が押せると分かる見せ方をお願いします。</li>
+<li>3枠に統一感を持たせつつ、タップエリアの境目を分かりやすくしてください。スマホのトーク画面で、特典名がひと目で読めることを優先してください。</li>
+<li>色、書体、アイコンの有無、余白、具体的な画像寸法はお任せします。参考LPの「3大プレゼント」部分に合わせたトーンでお願いします。コピーの改行は、読みやすさに合わせて調整していただいて大丈夫です。</li>
+</ul>
+<p><a href="https://utage-system.com/p/zN4btbsx2pHa">参考LP｜しるびの3大プレゼント</a></p>
+</main>
+</body>
+</html>
