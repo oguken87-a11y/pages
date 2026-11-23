@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ライオン兄さん祭り 集客ボード</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1d1f;--sub:#6b6b70;--line:#e6e3dc;--acc:#c2410c;--acc-soft:#fbe6d6;--good:#15803d}
+@media (prefers-color-scheme:dark){:root{--bg:#131314;--card:#1d1d1f;--ink:#f2f2f2;--sub:#a1a1a6;--line:#333336;--acc:#fb923c;--acc-soft:#4a2610;--good:#4ade80}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;font-size:14px;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:0}
+h2{font-size:17px;margin:0}
+.sub{color:var(--sub);font-size:12px}
+.demo{background:var(--acc-soft);border-radius:8px;padding:6px 12px;font-size:12px;margin:10px 0 12px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+@media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.kpi .l{color:var(--sub);font-size:12px}
+.kpi .v{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;color:var(--sub)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:14px;overflow:hidden}
+.hint{font-size:13px;background:var(--acc-soft);padding:8px 14px;border-bottom:1px solid var(--line)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line)}
+.sorts{display:flex;gap:4px}
+.sorts button{font:inherit;font-size:12px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:6px;padding:4px 12px;cursor:pointer}
+.sorts button.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{font-size:12px;color:var(--sub);font-weight:600}
+th.tl,td.tl{text-align:left}
+#list tbody tr{cursor:pointer}
+#list tbody tr:hover td{background:var(--bg)}
+#list tbody tr.on td{background:var(--acc-soft);font-weight:700}
+#list tr.all td{border-bottom:2px solid var(--line)}
+.no{color:var(--sub);font-size:12px;margin-right:6px;font-weight:400}
+.mini{display:inline-block;height:6px;border-radius:3px;background:var(--acc);vertical-align:middle;margin-left:6px}
+.detail .bar h2 small{font-weight:400}
+.filters{display:flex;gap:8px}
+select{font:inherit;font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+#log td,#log th{text-align:left}
+.ok{color:var(--good);font-weight:700}
+.ng{color:var(--sub)}
+.foot{padding:8px 14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🦁 ライオン兄さん祭り 集客ボード</h1>
+  <div class="sub">12/5（土）20:00 セミナー｜<span id="upd"></span></div>
+  <div class="demo" id="msg">読み込み中…</div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="card">
+    <div class="hint">👆 名前をクリックすると詳細データが出ます</div>
+    <div class="bar">
+      <h2>リストホルダーごとの集計</h2>
+      <div class="sorts">
+        <button data-s="no" class="on">名前順</button>
+        <button data-s="desc">登録 多い順</button>
+        <button data-s="asc">少ない順</button>
+      </div>
+    </div>
+    <div class="tbl"><table id="list"></table></div>
+  </div>
+
+  <div class="card detail" id="detail">
+    <div class="bar">
+      <h2 id="title"></h2>
+      <div class="filters">
+        <select id="fRes"><option value="">すべて</option><option value="1">登録</option><option value="0">未登録</option></select>
+        <select id="fSrc"><option value="">流入元：すべて</option></select>
+      </div>
+    </div>
+    <div class="tbl"><table id="log"></table></div>
+    <div class="sub foot" id="more"></div>
+  </div>
+</div>
+
+
+<script>
+(function(){
+var DATA_URL='https://script.google.com/macros/s/AKfycbxjx-Rm2DdMIbvYbixGA1GXKAJM6Oo2abgHS1yyPiniwXLnt3FS_zjhTlFVL9JMJgpt/exec?data=1';
+var H=[],byNo={},S={},ALL,EV=[],sel='',sortMode='no',D;
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function fmt(n){return n.toLocaleString('ja-JP')}
+function rate(r,a){return a?(r/a*100).toFixed(1)+'%':'—'}
+function md(d){return (d.getMonth()+1)+'/'+d.getDate()}
+function hm(d){return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+function w(d){return '日月火水木金土'[d.getDay()]}
+function evOf(no){return no?EV.filter(function(e){return e.h===no}):EV}
+function nameOf(no){return byNo[no]?byNo[no].name:'（経路なし）'}
+
+function start(d){
+  D=d;H=d.holders||[];
+  H.forEach(function(h){byNo[h.no]=h;S[h.no]=h});
+  ALL={acc:0,todayA:0,h1A:0,reg:0,line:0,todayR:0,h1R:0};
+  H.forEach(function(h){for(var k in ALL)ALL[k]+=h[k]||0});
+  EV=(d.log||[]).map(function(r){return{at:new Date(r[0]),h:r[1],src:r[2],reg:r[3]===1}});
+  var up=new Date(d.updated);
+  $('upd').textContent='最終更新 '+md(up)+'（'+w(up)+'）'+hm(up)+'・1時間ごとに自動更新';
+  var note='アクセス＝LPを見た人数（UTAGEの登録経路データ）／登録＝メール登録した人数（テスト登録は除く）。';
+  if(d.logSince){var ls=new Date(d.logSince);note+='下のアクセスログは '+md(ls)+' '+hm(ls)+' からの記録です。'}
+  else note+='下のアクセスログは、記録が始まると出ます。';
+  if(d.untrackedReg)note+='リストホルダーのURLを通らずに登録した '+d.untrackedReg+'人は数に入れていません。';
+  $('msg').textContent=note;
+  $('kpis').innerHTML=[
+    ['アクセス（全体）',fmt(ALL.acc),'今日 +'+ALL.todayA+'／直近1時間 +'+ALL.h1A],
+    ['登録（全体）',fmt(ALL.reg),'今日 +'+ALL.todayR+'／直近1時間 +'+ALL.h1R],
+    ['メール登録率',rate(ALL.reg,ALL.acc),'アクセスのうちメール登録した割合'],
+    ['LINE登録率',rate(ALL.line,ALL.acc),'LINE登録 '+fmt(ALL.line)+'人（メール登録者の '+rate(ALL.line,ALL.reg)+'）']
+  ].map(function(k){return'<div class="kpi"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="d">'+k[2]+'</div></div>'}).join('');
+  renderList();renderDetail();
+}
+
+function row(no,label,x,mx){
+  return'<tr data-no="'+no+'" class="'+(no===''?'all ':'')+(sel===no?'on':'')+'"><td class="tl">'+label+'</td>'+
+   '<td><b>'+fmt(x.reg)+'</b>'+(mx?'<span class="mini" style="width:'+Math.round(50*x.reg/mx)+'px"></span>':'')+'</td>'+
+   '<td>'+fmt(x.acc)+'</td><td>'+rate(x.reg,x.acc)+'</td><td>'+rate(x.line,x.acc)+'</td>'+
+   '<td>'+(x.todayR?'+'+x.todayR:'0')+'</td><td>'+(x.h1R?'+'+x.h1R:'0')+'</td></tr>'}
+function renderList(){
+  var list=H.slice();
+  if(sortMode==='desc')list.sort(function(a,b){return b.reg-a.reg||a.no.localeCompare(b.no)});
+  if(sortMode==='asc')list.sort(function(a,b){return a.reg-b.reg||a.no.localeCompare(b.no)});
+  var mx=Math.max.apply(null,H.map(function(h){return h.reg}).concat([1]));
+  var s='<thead><tr><th class="tl">リストホルダー</th><th>登録</th><th>アクセス</th><th>メール登録率</th><th>LINE登録率</th><th>今日の登録</th><th>直近1時間</th></tr></thead><tbody>';
+  s+=row('','全員',ALL,0);
+  list.forEach(function(h){s+=row(h.no,'<span class="no">'+h.no+'</span>'+esc(h.name),h,mx)});
+  $('list').innerHTML=s+'</tbody>';
+  $('list').querySelectorAll('tbody tr').forEach(function(tr){tr.onclick=function(){sel=tr.dataset.no;renderList();renderDetail();$('detail').scrollIntoView({behavior:'smooth',block:'start'})}});
+}
+function renderDetail(){
+  var x=sel?S[sel]:ALL;
+  $('title').innerHTML=(sel?esc(nameOf(sel))+' さんのアクセスログ':'全員のアクセスログ')+' <small class="sub">登録 '+x.reg+'／アクセス '+x.acc+'／メール登録率 '+rate(x.reg,x.acc)+'／LINE登録率 '+rate(x.line,x.acc)+'</small>';
+  var srcs=[];evOf(sel).forEach(function(e){if(srcs.indexOf(e.src)<0)srcs.push(e.src)});
+  var fs=$('fSrc'),cur=fs.value;
+  fs.innerHTML='<option value="">流入元：すべて</option>'+srcs.map(function(s){return'<option'+(s===cur?' selected':'')+'>'+esc(s)+'</option>'}).join('');
+  renderLog();
+}
+function renderLog(){
+  var fr=$('fRes').value, fs=$('fSrc').value;
+  var list=evOf(sel).filter(function(e){return(fr===''||String(+e.reg)===fr)&&(fs===''||e.src===fs)});
+  var s='<thead><tr><th>日時</th><th>リストホルダー</th><th>流入元</th><th>結果</th></tr></thead><tbody>';
+  list.slice(0,300).forEach(function(e){
+    s+='<tr><td>'+md(e.at)+'('+w(e.at)+') '+hm(e.at)+'</td><td>'+esc(nameOf(e.h))+'</td><td>'+esc(e.src)+'</td>';
+    s+='<td>'+(e.reg?'<span class="ok">登録</span>':'<span class="ng">未登録</span>')+'</td></tr>'});
+  $('log').innerHTML=s+'</tbody>';
+  $('more').textContent=list.length?(list.length+' 件'+(list.length>300?'（新しい順に300件まで表示）':'・新しい順')):'まだ記録がありません';
+}
+document.querySelectorAll('[data-s]').forEach(function(b){b.onclick=function(){sortMode=b.dataset.s;document.querySelectorAll('[data-s]').forEach(function(x){x.classList.toggle('on',x===b)});renderList()}});
+$('fRes').onchange=$('fSrc').onchange=renderLog;
+fetch(DATA_URL).then(function(r){return r.json()}).then(function(d){if(!d.holders)throw 0;start(d)})
+ .catch(function(){$('msg').textContent='データを読み込めませんでした。少し待ってから開き直してください。'});
+})();
+</script>
+</body>
+</html>
