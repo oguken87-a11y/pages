@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>一斉配信の送り先ガイド（旅費ゼロ生活・飛行機タダ乗りラボ）</title>
+<style>
+  :root{--ink:#1f2933;--sub:#52606d;--line:#d9e2ec;--bg:#f5f7fa;--card:#fff;--blue:#0b69a3;--blue-bg:#e3f1fa;--tabi:#0f766e;--tabi-bg:#e0f5f2;--labo:#9a4d00;--labo-bg:#fdf0dc;--warn:#b42318;--warn-bg:#fdecea;--pick:#d92d20}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;line-height:1.75;font-size:16px}
+  .wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+  h1{font-size:24px;line-height:1.4;margin:0 0 6px}
+  .date{color:var(--sub);font-size:13px;margin:0 0 20px}
+  h2{font-size:21px;margin:44px 0 12px;padding:8px 14px;background:var(--blue);color:#fff;border-radius:8px;line-height:1.4}
+  h3{font-size:17px;margin:20px 0 8px}
+  .card h3:first-child{margin-top:0}
+  p{margin:8px 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:12px 0}
+  .now{background:var(--blue-bg);border-color:#9fcbe6}
+  .tabi{border-left:6px solid var(--tabi)}
+  .labo{border-left:6px solid var(--labo)}
+  .tag{display:inline-block;font-size:13px;font-weight:700;border-radius:4px;padding:1px 8px;margin-right:6px}
+  .tag.t{background:var(--tabi-bg);color:var(--tabi)}
+  .tag.l{background:var(--labo-bg);color:var(--labo)}
+  .tag.n{background:#fff3c4;color:#7a5200}
+  .tag.m{background:#e3f1fa;color:#0b69a3}
+  .tag.g{background:#dcf5e3;color:#11703a}
+  .warn{background:var(--warn-bg);border-color:#f3b8b1}
+  .warn h3{color:var(--warn)}
+  table{border-collapse:collapse;width:100%;font-size:15px;margin:8px 0}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#eef2f6}
+  .scroll{overflow-x:auto}
+  .scroll table{min-width:520px}
+  ol,ul{padding-left:22px;margin:8px 0}
+  li{margin:4px 0}
+  .small{font-size:13px;color:var(--sub)}
+  .num{display:inline-block;background:var(--pick);color:#fff;border-radius:999px;font-size:13px;font-weight:700;min-width:22px;height:22px;line-height:22px;text-align:center;margin-right:4px}
+
+  /* UTAGEの画面に似せた図 */
+  .scr{border:1px solid #cfd6de;border-radius:6px;background:#fff;margin:10px 0;box-shadow:0 1px 3px rgba(0,0,0,.08);font-size:14px;line-height:1.6;overflow:hidden}
+  .scr-h{padding:8px 14px;border-bottom:1px solid #e3e8ee;font-weight:700;font-size:13px;background:#fbfcfd}
+  .scr-b{padding:12px 14px}
+  .rad{display:block;margin:2px 0;color:#333}
+  .rad i{display:inline-block;width:13px;height:13px;border:1.5px solid #8a94a0;border-radius:50%;margin-right:6px;vertical-align:-2px;position:relative}
+  .rad.on i{border-color:#1a73e8}
+  .rad.on i::after{content:"";position:absolute;inset:2.5px;background:#1a73e8;border-radius:50%}
+  .rad.on{font-weight:700}
+  .crow{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px;align-items:flex-start}
+  .sel{flex:1 1 150px;border:1px solid #c5ccd3;border-radius:4px;padding:5px 26px 5px 10px;position:relative;background:#fff;min-height:34px}
+  .sel::after{content:"▾";position:absolute;right:8px;top:5px;color:#666;font-size:12px}
+  .sel.val::after{content:""}
+  .sel.val{flex:2 1 220px;padding-right:10px}
+  .chip{display:inline-block;background:#e9ecef;border-radius:3px;padding:0 8px;font-size:13px}
+  .pick{outline:3px solid var(--pick);outline-offset:1px;border-radius:4px}
+  .rad.pick{padding:1px 4px;display:inline-block}
+  .btn{display:inline-block;border:1px solid #3b8de0;color:#1a73e8;border-radius:4px;padding:3px 10px;font-size:13px;background:#fff;margin:4px 4px 0 0}
+  .btn.g{background:#28a745;border-color:#28a745;color:#fff}
+  .and{font-size:12px;color:#666;margin:6px 0 0}
+  .lrow{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;border-top:1px solid #e3e8ee;color:#555}
+  .lrow:first-child{border-top:0}
+  .lrow.hit{background:#fff5f4;color:var(--ink);font-weight:700;outline:3px solid var(--pick);outline-offset:-3px}
+  .lrow .r{white-space:nowrap;font-weight:400}
+  .lrow.dim{color:#a0a8b0}
+  .biz{font-size:22px;font-weight:800;line-height:1.4;padding:6px 14px;border-radius:8px;margin:0 0 10px}
+  .biz.t{background:var(--tabi);color:#fff}
+  .biz.l{background:var(--labo);color:#fff}
+  .pickname{font-size:17px}
+  .pickname b{color:var(--pick);font-size:19px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>一斉配信の送り先ガイド<br>旅費ゼロ生活・飛行機タダ乗りラボ</h1>
+<p class="date">2026年11月25日 作成（人数はこの日の時点）／作成：小倉</p>
+
+<h2>選ぶシナリオ</h2>
+
+<div class="card tabi">
+  <div class="biz t">旅費ゼロ生活</div>
+  <p class="pickname">開くシナリオ：<b>メタ広告オプト</b>（1つだけ）</p>
+  <p class="small">配信アカウント：旅費が消える生活「仕組構築マニュアル」</p>
+  <div class="scr">
+    <div class="lrow hit"><span>メタ広告オプト</span><span class="r">1850　<span class="tag m">メール</span><span class="tag g">LINE</span></span></div>
+    <div class="lrow dim"><span>ウェビナー参加者</span><span class="r">411</span></div>
+    <div class="lrow dim"><span>実践編案内（7日間）</span><span class="r">211</span></div>
+    <div class="lrow dim"><span>ラボ ミニローンチ（旅費ゼロリスト）</span><span class="r">858</span></div>
+    <div class="lrow dim"><span>……（ほかのシナリオは開きません）</span><span class="r"></span></div>
+  </div>
+  <p>登録した人は全員ここに入り、先へ進んでもここに残ります。ここで、メール一斉送信を1本、LINE一斉送信を1本作ります。</p>
+</div>
+
+<div class="card labo">
+  <div class="biz l">飛行機タダ乗りラボ</div>
+  <p class="pickname">開くシナリオ：<b>メタ広告オプト</b>／<b>飛行機タダ乗りラボ 動画講座参加者</b>／<b>飛行機タダ乗りラボ 日程未選択</b>（3つ）</p>
+  <p class="small">配信アカウント：飛行機タダ乗りラボ「無料動画講座」</p>
+  <div class="scr">
+    <div class="lrow hit"><span>メタ広告オプト<br><span class="small">登録して、まだ日程を選んでいない人</span></span><span class="r">243　<span class="tag m">メール</span></span></div>
+    <div class="lrow hit"><span>飛行機タダ乗りラボ 動画講座参加者<br><span class="small">日程を選んだ人</span></span><span class="r">272　<span class="tag m">メール</span><span class="tag g">LINE</span></span></div>
+    <div class="lrow dim"><span>【停止・アーカイブ構想廃止】…</span><span class="r">0</span></div>
+    <div class="lrow hit"><span>飛行機タダ乗りラボ 日程未選択<br><span class="small">日程を選んでいない人のLINE</span></span><span class="r">66　<span class="tag g">LINE</span></span></div>
+    <div class="lrow dim"><span>……（ほかのシナリオは開きません）</span><span class="r"></span></div>
+  </div>
+  <p>飛行機タダ乗りラボは、日程を選ぶと「メタ広告オプト」から「飛行機タダ乗りラボ 動画講座参加者」へ移るので、全員が入っているシナリオがありません。</p>
+  <table>
+    <tr><th>メールを送るとき</th><td>「メタ広告オプト」と「飛行機タダ乗りラボ 動画講座参加者」に1本ずつ（計2本）</td></tr>
+    <tr><th>LINEを送るとき</th><td>「飛行機タダ乗りラボ 日程未選択」と「飛行機タダ乗りラボ 動画講座参加者」に1本ずつ（計2本）</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <p>シナリオを開いたら、左のメニューで <b>メール一斉送信</b>（LINEなら <b>LINE一斉送信</b>）を押します。出てきた画面の「配信条件」を、下のとおりに選びます。赤い枠が選ぶ場所です。</p>
+</div>
+
+<h2>配信条件</h2>
+
+<div class="card">
+  <h3>① 全員に送りたい場合</h3>
+  <p>上の丸を選ぶだけです。ほかは何も入れません。</p>
+  <div class="scr">
+    <div class="scr-h">配信条件</div>
+    <div class="scr-b">
+      <span class="rad on pick"><i></i>シナリオ登録者全員に配信(条件を指定しない)</span>
+      <span class="rad"><i></i>条件に該当する登録者に配信(条件を指定する)</span>
+      <div><span class="btn g">対象者確認</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>② ステップ配信が終わった人に送りたい場合</h3>
+  <p>下の丸を選び、左から順に3つ選びます。</p>
+  <div class="scr">
+    <div class="scr-h">配信条件</div>
+    <div class="scr-b">
+      <span class="rad"><i></i>シナリオ登録者全員に配信(条件を指定しない)</span>
+      <span class="rad on pick"><i></i>条件に該当する登録者に配信(条件を指定する)</span>
+      <div class="crow">
+        <div class="sel pick">ラベル</div>
+        <div class="sel pick">に次を1つ以上含む</div>
+        <div class="sel val pick"><span class="chip">ステップ配信完了</span></div>
+      </div>
+      <div><span class="btn">AND条件追加</span><span class="btn">OR条件追加</span></div>
+      <div><span class="btn g">対象者確認</span></div>
+    </div>
+  </div>
+  <p><span class="num">1</span>ラベル　<span class="num">2</span>に次を1つ以上含む　<span class="num">3</span>ステップ配信完了</p>
+  <p class="small">「ステップ配信完了」は、ステップ配信の最後の通が届いた人に付くラベルです。</p>
+  <p class="small">飛行機タダ乗りラボでは、ステップ配信が終わった人は「飛行機タダ乗りラボ 動画講座参加者」に入っています。②のときに開くのは、このシナリオ1つで足ります。</p>
+</div>
+
+<div class="card">
+  <h3>③ 購入者を外す場合</h3>
+  <p>外さないときは、何も足しません。①か②のままです。</p>
+  <p>外すときは、下の丸を選び、「ラベル／に次を1つ以上含む人を除外／購入済みのラベル」を入れます。</p>
+
+  <p style="margin-top:16px"><b>全員から、購入者だけ外す</b>（①＋外す）</p>
+  <div class="scr">
+    <div class="scr-h">配信条件</div>
+    <div class="scr-b">
+      <span class="rad"><i></i>シナリオ登録者全員に配信(条件を指定しない)</span>
+      <span class="rad on pick"><i></i>条件に該当する登録者に配信(条件を指定する)</span>
+      <div class="crow">
+        <div class="sel pick">ラベル</div>
+        <div class="sel pick">に次を1つ以上含む人を除外</div>
+        <div class="sel val pick"><span class="chip">購入済みのラベル（下の表）</span></div>
+      </div>
+      <div><span class="btn">AND条件追加</span><span class="btn">OR条件追加</span></div>
+      <div><span class="btn g">対象者確認</span></div>
+    </div>
+  </div>
+
+  <p style="margin-top:16px"><b>ステップ配信が終わった人から、購入者を外す</b>（②＋外す）</p>
+  <div class="scr">
+    <div class="scr-h">配信条件</div>
+    <div class="scr-b">
+      <span class="rad"><i></i>シナリオ登録者全員に配信(条件を指定しない)</span>
+      <span class="rad on pick"><i></i>条件に該当する登録者に配信(条件を指定する)</span>
+      <div class="crow">
+        <div class="sel">ラベル</div>
+        <div class="sel">に次を1つ以上含む</div>
+        <div class="sel val"><span class="chip">ステップ配信完了</span></div>
+      </div>
+      <div class="and">↓「AND条件追加」を押すと、2行目が出ます</div>
+      <div class="crow">
+        <div class="sel pick">ラベル</div>
+        <div class="sel pick">に次を1つ以上含む人を除外</div>
+        <div class="sel val pick"><span class="chip">購入済みのラベル（下の表）</span></div>
+      </div>
+      <div><span class="btn pick">AND条件追加</span><span class="btn">OR条件追加</span></div>
+      <div><span class="btn g">対象者確認</span></div>
+    </div>
+  </div>
+
+  <h3>購入済みのラベルの名前</h3>
+  <table>
+    <tr><th>旅費ゼロ生活</th><td><b>ラボ購入済み（配信除外用）</b>　<span class="small">35人</span></td></tr>
+    <tr><th>飛行機タダ乗りラボ</th><td><b>タダ乗りラボ_購入済み</b>　<span class="small">23人</span></td></tr>
+  </table>
+  <p class="small">どちらも「飛行機タダ乗りラボを購入した人」に付いているラベルで、今すぐ使えます。個別相談のあとに旅費ゼロ生活の本体を成約した方は、UTAGEに印が無いので外せません。</p>
+</div>
+
+<div class="card now">
+  <p><b>最後に、緑の「対象者確認」を押して人数を確かめてください。</b>人数が思っていた数と大きく違うときは、条件の選び方をもう一度見てください。</p>
+</div>
+
+<h2>送る時間</h2>
+
+<div class="card">
+  <p><b>19時を外して送ると、自動の配信と重なりにくくなります。</b></p>
+  <p>ステップ配信（自動で届く配信）は、19時に届くものが中心です。締切の日だけ、12時と21時〜23時にも届きます。</p>
+  <p class="small">「ステップ配信完了」のラベルで送るときは、相手にステップ配信がもう届かないので、時間はいつでもかまいません。</p>
+</div>
+
+<div class="card">
+  <p><b>いま動いている配信（11月26日まで）</b></p>
+  <p>旅費ゼロ生活で、飛行機タダ乗りラボの3日間の特別価格のご案内を配信しています。<b>11月26日の12時と23時</b>に届き、26日の23:59で終わります。</p>
+  <p>届く相手は、以前にご案内のリンクを押した方など約200人です。</p>
+  <p><b>この方たちを外して送りたいとき</b>は、配信条件で「AND条件追加」を押して、次の1行を足します（旅費ゼロ生活だけ。飛行機タダ乗りラボでは要りません）。</p>
+  <div class="scr">
+    <div class="scr-h">配信条件</div>
+    <div class="scr-b">
+      <div class="crow">
+        <div class="sel pick">ラベル</div>
+        <div class="sel pick">に次を1つ以上含む人を除外</div>
+        <div class="sel val pick"><span class="chip">ラボ3日間ミニローンチ1126_配信対象</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="small">11月27日以降に送るときは、この条件は要りません。</p>
+</div>
+
+
+</div>
+</body>
+</html>
