@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>さくらのウェブメールの開き方</title>
+<style>
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --text:#1f2937; --muted:#5b6472; --line:#d9dee6;
+  --accent:#0b6bcb; --hl:#e5322d; --hl-bg:#fff1f0; --ok:#16794c; --ok-bg:#eaf7f0;
+  --warn:#8a5a00; --warn-bg:#fff7e0; --screen:#fbfcfe; --bar:#e8ebf0;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14171c; --card:#1d2128; --text:#e8ebf0; --muted:#a3acb9; --line:#343b46;
+    --accent:#6db1ff; --hl:#ff6b64; --hl-bg:#3a1f1e; --ok:#58d29a; --ok-bg:#16301f;
+    --warn:#f0c46a; --warn-bg:#332a12; --screen:#252a33; --bar:#313744;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;line-height:1.8;font-size:17px}
+.wrap{max-width:720px;margin:0 auto;padding:24px 16px 56px}
+h1{font-size:24px;line-height:1.4;margin:0 0 8px}
+.lead{color:var(--muted);margin:0 0 20px}
+.box{border-radius:12px;padding:14px 16px;margin:16px 0;border:1px solid var(--line);background:var(--card)}
+.box.ok{background:var(--ok-bg);border-color:var(--ok)}
+.box.warn{background:var(--warn-bg);border-color:var(--warn)}
+.box h2{font-size:17px;margin:0 0 4px}
+.subject{display:block;margin:8px 0 0;padding:10px 12px;border-radius:8px;background:var(--card);border:2px dashed var(--accent);font-weight:700;font-size:18px;word-break:break-all}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:20px 0}
+.step-head{display:flex;gap:12px;align-items:flex-start}
+.num{flex:none;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:grid;place-items:center;font-size:18px}
+.step h3{margin:0;font-size:19px;line-height:1.5}
+.step p{margin:8px 0}
+.small{font-size:15px;color:var(--muted)}
+.hl{outline:3px solid var(--hl);outline-offset:2px;background:var(--hl-bg);border-radius:6px;font-weight:700}
+.screen{margin:12px 0 4px;border:1px solid var(--line);border-radius:10px;background:var(--screen);overflow:hidden;font-size:14px;line-height:1.6}
+.screen .bar{background:var(--bar);padding:6px 10px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line)}
+.screen .body{padding:12px}
+.tag{display:inline-block;font-size:12px;background:var(--bar);color:var(--muted);border-radius:4px;padding:0 6px;margin-left:4px}
+.field{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:6px 10px;margin:4px 0 8px}
+.btn{display:inline-block;border-radius:6px;background:var(--accent);color:#fff;padding:6px 14px}
+.menu div{padding:5px 10px;border-radius:6px}
+.cards{display:grid;gap:10px}
+.svc{border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--card)}
+.svc.no{opacity:.55}
+.svc .x{color:var(--hl);font-weight:700}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{border:1px solid var(--line);border-radius:8px;background:var(--card);padding:12px 4px;text-align:center;font-size:13px}
+.mail{display:grid;grid-template-columns:90px 1fr;gap:6px;padding:7px 8px;border-bottom:1px solid var(--line)}
+.mail:last-child{border-bottom:0}
+.mail b{font-weight:600}
+.arrow{text-align:center;color:var(--muted);margin:-4px 0}
+.report li{margin:6px 0}
+ul{padding-left:1.2em;margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>さくらのウェブメールの開き方</h1>
+
+<!-- STEP 1 -->
+<section class="step">
+  <div class="step-head"><div class="num">1</div><h3>さくらの「会員メニュー」にログインする</h3></div>
+  <p>ブラウザで下のページを開き、会員ID とパスワードでログインします。</p>
+  <p class="small">https://secure.sakura.ad.jp/auth/login</p>
+  <div class="screen"><div class="bar">さくらインターネット　ログイン（イメージ）</div><div class="body">
+    会員ID<div class="field">（しるびさんの会員ID）</div>
+    パスワード<div class="field">（会員パスワード）</div>
+    <span class="btn hl">ログイン</span>
+  </div></div>
+  <p class="small">ログインすると、しるびさんのGmailに「専用ログインURL」のメールが届くことがあります（2段階認証）。そのメールのURLを押すと、ログインが完了します。</p>
+</section>
+<div class="arrow">▼</div>
+
+<!-- STEP 2 -->
+<section class="step">
+  <div class="step-head"><div class="num">2</div><h3>左のメニューの「契約中のサービス一覧」を押す</h3></div>
+  <div class="screen"><div class="bar">会員メニュー（イメージ）</div><div class="body menu">
+    <div>会員メニュートップ</div>
+    <div>メールアドレス</div>
+    <div>会員パスワード</div>
+    <div>請求書の確認</div>
+    <div class="hl">契約中のサービス一覧</div>
+    <div>契約中のドメイン一覧</div>
+  </div></div>
+  <p class="small">スマホで左のメニューが見えないときは、画面の左上の「≡」を押すと出ます。</p>
+</section>
+<div class="arrow">▼</div>
+
+<!-- STEP 3 -->
+<section class="step">
+  <div class="step-head"><div class="num">3</div><h3><b>rurikoschool</b> のほうの「コントロールパネルを開く」を押す</h3></div>
+  <p>サーバーが2つ並びます。<b>初期ドメインが <u>rurikoschool</u>.sakura.ne.jp のほう</b>を選びます。</p>
+  <div class="screen"><div class="bar">契約中のサービス一覧（イメージ）</div><div class="body cards">
+    <div class="svc no">さくらのレンタルサーバ ライト<br>初期ドメイン [rurikotaguchi.sakura.ne.jp]<br><span class="x">× こちらは選びません</span></div>
+    <div class="svc">さくらのレンタルサーバ スタンダード<br>初期ドメイン [<b>rurikoschool</b>.sakura.ne.jp]<br><span class="btn hl">コントロールパネルを開く</span></div>
+  </div></div>
+  <p class="small">新しい画面が開き、数秒間「読み込み中」と出ます。そのまま少し待ちます。</p>
+</section>
+<div class="arrow">▼</div>
+
+<!-- STEP 4 -->
+<section class="step">
+  <div class="step-head"><div class="num">4</div><h3>「ウェブメール」のアイコンを押す</h3></div>
+  <div class="screen"><div class="bar">サーバーコントロールパネル ホーム（イメージ）</div><div class="body">
+    <div class="small" style="margin-bottom:6px">ショートカット</div>
+    <div class="tiles">
+      <div class="tile">ファイル<br>マネージャー</div>
+      <div class="tile">WordPress</div>
+      <div class="tile">データベース</div>
+      <div class="tile hl">ウェブメール</div>
+      <div class="tile">メール<br>アドレス</div>
+    </div>
+  </div></div>
+  <p class="small">見つからないときは、左のメニューの「メール」を押し、その中の「ウェブメール」を選びます。</p>
+</section>
+<div class="arrow">▼</div>
+
+<!-- STEP 5 -->
+<section class="step">
+  <div class="step-head"><div class="num">5</div><h3>ruriko1208@ でログインする</h3></div>
+  <div class="screen"><div class="bar">ウェブメール ログイン（イメージ・実際の画面とは少し違う場合があります）</div><div class="body">
+    メールアドレス<div class="field hl">ruriko1208@rurikoschool.com</div>
+    パスワード<div class="field hl">（ruriko1208@ のメールのパスワード）</div>
+    <span class="btn">ログイン</span>
+  </div></div>
+  <div class="box warn" style="margin:8px 0 0">
+    パスワードは、<b>メールを読むときのパスワード</b>です。さくらの会員パスワードとは別のものです。分からないときは、パスワードを変えずに、小倉さんに「分かりません」と伝えてください。
+  </div>
+</section>
+</div>
+</body>
+</html>
