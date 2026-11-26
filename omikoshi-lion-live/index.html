@@ -6,8 +6,8 @@
 <meta name="robots" content="noindex,nofollow">
 <title>ライオン兄さん祭り 集客ボード</title>
 <style>
-:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1d1f;--sub:#6b6b70;--line:#e6e3dc;--acc:#c2410c;--acc-soft:#fbe6d6;--good:#15803d;--gold-soft:#fdf3c8;--silver-soft:#eef0f3;--bronze-soft:#f8e4d2;--stripe:#f2f2f4;--hover:#e6e6ea}
-@media (prefers-color-scheme:dark){:root{--bg:#131314;--card:#1d1d1f;--ink:#f2f2f2;--sub:#a1a1a6;--line:#333336;--acc:#fb923c;--acc-soft:#4a2610;--good:#4ade80;--gold-soft:#3d3212;--silver-soft:#2c2f34;--bronze-soft:#3a2516;--stripe:#27272a;--hover:#323236}}
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1d1f;--sub:#6b6b70;--line:#e6e3dc;--acc:#c2410c;--acc-soft:#fbe6d6;--good:#15803d;--blue:#2563eb;--blue-soft:#e8f0fe;--head:#1e4fc2;--stripe:#f2f2f4;--hover:#e6e6ea}
+@media (prefers-color-scheme:dark){:root{--bg:#131314;--card:#1d1d1f;--ink:#f2f2f2;--sub:#a1a1a6;--line:#333336;--acc:#fb923c;--acc-soft:#4a2610;--good:#4ade80;--blue:#60a5fa;--blue-soft:#18284a;--head:#1e3a8a;--stripe:#27272a;--hover:#323236}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;font-size:14px;line-height:1.6}
 .wrap{max-width:1180px;margin:0 auto;padding:16px}
@@ -35,25 +35,26 @@ th.tl,td.tl{text-align:left}
 #list tbody tr{cursor:pointer}
 #list tbody tr.st td{background:var(--stripe)}
 #list tbody tr:hover td{background:var(--hover)}
-#list tbody tr.rk td{font-size:17px;font-weight:700;padding-top:13px;padding-bottom:13px}
-#list tbody tr.rk td.tl{font-size:19px}
-#list tbody tr.rk td b{font-size:22px}
-#list tbody tr.rk1 td{background:var(--gold-soft)}
-#list tbody tr.rk2 td{background:var(--silver-soft)}
-#list tbody tr.rk3 td{background:var(--bronze-soft)}
-#list tbody tr.rk1 td:first-child{box-shadow:inset 5px 0 0 #e0a800}
-#list tbody tr.rk2 td:first-child{box-shadow:inset 5px 0 0 #9aa3ad}
-#list tbody tr.rk3 td:first-child{box-shadow:inset 5px 0 0 #b8692a}
+#list thead th{background:var(--head);color:#fff;font-size:15px;font-weight:800;text-align:center;padding:11px 12px;border-bottom:0}
+#list tbody tr.rk td{font-weight:700;background:var(--blue-soft)}
+#list tbody tr.rk td:first-child{box-shadow:inset 5px 0 0 var(--blue)}
 #list tbody tr.on td{background:var(--acc-soft);font-weight:700}
-.medal,.msp{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;margin-right:8px;vertical-align:middle;flex:none}
-.medal{border-radius:50%;font-size:15px;font-weight:800;line-height:1;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),0 1px 3px rgba(0,0,0,.3)}
-.m1{background:linear-gradient(135deg,#fff4b8 0%,#f5c518 45%,#b8860b 100%);color:#5b3a00}
-.m2{background:linear-gradient(135deg,#ffffff 0%,#c9ced6 45%,#858d97 100%);color:#2f343a}
-.m3{background:linear-gradient(135deg,#ffd9b3 0%,#cd7f32 50%,#8b4f1d 100%);color:#3a1d04}
+#list tbody tr.all td,#list tbody tr.all.on td{background:transparent}
+/* メダル＝丸（金・銀・銅）＋下に青いリボン2本 */
+.medal,.msp{display:inline-block;position:relative;width:24px;height:24px;margin-right:10px;vertical-align:middle}
 .msp{height:1px}
+#list tbody tr.rk td{padding-top:9px;padding-bottom:13px}
+.medal{top:-3px}
+.medal::before,.medal::after{content:"";position:absolute;top:12px;width:10px;height:20px;background:var(--blue);clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%)}
+.medal::before{left:1px;transform:rotate(25deg)}
+.medal::after{right:1px;transform:rotate(-25deg)}
+.medal i{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-style:normal;font-size:12px;font-weight:800;line-height:1;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),0 1px 2px rgba(0,0,0,.3)}
+.m1 i{background:linear-gradient(135deg,#fff4b8 0%,#f5c518 45%,#b8860b 100%);color:#5b3a00}
+.m2 i{background:linear-gradient(135deg,#ffffff 0%,#c9ced6 45%,#858d97 100%);color:#2f343a}
+.m3 i{background:linear-gradient(135deg,#ffd9b3 0%,#cd7f32 50%,#8b4f1d 100%);color:#3a1d04}
 #list tr.all td{border-bottom:2px solid var(--line)}
 .no{color:var(--sub);font-size:12px;margin-right:6px;font-weight:400}
-.mini{display:inline-block;height:6px;border-radius:3px;background:var(--acc);vertical-align:middle;margin-left:6px}
+.mini{display:inline-block;height:6px;border-radius:3px;background:var(--blue);vertical-align:middle;margin-left:6px}
 .detail .bar h2 small{font-weight:400}
 .filters{display:flex;gap:8px}
 select{font:inherit;font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
@@ -153,8 +154,10 @@ function renderList(){
   var z=0;
   list.forEach(function(h){
     var r=rank[h.no]<=3?rank[h.no]:0;
-    var badge=r?'<span class="medal m'+r+'" title="'+r+'位">'+r+'</span>':'<span class="msp"></span>';
-    s+=row(h.no,badge+'<span class="no">'+h.no+'</span>'+esc(h.name),h,mx,r,!r&&(z++%2===0))});
+    // 1〜3位はメダルだけ（横の番号は出さない）
+    var label=r?'<span class="medal m'+r+'" title="'+r+'位"><i>'+r+'</i></span>'+esc(h.name)
+               :'<span class="msp"></span><span class="no">'+h.no+'</span>'+esc(h.name);
+    s+=row(h.no,label,h,mx,r,!r&&(z++%2===0))});
   $('list').innerHTML=s+'</tbody>';
   $('list').querySelectorAll('tbody tr').forEach(function(tr){tr.onclick=function(){sel=tr.dataset.no;renderList();renderDetail();$('detail').scrollIntoView({behavior:'smooth',block:'start'})}});
 }
