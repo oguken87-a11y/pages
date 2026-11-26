@@ -1,0 +1,64 @@
+/* LPの土台（幅と余白をそろえるための決まった形）  2026-11-12 作成
+   小倉さん 2026-11-12「左右や上下の幅があっていない事がある。特に問題」への対策。
+   使い方: HTMLのLPを作るとき、このファイルを最初に読み込む（または中身を <style> の先頭に写す）。
+   決まり: 幅・余白・間隔は、下の変数（--lp-…）だけを使う。px の数字を部品ごとに直接書かない。
+           案件で数字を変えるときは、:root の変数の値だけを変える（1か所）。
+   数字は Claude が置いた【仮】の出発点（小倉さんの決定ではない）。案件の決まりがあれば、そちらに合わせて :root を書き換える。 */
+
+:root {
+  /* 幅 */
+  --lp-max: 800px;        /* PCでの中身の幅（全セクション共通・1つだけ） */
+  --lp-side: 20px;        /* スマホの左右の余白（全セクション共通・左右同じ） */
+  /* 間隔の段（これ以外の数字を使わない） */
+  --lp-s1: 8px;
+  --lp-s2: 16px;
+  --lp-s3: 24px;
+  --lp-s4: 40px;
+  --lp-s5: 64px;
+  /* 役目ごとの余白 */
+  --lp-sec-y: var(--lp-s5);     /* セクションの上下（上と下は同じ） */
+  --lp-head-gap: var(--lp-s3);  /* 見出しと、その下の中身の間 */
+  --lp-stack: var(--lp-s2);     /* 縦に並ぶ部品どうしの間 */
+  --lp-card-pad: var(--lp-s3);  /* 枠・カードの中（上下左右同じ） */
+  --lp-radius: 12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; }
+img, video, svg { max-width: 100%; height: auto; display: block; }
+
+/* セクション：色の帯は画面いっぱい、上下の余白は同じ */
+.lp-sec { padding-block: var(--lp-sec-y); }
+
+/* 中身の入れ物：どのセクションでもこれ1つ。左右の余白と幅はここだけで決める */
+.lp-inner { width: 100%; max-width: calc(var(--lp-max) + var(--lp-side) * 2); margin-inline: auto; padding-inline: var(--lp-side); }
+/* 画像を画面いっぱいにしたいときだけ（中身の入れ物の外に置く） */
+.lp-bleed { width: 100%; }
+
+/* 縦に並べる：間隔は gap だけで作る（部品ごとの margin で作らない） */
+.lp-stack { display: flex; flex-direction: column; gap: var(--lp-stack); }
+.lp-stack > * { margin: 0; }
+.lp-stack--wide { gap: var(--lp-s4); }
+.lp-stack--tight { gap: var(--lp-s1); }
+
+/* 見出し：下の間隔は1種類 */
+.lp-head { margin: 0 0 var(--lp-head-gap); text-align: center; }
+
+/* 枠・カード：幅は入れ物いっぱい、中の余白は上下左右同じ */
+.lp-card { width: 100%; padding: var(--lp-card-pad); border-radius: var(--lp-radius); }
+.lp-card > :first-child { margin-top: 0; }
+.lp-card > :last-child { margin-bottom: 0; }
+
+/* 横に並べる：同じ幅・同じ高さ・同じ間隔 */
+.lp-row { display: grid; grid-template-columns: repeat(var(--lp-cols, 2), minmax(0, 1fr)); gap: var(--lp-stack); align-items: stretch; }
+
+/* ボタン：左右の真ん中・文字は上下左右の真ん中 */
+.lp-btn { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 480px; margin-inline: auto;
+          min-height: 64px; padding: var(--lp-s2) var(--lp-s3); line-height: 1.3; text-align: center; text-decoration: none; border: 0; cursor: pointer; }
+
+/* 入力欄：幅は入れ物いっぱい */
+.lp-input { display: block; width: 100%; padding: var(--lp-s2); font-size: 16px; }
+
+/* 画像にHTMLの文字を重ねる作り（Codexの画像を残す作り）のとき:
+   重ねる文字の左右の位置は、画像ごとにばらばらの数字にしない。同じ役目の文字は同じ left / right にする。 */
