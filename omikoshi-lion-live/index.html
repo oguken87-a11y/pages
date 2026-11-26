@@ -6,8 +6,8 @@
 <meta name="robots" content="noindex,nofollow">
 <title>ライオン兄さん祭り 集客ボード</title>
 <style>
-:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1d1f;--sub:#6b6b70;--line:#e6e3dc;--acc:#c2410c;--acc-soft:#fbe6d6;--good:#15803d;--gold-soft:#fdf3c8;--silver-soft:#eef0f3;--bronze-soft:#f8e4d2}
-@media (prefers-color-scheme:dark){:root{--bg:#131314;--card:#1d1d1f;--ink:#f2f2f2;--sub:#a1a1a6;--line:#333336;--acc:#fb923c;--acc-soft:#4a2610;--good:#4ade80;--gold-soft:#3d3212;--silver-soft:#2c2f34;--bronze-soft:#3a2516}}
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1d1f;--sub:#6b6b70;--line:#e6e3dc;--acc:#c2410c;--acc-soft:#fbe6d6;--good:#15803d;--gold-soft:#fdf3c8;--silver-soft:#eef0f3;--bronze-soft:#f8e4d2;--stripe:#f2f2f4;--hover:#e6e6ea}
+@media (prefers-color-scheme:dark){:root{--bg:#131314;--card:#1d1d1f;--ink:#f2f2f2;--sub:#a1a1a6;--line:#333336;--acc:#fb923c;--acc-soft:#4a2610;--good:#4ade80;--gold-soft:#3d3212;--silver-soft:#2c2f34;--bronze-soft:#3a2516;--stripe:#27272a;--hover:#323236}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;font-size:14px;line-height:1.6}
 .wrap{max-width:1180px;margin:0 auto;padding:16px}
@@ -33,7 +33,8 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:right;whit
 th{font-size:12px;color:var(--sub);font-weight:600}
 th.tl,td.tl{text-align:left}
 #list tbody tr{cursor:pointer}
-#list tbody tr:hover td{background:var(--bg)}
+#list tbody tr.st td{background:var(--stripe)}
+#list tbody tr:hover td{background:var(--hover)}
 #list tbody tr.rk td{font-size:17px;font-weight:700;padding-top:13px;padding-bottom:13px}
 #list tbody tr.rk td.tl{font-size:19px}
 #list tbody tr.rk td b{font-size:22px}
@@ -133,8 +134,8 @@ function start(d){
   renderList();renderDetail();
 }
 
-function row(no,label,x,mx,rk){
-  var cls=(no===''?'all ':'')+(rk?'rk rk'+rk+' ':'')+(sel===no?'on':'');
+function row(no,label,x,mx,rk,st){
+  var cls=(no===''?'all ':'')+(rk?'rk rk'+rk+' ':'')+(st?'st ':'')+(sel===no?'on':'');
   return'<tr data-no="'+no+'" class="'+cls+'"><td class="tl">'+label+'</td>'+
    '<td><b>'+fmt(x.reg)+'</b>'+(mx?'<span class="mini" style="width:'+Math.round(50*x.reg/mx)+'px"></span>':'')+'</td>'+
    '<td>'+fmt(x.acc)+'</td><td>'+rate(x.reg,x.acc)+'</td><td>'+rate(x.line,x.acc)+'</td>'+
@@ -148,10 +149,12 @@ function renderList(){
   // 順位は並び順に関係なく「登録の多さ」で決める（同じ数は同じ順位・登録0人はメダルなし）
   var rank={};H.forEach(function(h){if(h.reg>0)rank[h.no]=1+H.filter(function(o){return o.reg>h.reg}).length});
   s+=row('','<span class="msp"></span>全員',ALL,0,0);
+  // メダルの無い行（4位以下）はグレー→白→グレー…の縞にする（並び替えても上から交互）
+  var z=0;
   list.forEach(function(h){
     var r=rank[h.no]<=3?rank[h.no]:0;
     var badge=r?'<span class="medal m'+r+'" title="'+r+'位">'+r+'</span>':'<span class="msp"></span>';
-    s+=row(h.no,badge+'<span class="no">'+h.no+'</span>'+esc(h.name),h,mx,r)});
+    s+=row(h.no,badge+'<span class="no">'+h.no+'</span>'+esc(h.name),h,mx,r,!r&&(z++%2===0))});
   $('list').innerHTML=s+'</tbody>';
   $('list').querySelectorAll('tbody tr').forEach(function(tr){tr.onclick=function(){sel=tr.dataset.no;renderList();renderDetail();$('detail').scrollIntoView({behavior:'smooth',block:'start'})}});
 }
