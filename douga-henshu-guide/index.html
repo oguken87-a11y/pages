@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>AI動画編集の準備手順</title>
+<title>AI動画編集 環境構築マニュアル</title>
 <style>
   :root {
     --bg: #f7f6f3; --card: #ffffff; --text: #1f2328; --muted: #5b636d;
@@ -78,231 +78,245 @@
 <div class="wrap">
 
 <header>
-  <span class="label">手順書</span>
-  <h1>Gemini APIキーの取得から、AIで動画編集ができるまで</h1>
-  <p class="meta">この手順書を使う人：動画編集をするPCの持ち主の方（Googleアカウントもその方のもの）<br>
-  PC：Windows ／ 所要時間：40分くらい<br>
-  いっしょに受け取るもの：<code>douga-henshu.zip</code>（動画編集キット）</p>
+  <span class="label">マニュアル</span>
+  <h1>AI動画編集 環境構築マニュアル（Mac版）</h1>
+  <p class="meta">対象者：動画編集を行うMacの利用者の方（Googleアカウントもご本人のもの）<br>
+  対応OS：macOS（Apple シリコン・Intel のどちらも可） ／ 所要時間：約40〜60分<br>
+  配布物：<code>douga-henshu.zip</code>（動画編集キット）、<code>編集の参考チャンネル集_スクショ.pdf</code>（お手本選びの参考資料。zipにも同じものが入っています）</p>
 </header>
 
 <section>
-  <h2>全体像（まずここを読む）</h2>
-  <h3>ひとことで言うと</h3>
-  <p class="lead">「この動画みたいに編集して」と、AIに頼めるようにするための準備です。</p>
+  <h2>1. 概要</h2>
+  <h3>目的</h3>
+  <p class="lead">お手本にしたいYouTube動画の編集をAIが分析し、同じ作り方で手元の動画を編集できる環境を、Macに整えます。</p>
 
-  <h3>どんなことができるようになるか</h3>
+  <h3>構築後にできること</h3>
   <ul>
-    <li>好きなYouTubeの動画を1本「お手本」に選び、自分で撮った動画を渡すと、AIがお手本と同じような字幕・効果音・場面の切り替え方で編集してくれます。</li>
-    <li>編集ソフトを自分で触る必要はありません。AIに文章で頼み、出来上がりを見て「ここをこう直して」と言うだけです。</li>
-    <li>まず最初の3分だけ作って見せてくれるので、それを見てOKなら、残りも同じように仕上げてくれます。</li>
+    <li>お手本のYouTube動画を1本指定すると、AIが編集の特徴を分析し、「編集レシピ」（カット割り・テロップの大きさや色・効果音などの仕様書）にまとめます。</li>
+    <li>撮影した動画を渡すと、AIが編集レシピに沿って編集します。編集ソフトを操作する必要はありません。修正は「00:42のテロップを大きく」のように文章で指示します。</li>
+    <li>最初に冒頭3分を仕上げて確認を求めるので、問題がなければ全体を同じ仕様で編集します。</li>
   </ul>
   <div class="pipe">
-    <div>お手本を選ぶ</div><span>→</span><div>撮った動画を渡す</div><span>→</span><div>AIが最初の3分を編集</div><span>→</span><div>見て確認</div><span>→</span><div>残りも仕上げ</div>
+    <div>お手本の選定</div><span>→</span><div>分析<br><small>編集レシピの作成</small></div><span>→</span><div>冒頭3分の編集</div><span>→</span><div>確認</div><span>→</span><div>全体の編集</div>
   </div>
 
-  <h3>しくみ（3人のチームだと思ってください）</h3>
+  <h3>役割分担</h3>
   <div class="team">
-    <div><b>見る係</b><span class="who">Gemini<br><small>Googleが作ったAI</small></span><p>お手本の動画を見て、「何秒で場面が変わる」「字幕はこの大きさ・この色」などを細かく書き出す</p></div>
-    <div><b>作る係</b><span class="who">Codex<br><small>文章で頼むと、PCの作業をしてくれるAI</small></span><p>Geminiが書き出したものを見ながら、あなたの動画を編集する</p></div>
-    <div><b>監督</b><span class="who">あなた</span><p>お手本を選ぶ・撮った動画を渡す・出来上がりを見て「OK」か「ここを直して」を伝える</p></div>
+    <div><b>分析</b><span class="who">Gemini<br><small>Googleの生成AI</small></span><p>お手本の動画を見て、カットの切り替わる時刻、テロップの文言・大きさ・色などを書き出す</p></div>
+    <div><b>編集</b><span class="who">Codex<br><small>OpenAIのAIエージェント。文章の指示を受けて、Mac上でファイル操作やコマンドの実行を行う</small></span><p>Geminiの分析結果をもとに編集レシピを作り、撮影した動画を編集する</p></div>
+    <div><b>確認・判断</b><span class="who">利用者</span><p>お手本の選定、素材の受け渡し、仕上がりの確認と修正の指示</p></div>
   </div>
 
-  <h3>今回やること（最初の1回だけ・40分くらい）</h3>
+  <h3>本マニュアルで行う作業（初回のみ）</h3>
   <ol>
-    <li>Geminiを使うための「合い言葉（APIキー）」を作って、PCに覚えさせる</li>
-    <li>編集に使う道具をPCに入れる</li>
-    <li>ためしに動かしてみる</li>
+    <li>Gemini を使うためのAPIキーを発行し、Macに保存する</li>
+    <li>編集に必要なソフト（Homebrew・Python・FFmpeg）を入れる</li>
+    <li>試運転で、分析が動くことを確かめる</li>
   </ol>
-  <div class="box ok"><p>ほとんどの作業は、<strong>Codexが1つずつ案内して、自分でやってくれます。</strong>あなたがするのは、Codexの案内どおりに画面のボタンを押すことと、Codexの「これをしていいですか」に「はい」と答えることです。<br>準備が終われば、次からは「お手本のURL」と「撮った動画」を渡すだけで編集を頼めます。</p></div>
+  <div class="box ok"><p>作業の大半は、<strong>Codex が手順を案内し、コマンドの実行も行います。</strong>利用者が行うのは、APIキーの発行と保存、Homebrew のインストール（Macのパスワード入力が必要なため）、Codex からの実行許可の確認です。<br>構築が終われば、以降は「お手本のURL」と「撮影した動画」を渡すだけで編集を依頼できます。</p></div>
 
-  <h3>お金</h3>
+  <h3>費用</h3>
   <ul>
-    <li>Gemini：無料で始められます（1日に使える回数に上限があります）。</li>
-    <li>Codex：いま入っているCodexのプランの範囲で使います。</li>
+    <li>Gemini：無料枠で利用を始められます（1日・1分あたりの利用回数に上限があります）。</li>
+    <li>Codex：契約中のプランの範囲で利用します。</li>
   </ul>
 
-  <h3>ことばの説明</h3>
+  <h3>用語</h3>
   <table class="trouble">
-    <tr><th>APIキー</th><td>Geminiを、あなたのGoogleアカウントで使うための合い言葉。英数字の長い文字列。パスワードと同じで、人に教えない</td></tr>
-    <tr><th>環境変数</th><td>PCの中にある「メモ欄」のようなもの。ここにAPIキーを書いておくと、AIが自分で読み取れる</td></tr>
-    <tr><th>Codex</th><td>文章で頼むと、PCの操作や作業をしてくれるAIのアプリ</td></tr>
-    <tr><th>PowerShell</th><td>文字でPCに命令する画面。言われた1行を貼り付けて Enter を押すだけでよい</td></tr>
-    <tr><th>Python・FFmpeg</th><td>編集の道具を動かすためのソフト。入れておくだけで、自分で使うことはない</td></tr>
-    <tr><th>zip</th><td>いくつかのファイルを1つにまとめたもの。右クリック→「すべて展開」で元に戻る</td></tr>
-    <tr><th>テロップ</th><td>動画の中に出る字幕や文字</td></tr>
-    <tr><th>お手本</th><td>「この動画みたいにしたい」と真似する元のYouTube動画</td></tr>
+    <tr><th>APIキー</th><td>Gemini を外部のプログラムから自分のGoogleアカウントで使うための認証用の文字列。パスワードと同様に扱う</td></tr>
+    <tr><th>ターミナル</th><td>文字でMacに命令を出すアプリ（「アプリケーション」→「ユーティリティ」にあります）。本マニュアルでは、指定の1行を貼り付けて return キーを押すだけです</td></tr>
+    <tr><th>Homebrew</th><td>Mac用のソフトを、ターミナルからまとめて入れるための管理ツール</td></tr>
+    <tr><th>Python・FFmpeg</th><td>Python は分析用のプログラムを動かすソフト、FFmpeg は動画・音声の切り出しや書き出しを行うソフト。どちらも Codex が使います</td></tr>
+    <tr><th>仮想環境（.venv）</th><td>このキット専用に Python の部品を入れておくフォルダー。Mac本体の設定に影響を与えません</td></tr>
+    <tr><th>テロップ</th><td>動画内に表示される字幕や文字</td></tr>
+    <tr><th>お手本</th><td>編集の作り方を参考にするYouTube動画</td></tr>
+    <tr><th>編集レシピ</th><td>お手本を分析してまとめた編集の仕様書（<code>編集レシピ.md</code>）</td></tr>
   </table>
 </section>
 
 <section>
-  <h2>準備の流れ</h2>
+  <h2>2. 作業一覧</h2>
   <table class="flow">
-    <tr><th></th><th>やること</th><th>終わった目印</th></tr>
-    <tr><td>①</td><td><a href="#s1">APIキーを作る</a></td><td>キーの文字列がコピーできた</td></tr>
-    <tr><td>②</td><td><a href="#s2">PCにキーを覚えさせる</a></td><td>環境変数に <code>GEMINI_API_KEY</code> がある</td></tr>
-    <tr><td>③</td><td><a href="#s3">キーがつながるか確かめる</a></td><td><code>models/gemini-3.8-flash</code> と出た</td></tr>
-    <tr><td>④</td><td><a href="#s4">Python を入れる</a></td><td><code>py --version</code> で番号が出た</td></tr>
-    <tr><td>⑤</td><td><a href="#s5">FFmpeg を入れる</a></td><td><code>ffmpeg -version</code> で番号が出た</td></tr>
-    <tr><td>⑥</td><td><a href="#s6">Python の部品を入れる</a></td><td>エラー無く終わった</td></tr>
-    <tr><td>⑦</td><td><a href="#s7">動画編集キットを置く</a></td><td><code>C:\douga-henshu</code> に README.md がある</td></tr>
-    <tr><td>⑧</td><td><a href="#s8">試運転（最初の30秒を解析）</a></td><td>解析の結果ファイルができた</td></tr>
-    <tr><td>⑨</td><td><a href="#s9">AIに編集を頼む</a></td><td>AIが解析を始めた</td></tr>
+    <tr><th>No.</th><th>作業</th><th>担当</th><th>完了の確認</th></tr>
+    <tr><td>①</td><td><a href="#s1">動画編集キットを配置する</a></td><td>利用者</td><td>ホームフォルダーの <code>douga-henshu</code> に <code>README.md</code> がある</td></tr>
+    <tr><td>②</td><td><a href="#s2">APIキーを発行する</a></td><td>利用者（ブラウザ）</td><td>キーをコピーした</td></tr>
+    <tr><td>③</td><td><a href="#s3">APIキーをMacに保存する</a></td><td>利用者（ターミナル）</td><td>「保存しました」と表示された</td></tr>
+    <tr><td>④</td><td><a href="#s4">Homebrew を入れる</a></td><td>利用者（ターミナル）</td><td><code>Homebrew 4.</code> で始まる番号が表示された</td></tr>
+    <tr><td>⑤</td><td><a href="#s5">APIキーの接続を確認する</a></td><td>Codex</td><td><code>OK: gemini-3.8-flash</code> と表示された</td></tr>
+    <tr><td>⑥</td><td><a href="#s6">Python と FFmpeg を入れる</a></td><td>Codex</td><td>両方のバージョンが表示された</td></tr>
+    <tr><td>⑦</td><td><a href="#s7">Python の部品を入れる</a></td><td>Codex</td><td><code>Successfully installed</code> と表示された</td></tr>
+    <tr><td>⑧</td><td><a href="#s8">試運転（冒頭30秒を分析）</a></td><td>Codex</td><td><code>test_out.md</code> ができた</td></tr>
+    <tr><td>⑨</td><td><a href="#s9">お手本の分析と編集を依頼する</a></td><td>利用者・Codex</td><td>Codex が分析を始めた</td></tr>
   </table>
-  <div class="box note"><p>前提：Codex か Claude Code が入っていて、ログインできていること（この手順書では扱いません）。</p></div>
-  <div class="box ok"><p><strong>Codexに案内してもらうのがおすすめです。</strong> 先に<a href="#s7">⑦</a>（キットを <code>C:\douga-henshu</code> に置く）だけ自分でやり、Codexでそのフォルダーを開いて、<code>Codexに貼る文_準備の案内.md</code> の枠の中を貼ってください。①②は画面を案内してもらいながら自分で、③〜⑧のコマンドはCodexが打ちます。</p></div>
+  <div class="box note"><p>前提：Codex のアプリがMacに入っていて、ログインできていること（本マニュアルでは扱いません）。</p></div>
+  <div class="box ok"><p><strong>推奨の進め方：</strong><a href="#s1">①</a>だけを先に行い、Codex で <code>douga-henshu</code> フォルダーを開いて、<code>Codexに貼る文_準備の案内.md</code> の枠内の文を貼り付けてください。②〜④は Codex の案内に沿ってご自身で、⑤〜⑧は Codex が実行します。</p></div>
 </section>
 
 <section>
-  <h2>先に知っておくこと（大事）</h2>
+  <h2>3. 注意事項</h2>
   <div class="box warn">
-    <p><strong>APIキーは、パスワードと同じ扱いです。</strong></p>
+    <p><strong>APIキーはパスワードと同じ扱いです。</strong></p>
     <ul>
-      <li>LINE・メール・チャット・AIへのメッセージに貼らない</li>
+      <li>LINE・メール・チャット・AIへのメッセージに貼り付けない</li>
       <li>人に見せない・スクリーンショットに写さない</li>
     </ul>
   </div>
   <ul>
-    <li>キーはPCに覚えさせれば、AIはそこから自分で読みます。AIに「キーはこれです」と教える必要はありません。</li>
-    <li>万一ほかの人に見られたら、キーを消して作り直してください（<a href="#reset">いちばん下</a>）。</li>
-    <li>無料のまま使えますが、無料枠には1日・1分あたりに使える回数の上限があります。また、無料枠で送ったデータはGoogleがサービスの改善に使うことがあるとされています。長い動画をたくさん解析するようになったら、支払い（課金）の設定をするかどうかを決めてください。この手順書では課金の設定はしません。</li>
-    <li>解析できるYouTube動画は「公開」のものだけです（限定公開・非公開は不可）。</li>
+    <li>キーは③でMacに保存すれば、AIはそこから読み取ります。AIにキーを伝える必要はありません。</li>
+    <li>第三者に見られた可能性がある場合は、キーを削除して再発行してください（<a href="#reset">キーの削除・再発行</a>）。</li>
+    <li>無料枠には利用回数の上限があります。また、無料枠で送信したデータは、Googleがサービス改善に利用する場合があるとされています。長い動画を多く分析するようになった段階で、有料プラン（課金）の設定を検討してください。本マニュアルでは課金の設定は行いません。</li>
+    <li>分析できるYouTube動画は「公開」のものだけです（限定公開・非公開は不可）。</li>
+    <li>Codex は、インストールや外部との通信の前に実行の許可を求めることがあります。内容を確認して許可してください。</li>
   </ul>
 </section>
 
 <section id="s1">
-  <h2><span class="num">1</span>APIキーを作る</h2>
+  <h2><span class="num">1</span>動画編集キットを配置する</h2>
   <ol>
-    <li>動画編集をするPCで、ブラウザ（Chromeなど）を開く。</li>
-    <li>次のページを開く：<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">https://aistudio.google.com/apikey</a></li>
-    <li>あなたのGoogleアカウントでログインする（別のアカウントでログインしていたら、右上のアイコンから切り替える）。</li>
-    <li>初めてのときは、利用規約に同意する画面が出ます。読んで、同意して進む。</li>
-    <li>「<strong>APIキーを作成</strong>」（英語の画面なら「<strong>Create API key</strong>」）を押す。</li>
-    <li>「プロジェクト」（キーを入れておく箱のようなもの）を選ぶ画面が出たら、すでにあればそれを選び、無ければ「新しいプロジェクトで作成」（「Create API key in new project」）を選ぶ。キーに名前を付けられる場合は「<strong>動画解析用</strong>」とする。</li>
-    <li>英数字の長い文字列（「AIza」で始まることが多い）が出ます。これがAPIキーです。横の「コピー」ボタンでコピーする。<strong>この画面はまだ閉じない。</strong></li>
+    <li>受け取った <code>douga-henshu.zip</code> をダウンロードする（通常は「ダウンロード」フォルダーに保存されます）。</li>
+    <li>Finder で <code>douga-henshu.zip</code> をダブルクリックして展開する（Safari の設定によっては、ダウンロード時に自動で展開されます）。</li>
+    <li>Finder のメニュー「移動」→「ホーム」（<span class="kbd">command</span> + <span class="kbd">shift</span> + <span class="kbd">H</span>）でホームフォルダーを開き、展開してできた <code>douga-henshu</code> フォルダーをそこへ移動する。</li>
+    <li><code>douga-henshu</code> の中に <code>README.md</code>・<code>gemini_video.py</code> などがあることを確かめる。</li>
   </ol>
-  <div class="box note"><p>ボタンの名前や位置は、Googleの更新で少し変わることがあります。「API キー」「Get API key」「Create」などの言葉を探してください。</p></div>
+  <ul>
+    <li><code>douga-henshu</code> の中にさらに <code>douga-henshu</code> がある場合は、内側のフォルダーをホームフォルダーに移動してください。</li>
+    <li>フォルダー名は半角英字のまま変えないでください（AIが使う道具が正しく開けなくなることがあります）。</li>
+  </ul>
 </section>
 
 <section id="s2">
-  <h2><span class="num">2</span>PCにキーを覚えさせる</h2>
+  <h2><span class="num">2</span>APIキーを発行する</h2>
   <ol>
-    <li>画面左下のスタート（Windowsマーク）を押し、「<strong>環境変数</strong>」と入力する。</li>
-    <li>「<strong>環境変数を編集</strong>」（「アカウントの環境変数を編集」）を開く。「システム環境変数の編集」ではなく、<strong>アカウントの方</strong>。</li>
-    <li>上半分の「（あなたの名前）のユーザー環境変数」の下にある「<strong>新規</strong>」を押す。</li>
-    <li>次のとおり入れて「OK」。
-      <table>
-        <tr><th>変数名</th><td><code>GEMINI_API_KEY</code>（半角・大文字。この通りに）</td></tr>
-        <tr><th>変数値</th><td>①でコピーしたキーを貼り付ける（前後に空白を入れない）</td></tr>
-      </table>
-    </li>
-    <li>一覧に <code>GEMINI_API_KEY</code> が増えたのを見てから、もう一度「OK」で閉じる。</li>
-    <li><strong>開いていた Codex・Claude Code・PowerShell を全部閉じる。</strong>（開き直さないと、新しく入れたキーが見えません）</li>
+    <li>ブラウザ（Safari・Chrome など）で次のページを開く：<br><a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">https://aistudio.google.com/apikey</a></li>
+    <li>ご自身のGoogleアカウントでログインする（別のアカウントでログインしている場合は、右上のアイコンから切り替える）。</li>
+    <li>初回は利用規約への同意画面が表示されます。内容を確認して同意する。</li>
+    <li>「<strong>APIキーを作成</strong>」（英語表示の場合は「<strong>Create API key</strong>」）を押す。</li>
+    <li>プロジェクト（キーを管理する単位）の選択画面が表示された場合は、既存のものを選ぶか、「新しいプロジェクトで作成」（「Create API key in new project」）を選ぶ。キーに名前を付けられる場合は「動画解析用」とする。</li>
+    <li>英数字の長い文字列（多くは「AIza」で始まります）が表示されます。これがAPIキーです。横の「コピー」ボタンでコピーする。<strong>この画面はまだ閉じない。</strong></li>
   </ol>
-  <p>①のブラウザの画面は閉じてかまいません。キーはいつでも <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">https://aistudio.google.com/apikey</a> で見直せます。</p>
+  <div class="box note"><p>ボタンの名称や配置は、Googleの更新で変わることがあります。「API キー」「Get API key」「Create」などの表記を探してください。</p></div>
 </section>
 
 <section id="s3">
-  <h2><span class="num">3</span>キーがつながるか確かめる</h2>
-  <p>スタートから「PowerShell」を開き、次の1行を貼り付けて <span class="kbd">Enter</span>（キーは画面に出ません）。</p>
-  <div class="cmd"><pre>if (-not $env:GEMINI_API_KEY) { "NO KEY" } else { (Invoke-RestMethod -Uri "https://generativelanguage.googleapis.com/v1beta/models" -Headers @{ "x-goog-api-key" = $env:GEMINI_API_KEY }).models.name | Select-String "gemini-3.8-flash" }</pre><button type="button">コピー</button></div>
-  <div class="box ok"><p><code>models/gemini-3.8-flash</code> を含む行が出れば<strong>成功</strong>。</p></div>
-  <table class="trouble">
-    <tr><th>「NO KEY」</th><td>②のあとPowerShellを開き直していないか、変数名がちがう。</td></tr>
-    <tr><th>「(400)」「API key not valid」</th><td>キーの貼り付けまちがい。②の変数値を入れ直す。</td></tr>
-    <tr><th>「(403)」</th><td>プロジェクトでGeminiが使えない状態。①で、新しいプロジェクトでキーを作り直す。</td></tr>
-    <tr><th>何も出ずエラーも無い</th><td>キーは通っているが、そのAIが見つからない。動画編集を頼む人にそう伝える。</td></tr>
-  </table>
+  <h2><span class="num">3</span>APIキーをMacに保存する</h2>
+  <ol>
+    <li>ターミナルを開く（Finder の「アプリケーション」→「ユーティリティ」→「ターミナル」、または <span class="kbd">command</span> + <span class="kbd">space</span> で「ターミナル」と入力）。</li>
+    <li>次の1行を貼り付けて <span class="kbd">return</span> キーを押す。</li>
+  </ol>
+  <div class="cmd"><pre>read -rs "k?APIキーを貼り付けて return（画面には表示されません）: "; ( umask 077; printf '%s' "$k" &gt; ~/.gemini_api_key ); unset k; echo; echo "保存しました（$(wc -c &lt; ~/.gemini_api_key | tr -d ' ')文字）"</pre><button type="button">コピー</button></div>
+  <ol start="3">
+    <li>「APIキーを貼り付けて return」と表示されたら、②でコピーしたキーを <span class="kbd">command</span> + <span class="kbd">V</span> で貼り付けて <span class="kbd">return</span> キーを押す（貼り付けても画面には何も表示されませんが、入力されています）。</li>
+    <li>「保存しました（39文字）」のように表示されれば完了です（文字数はキーによって多少異なります）。</li>
+  </ol>
+  <ul>
+    <li>キーはホームフォルダーの <code>.gemini_api_key</code> というファイルに、本人だけが読める設定で保存されます（名前が「.」で始まるファイルは、Finder では通常表示されません）。</li>
+    <li>「not a valid identifier」と表示される場合は、ターミナルが古い形式（bash）で動いています。<code>zsh</code> と入力して <span class="kbd">return</span> キーを押してから、もう一度貼り付けてください。</li>
+    <li>文字数が 0 や極端に少ない場合は、貼り付けに失敗しています。もう一度この手順を行ってください（上書きされます）。</li>
+    <li>②のブラウザの画面は閉じてかまいません。キーはいつでも <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">https://aistudio.google.com/apikey</a> で確認できます。</li>
+  </ul>
 </section>
 
 <section id="s4">
-  <h2><span class="num">4</span>Python を入れる</h2>
-  <p>PowerShellで次の1行。途中で「同意しますか」と聞かれたら <span class="kbd">Y</span> → <span class="kbd">Enter</span>。「このアプリがデバイスに変更を加えることを許可しますか」と出たら「はい」。</p>
-  <div class="cmd"><pre>winget install --id Python.Python.3.13 -e</pre><button type="button">コピー</button></div>
-  <p>終わったら<strong>PowerShellを閉じて開き直し</strong>、次を入れる。</p>
-  <div class="cmd"><pre>py --version</pre><button type="button">コピー</button></div>
-  <div class="box ok"><p><code>Python 3.</code> で始まる番号が出れば<strong>成功</strong>。</p></div>
-  <table class="trouble">
-    <tr><th>「winget が見つからない」</th><td>Microsoft Store で「アプリ インストーラー」を入れる（または更新する）。</td></tr>
-    <tr><th>「py が見つからない」</th><td>PowerShellを閉じて開き直す。それでもだめならPCを再起動する。</td></tr>
-    <tr><th><code>python</code> でStoreが開く</th><td>この手順では <code>py</code> を使うので気にしなくて大丈夫。</td></tr>
-  </table>
-  <p class="meta">すでにPython 3.10以上が入っていれば、この④は飛ばしてかまいません（<code>py --version</code> で確かめる）。</p>
+  <h2><span class="num">4</span>Homebrew を入れる</h2>
+  <p>すでに Homebrew が入っている場合（ターミナルで <code>brew --version</code> と入力して番号が表示される場合）は、この手順は不要です。</p>
+  <ol>
+    <li>ターミナルに次の1行を貼り付けて <span class="kbd">return</span> キーを押す（Homebrew 公式のインストール用コマンドです）。</li>
+  </ol>
+  <div class="cmd"><pre>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</pre><button type="button">コピー</button></div>
+  <ol start="2">
+    <li>「Password:」と表示されたら、<strong>Macにログインするときのパスワード</strong>を入力して <span class="kbd">return</span> キーを押す（入力しても画面には表示されません）。</li>
+    <li>「Press RETURN/ENTER to continue」と表示されたら <span class="kbd">return</span> キーを押す。</li>
+    <li>完了まで5〜15分ほどかかります（初めての場合は、開発用の部品「コマンドライン・デベロッパ・ツール」も自動で入ります）。「Installation successful!」と表示されれば終了です。</li>
+    <li>続けて次の1行を貼り付けて <span class="kbd">return</span> キーを押す（ターミナルから <code>brew</code> が使えるように設定します）。</li>
+  </ol>
+  <div class="cmd"><pre>if [ -x /opt/homebrew/bin/brew ]; then echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' &gt;&gt; ~/.zprofile; eval "$(/opt/homebrew/bin/brew shellenv)"; fi; brew --version</pre><button type="button">コピー</button></div>
+  <div class="box ok"><p><code>Homebrew 4.</code> で始まる番号が表示されれば<strong>完了</strong>です。</p></div>
+  <ul>
+    <li>「command not found: brew」と表示される場合は、ターミナルを一度終了して開き直し、<code>brew --version</code> を入力してください。</li>
+    <li>Macのパスワードは Codex には入力できないため、この手順はご自身で行ってください。</li>
+  </ul>
 </section>
 
 <section id="s5">
-  <h2><span class="num">5</span>FFmpeg を入れる</h2>
-  <p>動画・音声を切ったりつないだりする道具です。PowerShellで次の1行。途中で聞かれたら <span class="kbd">Y</span> → <span class="kbd">Enter</span>。</p>
-  <div class="cmd"><pre>winget install --id Gyan.FFmpeg -e</pre><button type="button">コピー</button></div>
-  <p>終わったら<strong>PowerShellを閉じて開き直し</strong>、次を入れる。</p>
-  <div class="cmd"><pre>ffmpeg -version</pre><button type="button">コピー</button></div>
-  <div class="box ok"><p><code>ffmpeg version</code> で始まる行が出れば<strong>成功</strong>。</p></div>
+  <h2><span class="num">5</span>APIキーの接続を確認する（Codex が実行）</h2>
+  <div class="cmd"><pre>if [ ! -s ~/.gemini_api_key ]; then echo "NO KEY"; else r=$(curl -s -H "x-goog-api-key: $(cat ~/.gemini_api_key)" "https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000"); if echo "$r" | grep -q 'models/gemini-3.8-flash'; then echo "OK: gemini-3.8-flash"; else echo "$r" | head -8; fi; fi</pre><button type="button">コピー</button></div>
+  <div class="box ok"><p><code>OK: gemini-3.8-flash</code> と表示されれば<strong>成功</strong>です（キーの値は表示されません）。</p></div>
+  <table class="trouble">
+    <tr><th>「NO KEY」</th><td>③が完了していない。③をやり直す</td></tr>
+    <tr><th>「API key not valid」（code 400）</th><td>キーの貼り付け誤り。②のページでキーをコピーし直し、③をやり直す</td></tr>
+    <tr><th>code 403</th><td>プロジェクトで Gemini が使えない状態。②で、新しいプロジェクトでキーを作り直す</td></tr>
+    <tr><th>一覧は表示されるが OK が出ない</th><td>キーは有効だが、指定のモデルが見つからない。動画編集の依頼元に連絡する</td></tr>
+  </table>
 </section>
 
 <section id="s6">
-  <h2><span class="num">6</span>Python の部品を入れる</h2>
-  <p>PowerShellで次の1行。</p>
-  <div class="cmd"><pre>py -m pip install numpy pillow yt-dlp</pre><button type="button">コピー</button></div>
-  <div class="box ok"><p>最後に <code>Successfully installed …</code> と出れば<strong>成功</strong>（「Requirement already satisfied」でも大丈夫）。</p></div>
+  <h2><span class="num">6</span>Python と FFmpeg を入れる（Codex が実行）</h2>
+  <div class="cmd"><pre>brew install python ffmpeg</pre><button type="button">コピー</button></div>
+  <p>完了後、次の2行でバージョンを確認する。</p>
+  <div class="cmd"><pre>python3 --version</pre><button type="button">コピー</button></div>
+  <div class="cmd"><pre>ffmpeg -version</pre><button type="button">コピー</button></div>
+  <div class="box ok"><p><code>Python 3.10</code> 以上の番号と、<code>ffmpeg version</code> で始まる行が表示されれば<strong>完了</strong>です。</p></div>
+  <table class="trouble">
+    <tr><th>「command not found: brew」</th><td>先に <code>eval "$(/opt/homebrew/bin/brew shellenv)"</code> を実行する</td></tr>
+    <tr><th><code>python3 --version</code> が 3.9 以下</th><td>Mac に元から入っている Python が使われている。<code>eval "$(/opt/homebrew/bin/brew shellenv)"</code> を実行してから確認し直す</td></tr>
+  </table>
 </section>
 
 <section id="s7">
-  <h2><span class="num">7</span>動画編集キットを置く</h2>
-  <ol>
-    <li>受け取った <code>douga-henshu.zip</code> を右クリック →「<strong>すべて展開</strong>」。</li>
-    <li>展開先に <code>C:\</code> と入れて「展開」。</li>
-    <li><code>C:\douga-henshu</code> の中に、<code>README.md</code>・<code>gemini_video.py</code> などがあるのを見る。
-      <ul><li><code>C:\douga-henshu\douga-henshu\</code> のように二重になっていたら、中の方の <code>douga-henshu</code> フォルダーを <code>C:\</code> に移す。</li></ul>
-    </li>
-  </ol>
-  <div class="box note"><p>フォルダーの名前は半角英字のままにしてください（日本語の名前にすると、AIの道具がうまく開けないことがあります）。</p></div>
+  <h2><span class="num">7</span>Python の部品を入れる（Codex が実行）</h2>
+  <p>キット専用の仮想環境（<code>.venv</code>）を作り、分析に必要な部品（numpy・pillow・yt-dlp）を入れます。</p>
+  <div class="cmd"><pre>cd ~/douga-henshu &amp;&amp; python3 -m venv .venv &amp;&amp; .venv/bin/pip install numpy pillow yt-dlp</pre><button type="button">コピー</button></div>
+  <div class="box ok"><p>最後に <code>Successfully installed …</code> と表示されれば<strong>完了</strong>です。以降、キットのプログラムは <code>.venv/bin/python</code> で実行します。</p></div>
 </section>
 
 <section id="s8">
-  <h2><span class="num">8</span>試運転（動画の最初の30秒を解析）</h2>
+  <h2><span class="num">8</span>試運転（動画の冒頭30秒を分析・Codex が実行）</h2>
   <ol>
-    <li>好きなYouTubeの<strong>公開</strong>動画を1本選び、URLをコピーする（例：<code>https://www.youtube.com/watch?v=xxxxxxxxxxx</code>）。</li>
-    <li>PowerShellで、次の2行を順に入れる。2行目の <code>ここにURL</code> を、コピーしたURLに置き換える（前後の <code>"</code> は残す）。
-      <div class="cmd"><pre>cd C:\douga-henshu</pre><button type="button">コピー</button></div>
-      <div class="cmd"><pre>py gemini_video.py "ここにURL" test_prompt.md test_out.md --start 0 --end 30 --fps 1</pre><button type="button">コピー</button></div>
-    </li>
-    <li>1〜3分ほど待つと、<code>saved test_out.md chars …</code> と出ます。</li>
-    <li><code>C:\douga-henshu\test_out.md</code> をメモ帳で開き、カットの時刻とテロップの表が書いてあれば成功です。</li>
+    <li>任意のYouTubeの<strong>公開</strong>動画のURLを1本用意する（例：<code>https://www.youtube.com/watch?v=xxxxxxxxxxx</code>）。</li>
+    <li>次の2行を順に実行する。<code>ここにURL</code> を用意したURLに置き換える（前後の <code>"</code> は残す）。</li>
+  </ol>
+  <div class="cmd"><pre>cd ~/douga-henshu</pre><button type="button">コピー</button></div>
+  <div class="cmd"><pre>.venv/bin/python gemini_video.py "ここにURL" test_prompt.md test_out.md --start 0 --end 30 --fps 1</pre><button type="button">コピー</button></div>
+  <ol start="3">
+    <li>1〜3分ほどで <code>saved test_out.md chars …</code> と表示されます。</li>
+    <li><code>douga-henshu/test_out.md</code> に、カットの時刻とテロップの表が書かれていれば<strong>成功</strong>です。</li>
   </ol>
   <table class="trouble">
-    <tr><th>「HTTP 400」</th><td>URLのまちがい、または限定公開・非公開の動画。別の公開動画で試す。</td></tr>
-    <tr><th>「HTTP 403」</th><td>③に戻って確かめる。</td></tr>
-    <tr><th>「HTTP 429」</th><td>無料枠の回数の上限。しばらく（1分〜翌日）待ってからやり直す。</td></tr>
-    <tr><th>「GEMINI_API_KEY が見つかりません」</th><td>②をやり直し、PowerShellを開き直す。</td></tr>
-    <tr><th>「No module named …」</th><td>⑥をやり直す。</td></tr>
+    <tr><th>「HTTP 400」</th><td>URLの誤り、または限定公開・非公開の動画。別の公開動画で試す</td></tr>
+    <tr><th>「HTTP 403」</th><td>⑤に戻って確認する</td></tr>
+    <tr><th>「HTTP 429」</th><td>無料枠の利用回数の上限。時間をおいて（1分〜翌日）やり直す</td></tr>
+    <tr><th>「GEMINI_API_KEY が見つかりません」</th><td>③をやり直す</td></tr>
+    <tr><th>「No module named …」</th><td>⑦をやり直す</td></tr>
   </table>
 </section>
 
 <section id="s9">
-  <h2><span class="num">9</span>AIに編集を頼む</h2>
+  <h2><span class="num">9</span>お手本の分析と編集を依頼する</h2>
   <ol>
-    <li>お手本の動画を1本選ぶ。<code>C:\douga-henshu\参考チャンネル集.md</code>（11チャンネル。画面のスクショは同じフォルダーの <code>編集の参考チャンネル集_スクショ.pdf</code>）から、自分の動画の形に近いもの（1人で話す／2人の対談／図やスライドで説明）を選び、YouTubeで開いてURLをコピーする。</li>
-    <li>Codex（または Claude Code）を開き、作業フォルダーに <code>C:\douga-henshu</code> を選ぶ。</li>
-    <li><code>C:\douga-henshu\AIへの頼み方.md</code> を開き、枠の中の文をそのまま貼る。「お手本のURL：」のあとに、1で選んだ動画のURLを入れて送る。</li>
-    <li>AIがお手本を解析して「編集レシピ.md」を作ります。そのあと、編集したい素材（撮った動画）のある場所をAIに伝えると、冒頭3分の編集から始まります。</li>
+    <li>お手本の動画を1本選ぶ。<code>douga-henshu/参考チャンネル集.md</code>（11チャンネル。画面の例は同じフォルダーの <code>編集の参考チャンネル集_スクショ.pdf</code>）から、ご自身の動画の形式（1人で話す／2人の対談／図やスライドでの解説）に近いものを選び、YouTubeでURLをコピーする。</li>
+    <li>Codex で <code>douga-henshu</code> フォルダーを開いた状態で、<code>AIへの頼み方.md</code> の枠内の文を貼り付け、「お手本のURL：」のあとに1のURLを入れて送信する。</li>
+    <li>Codex がお手本を分析し、<code>編集レシピ.md</code> を作成します。その後、編集したい動画の保存場所を Codex に伝えると、冒頭3分の編集から始まります。</li>
   </ol>
-  <div class="box ok"><p>ここまでできれば<strong>完了</strong>です。</p></div>
+  <div class="box ok"><p>以上で構築は<strong>完了</strong>です。</p></div>
 </section>
 
 <section>
-  <h2>終わったら</h2>
+  <h2>完了後の連絡</h2>
   <ul>
-    <li>動画編集を頼む人には「<strong>⑧の試運転まで終わった</strong>」とだけ伝える。<strong>キーそのものは伝えない。</strong></li>
-    <li>止まったときは、①〜⑨のどこで止まったかと、出たエラーの文字（キーが写っていないもの）を伝える。</li>
+    <li>動画編集の依頼元には「⑧の試運転まで完了した」ことだけを伝えてください。<strong>キーそのものは伝えないでください。</strong></li>
+    <li>途中で止まった場合は、①〜⑨のどこで止まったかと、表示された文言（キーが写っていないもの）を伝えてください。</li>
   </ul>
 </section>
 
 <section id="reset">
-  <h2>キーを消す・作り直すとき</h2>
+  <h2>キーの削除・再発行</h2>
   <ol>
     <li><a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">https://aistudio.google.com/apikey</a> を開く。</li>
     <li>一覧の該当のキーの横にある「削除」（ごみ箱のマーク）を押す。</li>
-    <li>新しく作り直したら、②の変数値を新しいキーに入れ替え、③で確かめる。</li>
+    <li>新しいキーを発行したら、③の手順をもう一度行う（古いキーは上書きされます）。⑤で接続を確認する。</li>
+    <li>Mac からキーを消すだけの場合は、ターミナルで次の1行を実行する。</li>
   </ol>
+  <div class="cmd"><pre>rm ~/.gemini_api_key</pre><button type="button">コピー</button></div>
 </section>
 
 </div>
