@@ -154,9 +154,8 @@ function renderList(){
   var z=0;
   list.forEach(function(h){
     var r=rank[h.no]<=3?rank[h.no]:0;
-    // 1〜3位はメダルだけ（横の番号は出さない）
-    var label=r?'<span class="medal m'+r+'" title="'+r+'位"><i>'+r+'</i></span>'+esc(h.name)
-               :'<span class="msp"></span><span class="no">'+h.no+'</span>'+esc(h.name);
+    // 名前の横の番号は出さない（1〜3位はメダル、4位以下は同じ幅の空き）
+    var label=(r?'<span class="medal m'+r+'" title="'+r+'位"><i>'+r+'</i></span>':'<span class="msp"></span>')+esc(h.name);
     s+=row(h.no,label,h,mx,r,!r&&(z++%2===0))});
   $('list').innerHTML=s+'</tbody>';
   $('list').querySelectorAll('tbody tr').forEach(function(tr){tr.onclick=function(){sel=tr.dataset.no;renderList();renderDetail();$('detail').scrollIntoView({behavior:'smooth',block:'start'})}});
