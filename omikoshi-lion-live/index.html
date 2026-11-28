@@ -62,12 +62,21 @@ select{font:inherit;font-size:13px;color:var(--ink);background:var(--card);borde
 .ok{color:var(--good);font-weight:700}
 .ng{color:var(--sub)}
 .foot{padding:8px 14px}
+/* 一番上の「更新中」帯 */
+.live{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;background:var(--head);color:#fff;border-radius:12px;padding:10px 16px;margin-bottom:12px}
+.live .tag{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:800;background:rgba(255,255,255,.16);border-radius:999px;padding:3px 12px 3px 10px}
+.live .dot{width:10px;height:10px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 0 rgba(74,222,128,.7);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.7)}70%{box-shadow:0 0 0 9px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+@media (prefers-reduced-motion:reduce){.live .dot{animation:none}}
+.live .time{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.live .time small{font-size:13px;font-weight:600;opacity:.85;margin-right:6px}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="live"><span class="tag"><span class="dot"></span>1時間に1回更新中</span><span class="time"><small>最終更新</small><span id="upd">—</span></span></div>
   <h1>🦁 ライオン兄さん祭り 集客ボード</h1>
-  <div class="sub">12/5（土）20:00 セミナー｜<span id="upd"></span></div>
+  <div class="sub">12/5（土）20:00 セミナー</div>
   <div class="demo" id="msg">読み込み中…</div>
 
   <div class="kpis" id="kpis"></div>
@@ -120,7 +129,7 @@ function start(d){
   H.forEach(function(h){for(var k in ALL)ALL[k]+=h[k]||0});
   EV=(d.log||[]).map(function(r){return{at:new Date(r[0]),h:r[1],src:r[2],reg:r[3]===1}});
   var up=new Date(d.updated);
-  $('upd').textContent='最終更新 '+md(up)+'（'+w(up)+'）'+hm(up)+'・1時間ごとに自動更新';
+  $('upd').textContent=md(up)+'（'+w(up)+'）'+hm(up);
   var note='アクセス＝LPを見た人数（UTAGEの登録経路データ）／登録＝メール登録した人数（テスト登録は除く）。';
   if(d.logSince){var ls=new Date(d.logSince);note+='下のアクセスログは '+md(ls)+' '+hm(ls)+' からの記録です。'}
   else note+='下のアクセスログは、記録が始まると出ます。';
