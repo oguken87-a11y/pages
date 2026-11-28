@@ -65,10 +65,12 @@ select{font:inherit;font-size:13px;color:var(--ink);background:var(--card);borde
 /* 一番上の「更新中」帯 */
 .live{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:14px}
 .onair{display:flex;align-items:center;gap:10px}
-.onair .lamp{font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:900;letter-spacing:.12em;color:#fff;background:#dc2626;border:2px solid #fecaca;border-radius:6px;padding:3px 10px 3px 12px;animation:onair 2.4s ease-in-out infinite}
-@keyframes onair{0%,100%{box-shadow:0 0 6px 1px rgba(220,38,38,.55)}50%{box-shadow:0 0 16px 5px rgba(220,38,38,.85)}}
-@media (prefers-reduced-motion:reduce){.onair .lamp{animation:none;box-shadow:0 0 10px 3px rgba(220,38,38,.7)}}
-.onair .msg{font-size:15px;font-weight:800;color:#dc2626}
+/* 「更新中」＝点灯しているランプ（控えめなネオン） */
+.onair .msg{display:inline-flex;align-items:center;gap:8px;font-size:16px;font-weight:800;color:#dc2626;border:1.5px solid rgba(220,38,38,.55);border-radius:8px;padding:4px 12px;box-shadow:0 0 6px rgba(220,38,38,.25),inset 0 0 6px rgba(220,38,38,.12);text-shadow:0 0 6px rgba(220,38,38,.35)}
+.onair .msg::before{content:"";width:9px;height:9px;border-radius:50%;background:#ef4444;box-shadow:0 0 4px 1px rgba(239,68,68,.7);animation:lamp 2.6s ease-in-out infinite}
+@keyframes lamp{0%,100%{opacity:1}50%{opacity:.45}}
+@media (prefers-reduced-motion:reduce){.onair .msg::before{animation:none}}
+@media (prefers-color-scheme:dark){.onair .msg{color:#f87171;border-color:rgba(248,113,113,.6)}}
 .times{display:flex;flex-wrap:wrap;gap:4px 22px}
 .times .t{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
 .times .t small{font-size:12px;font-weight:600;color:var(--sub);margin-right:6px}
@@ -78,7 +80,7 @@ select{font:inherit;font-size:13px;color:var(--ink);background:var(--card);borde
 <body>
 <div class="wrap">
   <div class="live">
-    <div class="onair"><span class="lamp">ON AIR</span><span class="msg">1時間に1回 更新中</span></div>
+    <div class="onair"><span class="msg">1時間に1回 更新中</span></div>
     <div class="times"><span class="t"><small>最終更新</small><span id="upd">—</span></span><span class="t next"><small>次回更新予定</small><span id="nxt">—</span></span></div>
   </div>
   <h1>🦁 ライオン兄さん祭り 集客ボード</h1>
