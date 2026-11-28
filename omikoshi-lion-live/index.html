@@ -63,18 +63,24 @@ select{font:inherit;font-size:13px;color:var(--ink);background:var(--card);borde
 .ng{color:var(--sub)}
 .foot{padding:8px 14px}
 /* 一番上の「更新中」帯 */
-.live{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;background:var(--head);color:#fff;border-radius:12px;padding:10px 16px;margin-bottom:12px}
-.live .tag{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:800;background:rgba(255,255,255,.16);border-radius:999px;padding:3px 12px 3px 10px}
-.live .dot{width:10px;height:10px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 0 rgba(74,222,128,.7);animation:pulse 1.8s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.7)}70%{box-shadow:0 0 0 9px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
-@media (prefers-reduced-motion:reduce){.live .dot{animation:none}}
-.live .time{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.02em}
-.live .time small{font-size:13px;font-weight:600;opacity:.85;margin-right:6px}
+.live{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:14px}
+.onair{display:flex;align-items:center;gap:10px}
+.onair .lamp{font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:900;letter-spacing:.12em;color:#fff;background:#dc2626;border:2px solid #fecaca;border-radius:6px;padding:3px 10px 3px 12px;animation:onair 2.4s ease-in-out infinite}
+@keyframes onair{0%,100%{box-shadow:0 0 6px 1px rgba(220,38,38,.55)}50%{box-shadow:0 0 16px 5px rgba(220,38,38,.85)}}
+@media (prefers-reduced-motion:reduce){.onair .lamp{animation:none;box-shadow:0 0 10px 3px rgba(220,38,38,.7)}}
+.onair .msg{font-size:15px;font-weight:800;color:#dc2626}
+.times{display:flex;flex-wrap:wrap;gap:4px 22px}
+.times .t{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.times .t small{font-size:12px;font-weight:600;color:var(--sub);margin-right:6px}
+.times .t.next{color:var(--sub)}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="live"><span class="tag"><span class="dot"></span>1時間に1回更新中</span><span class="time"><small>最終更新</small><span id="upd">—</span></span></div>
+  <div class="live">
+    <div class="onair"><span class="lamp">ON AIR</span><span class="msg">1時間に1回 更新中</span></div>
+    <div class="times"><span class="t"><small>最終更新</small><span id="upd">—</span></span><span class="t next"><small>次回更新予定</small><span id="nxt">—</span></span></div>
+  </div>
   <h1>🦁 ライオン兄さん祭り 集客ボード</h1>
   <div class="sub">12/5（土）20:00 セミナー</div>
   <div class="demo" id="msg">読み込み中…</div>
@@ -130,6 +136,9 @@ function start(d){
   EV=(d.log||[]).map(function(r){return{at:new Date(r[0]),h:r[1],src:r[2],reg:r[3]===1}});
   var up=new Date(d.updated);
   $('upd').textContent=md(up)+'（'+w(up)+'）'+hm(up);
+  // 次回＝最終更新の1時間後（Googleの1時間ごとの自動実行は数分ずれるので「ごろ」）
+  var nx=new Date(up.getTime()+3600000);
+  $('nxt').textContent=nx<new Date()?'まもなく':md(nx)+'（'+w(nx)+'）'+hm(nx)+'ごろ';
   var note='アクセス＝LPを見た人数（UTAGEの登録経路データ）／登録＝メール登録した人数（テスト登録は除く）。';
   if(d.logSince){var ls=new Date(d.logSince);note+='下のアクセスログは '+md(ls)+' '+hm(ls)+' からの記録です。'}
   else note+='下のアクセスログは、記録が始まると出ます。';
